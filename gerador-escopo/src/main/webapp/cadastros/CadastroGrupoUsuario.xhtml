@@ -6,24 +6,23 @@
 	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui">
 
 	<f:metadata>
-		<f:viewAction action="#{cadastroUsuarioBean.consultar}" />
+		<f:viewAction action="#{cadastroGrupoBean.consultar}" />
 	</f:metadata>
 
-	<ui:define name="titulo">Cadastro de Usuário</ui:define>
+	<ui:define name="titulo">Cadastro de Grupo</ui:define>
 
 	<ui:define name="corpo">
-		<h1>Cadastro usuário</h1>
+		<h1>Cadastro Grupo</h1>
 		<h:form id="frmCadastro">
 
-			<p:messages id="msgs" closable="true" showDetail="true" />
+			<p:messages id="msgs" />
 
 			<p:toolbar id="toolbar">
 				<f:facet name="left">
-					 <p:commandButton value="Novo" icon="ui-icon-document"
-						action="#{cadastroUsuarioBean.prepararNovoCadastro}"
-						process="@this" update="usuario-dialog"
-						oncomplete="PF('edicaoUsuarioDialog').show()">
-						<p:resetInput target="usuario-dialog" />
+					<p:commandButton value="Novo" icon="ui-icon-document"
+						action="#{cadastroGrupoBean.prepararNovoCadastro}" process="@this"
+						update="grupo-dialog" oncomplete="PF('edicaoGrupoDialog').show()">
+						<p:resetInput target="grupo-dialog" />
 					</p:commandButton>
 
 					<span class="ui-separator"> <span
@@ -31,113 +30,107 @@
 					</span>
 
 					<p:commandButton icon="ui-icon-pencil" title="Editar"
-						process="@this" update="usuario-dialog"
-						oncomplete="PF('edicaoUsuarioDialog').show()"
-						disabled="#{cadastroUsuarioBean.usuarioSelecionado == null}">
-						<p:resetInput target="usuario-dialog" />
+						process="@this" update="grupo-dialog"
+						oncomplete="PF('edicaoGrupoDialog').show()"
+						disabled="#{cadastroGrupoBean.grupoSelecionado == null}">
+						<p:resetInput target="grupo-dialog" />
 
 						<f:setPropertyActionListener
-							value="#{cadastroUsuarioBean.usuarioSelecionado}"
-							target="#{cadastroUsuarioBean.usuarioEdicao}" />
+							value="#{cadastroGrupoBean.grupoSelecionado}"
+							target="#{cadastroGrupoBean.grupoEdicao}" />
 					</p:commandButton>
 
 					<p:commandButton icon="ui-icon-trash" title="Excluir"
-						process="@this" update="usuario-table msgs toolbar"
-						action="#{cadastroUsuarioBean.excluir}"
-						disabled="#{cadastroUsuarioBean.usuarioSelecionado == null}">
+						process="@this" update="grupo-table msgs toolbar"
+						action="#{cadastroGrupoBean.excluir}"
+						disabled="#{cadastroGrupoBean.grupoSelecionado == null}">
 
 						<p:confirm icon="ui-icon-alert" header="Confirmação de exclusão"
-							message="Tem certeza que deseja excluir o Usuario?" />
+							message="Tem certeza que deseja excluir o Grupo?" />
 
 					</p:commandButton>
+					<span class="ui-separator"> <span
+						class="ui-icon ui-icon-grip-dotted-vertical" />
+					</span>
+
+					<p:commandButton value="Associar Usuários"
+						disabled="#{cadastroGrupoBean.grupoSelecionado == null}"
+						process="@this" update="associaUsuarios-Dialog"
+						oncomplete="PF('associaUsuariosDialog').show()">
+						<p:resetInput target="associaUsuarios-Dialog" />
+						<f:setPropertyActionListener
+							value="#{cadastroGrupoBean.grupoSelecionado}"
+							target="#{cadastroGrupoBean.grupoEdicao}" />
+					</p:commandButton>
 				</f:facet>
+				
+				<f:facet name="">
 			</p:toolbar>
 
-			<p:dataTable value="#{cadastroUsuarioBean.todosUsuarios}" 
-				var="usuario" emptyMessage="Nenhum usuário cadastrado." rows="10"
-				paginator="true" paginatorPosition="bottom" style="margin-top: 10px"
-				id="usuario-table"
-				selection="#{cadastroUsuarioBean.usuarioSelecionado}"
-				selectionMode="single" rowKey="#{usuario.codigo}"
-				filteredValue="#{cadastroUsuarioBean.filtroUsuarios}"
-				widgetVar="tabelaUsuario">
+			<p:dataTable value="#{cadastroGrupoBean.todosGrupos}" var="grupo"
+				emptyMessage="Nenhum grupo cadastrado." rows="10" paginator="true"
+				paginatorPosition="bottom" style="margin-top: 10px" id="grupo-table"
+				selection="#{cadastroGrupoBean.grupoSelecionado}"
+				selectionMode="single" rowKey="#{grupo.codigo}"
+				filteredValue="#{cadastroGrupoBean.filtroGrupos}"
+				widgetVar="tabelaGrupo">
 
-			
+
 
 				<p:ajax event="rowSelect" update=":frmCadastro:toolbar" />
 				<p:ajax event="rowUnselect" update=":frmCadastro:toolbar" />
 
-				<p:column headerText="Nome" sortBy="#{usuario.nomeCompleto}"
-					filterBy="#{usuario.nomeCompleto}" footerText="Contendo"
-					filterMatchMode="contains" >
-					<h:outputText value="#{usuario.nomeCompleto}" />
+				<p:column headerText="Código" sortBy="#{grupo.codigo}"
+					filterBy="#{grupo.codigo}" footerText="" filterMatchMode="contains"
+					width="50">
+					<h:outputText value="#{grupo.codigo}" />
+				</p:column>
+				<p:column headerText="Nome" width="200" sortBy="#{grupo.nome}"
+					filterBy="#{grupo.nome}" footerText="" filterMatchMode="contains">
+					<h:outputText value="#{grupo.nome}" />
 				</p:column>
 
-				<p:column headerText="Usuário" sortBy="#{usuario.usuario}"
-					filterBy="#{usuario.usuario}" footerText="contains"
-					filterMatchMode="contains">
-					<h:outputText value="#{usuario.usuario}" />
-				</p:column>
-				<p:column headerText="Email" width="250" sortBy="#{usuario.email}"
-					filterBy="#{usuario.email}" footerText="contains"
-					filterMatchMode="contains">
-					<h:outputText value="#{usuario.email}" />
-				</p:column>
-				<p:column headerText="Status" width="120"
-					
-					sortBy="#{usuario.status}">
-						<h:outputText value="#{usuario.status} " />
-				</p:column>
 			</p:dataTable>
 
-			<p:dialog header="Novo Usuário" widgetVar="edicaoUsuarioDialog"
-				id="usuario-dialog" resizable="false" modal="true"
+			<p:dialog header="Novo Grupo" widgetVar="edicaoGrupoDialog"
+				id="grupo-dialog" resizable="false" modal="true"
 				closeOnEscape="true">
 
 				<p:messages id="msgs-dialog" />
 
-				<p:defaultCommand target="salvar-button" scope="usuario-dialog" />
-
+				<p:defaultCommand target="salvar-button" scope="grupo-dialog" />
 				<h:panelGrid columns="2" id="painel-dialog">
 					<p:outputLabel value="Código" for="codigo" />
-					<p:inputText id="codigo" size="20" maxlength="20"
-						value="#{cadastroUsuarioBean.usuarioEdicao.codigo}"
-						readonly="true" />
-
-					<p:outputLabel value="Usuário" for="nome" />
-					<p:inputText id="nome"
-						value="#{cadastroUsuarioBean.usuarioEdicao.usuario}" />
-
-					<p:outputLabel value="Senha" for="senha" />
-					<p:password id="senha" 
-						value="#{cadastroUsuarioBean.usuarioEdicao.senha}" />
-
-					<p:outputLabel value="Mudar Senha" for="mudarSenha" />
-
-					<p:selectBooleanButton id="mudarSenha"
-						value="#{cadastroUsuarioBean.usuarioEdicao.mudarSenha}"
-						onLabel="Sim" offLabel="Não" style="width:60px" />
-
-					<p:outputLabel value="Nome Completo" for="nomeCompleto" />
-					<p:inputText id="nomeCompleto" size="20" maxlength="100"
-						value="#{cadastroUsuarioBean.usuarioEdicao.nomeCompleto}" />
-
-					<p:outputLabel value="Email" for="email" />
-					<p:inputText id="email"
-						value="#{cadastroUsuarioBean.usuarioEdicao.email}" />
-
-					<p:outputLabel value="Status" for="status" />
-					<p:selectOneMenu id="status"
-						value="#{cadastroUsuarioBean.usuarioEdicao.status}">
-						<f:selectItems value="#{cadastroUsuarioBean.statusList}" />
-					</p:selectOneMenu>
-
+					<p:inputText id="codigo" size="5" maxlength="20"
+						value="#{cadastroGrupoBean.grupoEdicao.codigo}" readonly="true" />
+					<p:outputLabel value="Nome" for="nome" />
+					<p:inputText id="nome" required="true"
+						value="#{cadastroGrupoBean.grupoEdicao.nome}" />
 					<p:commandButton value="Salvar" id="salvar-button"
-						action="#{cadastroUsuarioBean.salvar}" process="usuario-dialog"
+						action="#{cadastroGrupoBean.salvar}" process="grupo-dialog"
 						update="msgs-dialog painel-dialog"
-						oncomplete="if (!args.validationFailed) PF('edicaoUsuarioDialog').hide()" />
+						oncomplete="if (!args.validationFailed) PF('edicaoGrupoDialog').hide()" />
 				</h:panelGrid>
 			</p:dialog>
+
+			<p:dialog header="Associar usuários"
+				widgetVar="associaUsuariosDialog" id="associaUsuarios-Dialog"
+				resizable="false" modal="true" closeOnEscape="true">
+				<h:form>
+					<h3 style="margin-top: 0">Associar Usuários ao Grupo</h3>
+					<p:pickList id="pickUsuarios" value="#{cadastroGrupoBean.todosUsuarios}"
+						var="usuario" iconOnly="true" itemLabel="#{usuario.usuario}"
+						itemValue="#{usuario}" >
+						<f:facet name="sourceCaption">Disponíveis</f:facet>
+						<f:facet name="targetCaption">Associados</f:facet>
+					</p:pickList>
+					<p:commandButton value="Salvar" style="margin-top:10px  " />	
+
+				</h:form>
+			</p:dialog>
+
 		</h:form>
+
+
 	</ui:define>
 </ui:composition>

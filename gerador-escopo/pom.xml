@@ -116,6 +116,7 @@
 			<version>2.4</version>
 			<scope>compile</scope>
 		</dependency>
+		<!-- Ehcache -->
 		<dependency>
 			<groupId>org.primefaces.extensions</groupId>
 			<artifactId>all-themes</artifactId>
@@ -123,27 +124,27 @@
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
-		<groupId>net.sf.ehcache</groupId>
-		<artifactId>ehcache-core</artifactId>
-		<version>2.6.9</version>
-		<scope>compile</scope>
-	</dependency>
-	<dependency>
-		<groupId>org.hibernate</groupId>
-		<artifactId>hibernate-ehcache</artifactId>
-		<version>4.3.6.Final</version>
-		<scope>compile</scope>
-	</dependency>
-	<dependency>
-		<groupId>org.slf4j</groupId>
-		<artifactId>slf4j-api</artifactId>
-		<version>1.7.7</version>
-		<scope>compile</scope>
-	</dependency>
-		
+			<groupId>net.sf.ehcache</groupId>
+			<artifactId>ehcache-core</artifactId>
+			<version>2.6.9</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-ehcache</artifactId>
+			<version>4.3.6.Final</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.7</version>
+			<scope>compile</scope>
+		</dependency>
+
 	</dependencies>
 
-	<!-- Ehcache -->
-	
+
+
 
 </project>
