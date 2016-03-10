@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title><ui:insert name="titulo">Gerador de Escopo</ui:insert></title>
+	<h:outputStylesheet library="prodama" name="estilo.css" />
+</h:head>
+
+<h:body>
+	<!-- <f:metadata>
+		<f:viewAction action="#{consultaLancamentosBean.consultar}" />
+	</f:metadata>
+ -->
+	<p:ajaxStatus styleClass="ajax-status">
+		<f:facet name="start">
+			<h:graphicImage library="prodama" name="loading.gif" />
+		</f:facet>
+		<f:facet name="complete">
+			<h:outputText value="" />
+		</f:facet>
+	</p:ajaxStatus>
+
+	<header>
+		<h:graphicImage library="prodama" name="logo.png" />
+
+		<div style="float: right; margin-right: 20px; margin-top: 8px">
+			Olá #{usuarioLogin.nome}!</div>
+		
+
+		<div style="float: right; margin-right: 110px">
+			<h:form style="display: inline-block">
+				<p:menubar styleClass="menu-sistema">
+					<p:submenu label="Cadastros">
+						<p:menuitem value="Sair" action="#{loginBean.logout}" />
+					</p:submenu>
+					<p:submenu label="Projetos">
+						<p:menuitem value="Sair" action="#{loginBean.logout}" />
+					</p:submenu>
+					<p:submenu label="Configurações">
+						<p:menuitem value="Cadastro Usuário" outcome="/cadastros/CadastroUsuario.xhtml"/>
+					</p:submenu>
+					<p:menuitem value="Sair" action="#{loginBean.logout}" icon="ui-icon-close"/>
+				</p:menubar>
+			</h:form>
+		</div>
+		<div style="clear: both"></div>
+
+	</header>
+
+
+	<div id="conteudo">
+		<ui:insert name="corpo" />
+	</div>
+
+	<!-- <p:separator style="margin-top: 20px" /> -->
+	<footer> Sistema de Gerenciamento de Escopo - Prodama </footer>
+	<h:form>
+		<p:confirmDialog global="true">
+			<p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no"
+				icon="ui-icon-close" />
+				
+			<p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes"
+				icon="ui-icon-check" />
+		</p:confirmDialog>
+	</h:form>
+</h:body>
+
+</html>

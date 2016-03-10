@@ -1,0 +1,143 @@
+<ui:composition template="/WEB-INF/template/Layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui">
+
+	<f:metadata>
+		<f:viewAction action="#{cadastroUsuarioBean.consultar}" />
+	</f:metadata>
+
+	<ui:define name="titulo">Cadastro de Usuário</ui:define>
+
+	<ui:define name="corpo">
+		<h1>Cadastro usuário</h1>
+		<h:form id="frmCadastro">
+
+			<p:messages id="msgs" closable="true" showDetail="true" />
+
+			<p:toolbar id="toolbar">
+				<f:facet name="left">
+					 <p:commandButton value="Novo" icon="ui-icon-document"
+						action="#{cadastroUsuarioBean.prepararNovoCadastro}"
+						process="@this" update="usuario-dialog"
+						oncomplete="PF('edicaoUsuarioDialog').show()">
+						<p:resetInput target="usuario-dialog" />
+					</p:commandButton>
+
+					<span class="ui-separator"> <span
+						class="ui-icon ui-icon-grip-dotted-vertical" />
+					</span>
+
+					<p:commandButton icon="ui-icon-pencil" title="Editar"
+						process="@this" update="usuario-dialog"
+						oncomplete="PF('edicaoUsuarioDialog').show()"
+						disabled="#{cadastroUsuarioBean.usuarioSelecionado == null}">
+						<p:resetInput target="usuario-dialog" />
+
+						<f:setPropertyActionListener
+							value="#{cadastroUsuarioBean.usuarioSelecionado}"
+							target="#{cadastroUsuarioBean.usuarioEdicao}" />
+					</p:commandButton>
+
+					<p:commandButton icon="ui-icon-trash" title="Excluir"
+						process="@this" update="usuario-table msgs toolbar"
+						action="#{cadastroUsuarioBean.excluir}"
+						disabled="#{cadastroUsuarioBean.usuarioSelecionado == null}">
+
+						<p:confirm icon="ui-icon-alert" header="Confirmação de exclusão"
+							message="Tem certeza que deseja excluir o Usuario?" />
+
+					</p:commandButton>
+				</f:facet>
+			</p:toolbar>
+
+			<p:dataTable value="#{cadastroUsuarioBean.todosUsuarios}" 
+				var="usuario" emptyMessage="Nenhum usuário cadastrado." rows="10"
+				paginator="true" paginatorPosition="bottom" style="margin-top: 10px"
+				id="usuario-table"
+				selection="#{cadastroUsuarioBean.usuarioSelecionado}"
+				selectionMode="single" rowKey="#{usuario.codigo}"
+				filteredValue="#{cadastroUsuarioBean.filtroUsuarios}"
+				widgetVar="tabelaUsuario">
+
+			
+
+				<p:ajax event="rowSelect" update=":frmCadastro:toolbar" />
+				<p:ajax event="rowUnselect" update=":frmCadastro:toolbar" />
+
+				<p:column headerText="Nome" sortBy="#{usuario.nomeCompleto}"
+					filterBy="#{usuario.nomeCompleto}" footerText="Contendo"
+					filterMatchMode="contains" >
+					<h:outputText value="#{usuario.nomeCompleto}" />
+				</p:column>
+
+				<p:column headerText="Usuário" sortBy="#{usuario.usuario}"
+					filterBy="#{usuario.usuario}" footerText="contains"
+					filterMatchMode="contains">
+					<h:outputText value="#{usuario.usuario}" />
+				</p:column>
+				<p:column headerText="Email" width="250" sortBy="#{usuario.email}"
+					filterBy="#{usuario.email}" footerText="contains"
+					filterMatchMode="contains">
+					<h:outputText value="#{usuario.email}" />
+				</p:column>
+				<p:column headerText="Status" width="120"
+					
+					sortBy="#{usuario.status}">
+						<h:outputText value="#{usuario.status} " />
+				</p:column>
+			</p:dataTable>
+
+			<p:dialog header="Novo Usuário" widgetVar="edicaoUsuarioDialog"
+				id="usuario-dialog" resizable="false" modal="true"
+				closeOnEscape="true">
+
+				<p:messages id="msgs-dialog" />
+
+				<p:defaultCommand target="salvar-button" scope="usuario-dialog" />
+
+				<h:panelGrid columns="2" id="painel-dialog">
+					<p:outputLabel value="Código" for="codigo" />
+					<p:inputText id="codigo" size="20" maxlength="20"
+						value="#{cadastroUsuarioBean.usuarioEdicao.codigo}"
+						readonly="true" />
+
+					<p:outputLabel value="Usuário" for="nome" />
+					<p:inputText id="nome"
+						value="#{cadastroUsuarioBean.usuarioEdicao.usuario}" />
+
+					<p:outputLabel value="Senha" for="senha" />
+					<p:password id="senha" 
+						value="#{cadastroUsuarioBean.usuarioEdicao.senha}" />
+
+					<p:outputLabel value="Mudar Senha" for="mudarSenha" />
+
+					<p:selectBooleanButton id="mudarSenha"
+						value="#{cadastroUsuarioBean.usuarioEdicao.mudarSenha}"
+						onLabel="Sim" offLabel="Não" style="width:60px" />
+
+					<p:outputLabel value="Nome Completo" for="nomeCompleto" />
+					<p:inputText id="nomeCompleto" size="20" maxlength="100"
+						value="#{cadastroUsuarioBean.usuarioEdicao.nomeCompleto}" />
+
+					<p:outputLabel value="Email" for="email" />
+					<p:inputText id="email"
+						value="#{cadastroUsuarioBean.usuarioEdicao.email}" />
+
+					<p:outputLabel value="Status" for="status" />
+					<p:selectOneMenu id="status"
+						value="#{cadastroUsuarioBean.usuarioEdicao.status}">
+						<f:selectItems value="#{cadastroUsuarioBean.statusList}" />
+					</p:selectOneMenu>
+
+					<p:commandButton value="Salvar" id="salvar-button"
+						action="#{cadastroUsuarioBean.salvar}" process="usuario-dialog"
+						update="msgs-dialog painel-dialog"
+						oncomplete="if (!args.validationFailed) PF('edicaoUsuarioDialog').hide()" />
+				</h:panelGrid>
+			</p:dialog>
+		</h:form>
+	</ui:define>
+</ui:composition>

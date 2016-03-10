@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pageflow:Pageflow xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pageflow="http://www.sybase.com/suade/pageflow" id="pf14542892645192" configfile="/gerador-escopo/src/main/webapp/WEB-INF/faces-config.xml">
+  <nodes xsi:type="pageflow:PFPage" name="*" id="pf14571140440870" referenceLink="//@navigationRule.0/@fromViewId|" outlinks="pf14571140440881" path="*"/>
+  <nodes xsi:type="pageflow:PFPage" name="Home.xhtml" id="pf14571140440882" referenceLink="//@navigationRule.0/@navigationCase.0/@toViewId|" inlinks="pf14571140440881" path="/Home.xhtml"/>
+  <links id="pf14571140440881" target="pf14571140440882" source="pf14571140440870" outcome="oi" redirect="true"/>
+</pageflow:Pageflow>
