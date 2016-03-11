@@ -17,7 +17,7 @@ public class CadastroGrupo implements Serializable{
 	private Grupos grupos;
 	
 	@Transactional
-	public void salvar(Grupo grupo) throws NegocioException {
+	public void salvar(Grupo grupo) throws Exception {
 		if (grupos.pesquisaPorNome(grupo) && (grupo.getCodigo() == null || grupo.getCodigo()==0)) {
 			throw new NegocioException(
 					"Já existe um cadastro com este nome de usuário: " + grupo.getNome());
@@ -31,5 +31,5 @@ public class CadastroGrupo implements Serializable{
 		grupos.excluir(grupo);
 		
 	}
-
+	
 }

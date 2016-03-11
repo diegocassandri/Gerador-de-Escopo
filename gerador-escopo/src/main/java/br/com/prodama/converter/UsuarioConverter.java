@@ -10,7 +10,7 @@ import javax.persistence.EntityManager;
 import br.com.prodama.model.Usuario;
 
 
-@FacesConverter(forClass = Usuario.class)
+@FacesConverter(forClass = Usuario.class,value = "usuarioPickConverter")
 public class UsuarioConverter implements Converter {
 
 	@Inject

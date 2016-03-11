@@ -7,7 +7,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
-
+import br.com.prodama.model.Grupo;
 import br.com.prodama.model.Usuario;
 
 public class Usuarios implements Serializable {
@@ -58,6 +58,19 @@ public class Usuarios implements Serializable {
 
 	public List<Usuario> todos() {
 		return manager.createQuery("from Usuario", Usuario.class).getResultList();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Grupo> gruposNaoAssociados(Usuario usuario) {
+
+		Query query = manager.createQuery("Select g From Grupo g Where not exists (Select u from g.usuarios u Where u = :usuario)", Grupo.class);
+		query.setParameter("usuario", usuario);
+		return query.getResultList();
+
+	}
+
+	public List<Grupo> gruposAssociados(Usuario usuario) {
+		return usuario.getGrupos();
 	}
 
 	

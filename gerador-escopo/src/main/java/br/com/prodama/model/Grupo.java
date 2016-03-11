@@ -1,15 +1,17 @@
 package br.com.prodama.model;
 
 import java.io.Serializable;
+import java.util.LinkedList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-
 import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
@@ -25,8 +27,8 @@ public class Grupo implements Serializable {
 	@NotEmpty
 	private String descricao;
 
-	@ManyToMany(mappedBy="grupos")
-	private List<Usuario> usuarios;
+	@ManyToMany(mappedBy="grupos",cascade=CascadeType.ALL,fetch=FetchType.EAGER)
+	private List<Usuario> usuarios = new LinkedList<Usuario>();
 	
 	public Long getCodigo() {
 		return codigo;

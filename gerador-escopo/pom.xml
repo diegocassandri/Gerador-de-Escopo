@@ -12,7 +12,7 @@
 	</properties>
 
 	<build>
-		<finalName>gerenciador-acesso</finalName>
+		<finalName>gerador-escopo</finalName>
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>

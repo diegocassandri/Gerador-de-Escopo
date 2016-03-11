@@ -12,14 +12,14 @@
 	<ui:define name="titulo">Cadastro de Usuário</ui:define>
 
 	<ui:define name="corpo">
-		<h1>Cadastro usuário</h1>
+		<h1>Cadastro Usuário</h1>
 		<h:form id="frmCadastro">
 
 			<p:messages id="msgs" />
 
 			<p:toolbar id="toolbar">
 				<f:facet name="left">
-					 <p:commandButton value="Novo" icon="ui-icon-document"
+					<p:commandButton value="Novo" icon="ui-icon-document"
 						action="#{cadastroUsuarioBean.prepararNovoCadastro}"
 						process="@this" update="usuario-dialog"
 						oncomplete="PF('edicaoUsuarioDialog').show()">
@@ -51,9 +51,21 @@
 
 					</p:commandButton>
 				</f:facet>
+
+				<f:facet name="right">
+					<p:commandButton value="Associar Grupos"
+						disabled="#{cadastroUsuarioBean.usuarioSelecionado == null}"
+						process="@this" update="associaGrupos-Dialog"
+						oncomplete="PF('associaGruposDialog').show()">
+						<p:resetInput target="associaGrupos-Dialog" />
+						<f:setPropertyActionListener
+							value="#{cadastroUsuarioBean.usuarioSelecionado}"
+							target="#{cadastroUsuarioBean.usuarioEdicao}" />
+					</p:commandButton>
+				</f:facet>
 			</p:toolbar>
 
-			<p:dataTable value="#{cadastroUsuarioBean.todosUsuarios}" 
+			<p:dataTable value="#{cadastroUsuarioBean.todosUsuarios}"
 				var="usuario" emptyMessage="Nenhum usuário cadastrado." rows="10"
 				paginator="true" paginatorPosition="bottom" style="margin-top: 10px"
 				id="usuario-table"
@@ -62,14 +74,14 @@
 				filteredValue="#{cadastroUsuarioBean.filtroUsuarios}"
 				widgetVar="tabelaUsuario">
 
-			
+
 
 				<p:ajax event="rowSelect" update=":frmCadastro:toolbar" />
 				<p:ajax event="rowUnselect" update=":frmCadastro:toolbar" />
 
 				<p:column headerText="Nome" sortBy="#{usuario.nomeCompleto}"
 					filterBy="#{usuario.nomeCompleto}" footerText="Contendo"
-					filterMatchMode="contains" >
+					filterMatchMode="contains">
 					<h:outputText value="#{usuario.nomeCompleto}" />
 				</p:column>
 
@@ -83,10 +95,8 @@
 					filterMatchMode="contains">
 					<h:outputText value="#{usuario.email}" />
 				</p:column>
-				<p:column headerText="Status" width="120"
-					
-					sortBy="#{usuario.status}">
-						<h:outputText value="#{usuario.status} " />
+				<p:column headerText="Status" width="120" sortBy="#{usuario.status}">
+					<h:outputText value="#{usuario.status} " />
 				</p:column>
 			</p:dataTable>
 
@@ -109,7 +119,7 @@
 						value="#{cadastroUsuarioBean.usuarioEdicao.usuario}" />
 
 					<p:outputLabel value="Senha" for="senha" />
-					<p:password id="senha" 
+					<p:password id="senha"
 						value="#{cadastroUsuarioBean.usuarioEdicao.senha}" />
 
 					<p:outputLabel value="Mudar Senha" for="mudarSenha" />
@@ -137,6 +147,26 @@
 						update="msgs-dialog painel-dialog"
 						oncomplete="if (!args.validationFailed) PF('edicaoUsuarioDialog').hide()" />
 				</h:panelGrid>
+			</p:dialog>
+
+			<p:dialog header="Associar Grupos"
+				widgetVar="associaGruposDialog" id="associaGrupos-Dialog"
+				resizable="false" modal="true" closeOnEscape="true">
+				<p:messages id="msgs-associa" />
+				<h3 style="margin-top: 0">Associar Grupos ao Usuario #{cadastroUsuarioBean.usuarioSelecionado} </h3> 
+				<p:pickList id="pickGrupos"
+					value="#{cadastroUsuarioBean.todosGrupos}" var="grupo"
+					iconOnly="true" itemLabel="#{grupo.nome}"
+					itemValue="#{grupo}" converter="grupoPickConverter"
+					showSourceFilter="true" showTargetFilter="true"
+					filterMatchMode="contains">
+					<f:facet name="sourceCaption">Disponíveis</f:facet>
+					<f:facet name="targetCaption">Associados</f:facet>
+				</p:pickList>
+				<p:commandButton value="Salvar" style="margin-top:10px"
+					action="#{cadastroUsuarioBean.salvaListaGrupos}"
+					process="associaGrupos-Dialog" update="msgs-associa"
+					oncomplete="if (!args.validationFailed) PF('associaGruposDialog').hide()" />
 			</p:dialog>
 		</h:form>
 	</ui:define>

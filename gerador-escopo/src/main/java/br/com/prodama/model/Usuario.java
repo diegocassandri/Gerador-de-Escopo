@@ -1,11 +1,14 @@
 package br.com.prodama.model;
 
 import java.io.Serializable;
+import java.util.LinkedList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -47,9 +50,10 @@ public class Usuario implements Serializable {
 	@Enumerated(EnumType.STRING)
 	private Status status;
 	
-	@ManyToMany
+	
+	@ManyToMany(cascade=CascadeType.ALL,fetch=FetchType.EAGER)
 	@JoinTable(name = "usuario_grupo", joinColumns = @JoinColumn(name = "codigo_usuario"), inverseJoinColumns = @JoinColumn(name = "codigo_grupo"))
-	private List<Grupo> grupos;
+	private List<Grupo> grupos = new LinkedList<Grupo>();
 
 	public Long getCodigo() {
 		return codigo;
