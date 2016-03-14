@@ -103,7 +103,6 @@ public class CadastroGrupoBean implements Serializable {
 				e.printStackTrace();
 			}
 		}
-		//messages.info("Grupo salvo com sucesso!");
 		RequestContext.getCurrentInstance().update(Arrays.asList("frmCadastro:msgs", "frmCadastro:grupo-table"));
 
 	}

@@ -56,7 +56,8 @@
 					<p:commandButton value="Associar Grupos"
 						disabled="#{cadastroUsuarioBean.usuarioSelecionado == null}"
 						process="@this" update="associaGrupos-Dialog"
-						oncomplete="PF('associaGruposDialog').show()">
+						oncomplete="PF('associaGruposDialog').show()"
+						icon="ui-icon-circle-plus">
 						<p:resetInput target="associaGrupos-Dialog" />
 						<f:setPropertyActionListener
 							value="#{cadastroUsuarioBean.usuarioSelecionado}"
@@ -73,25 +74,23 @@
 				selectionMode="single" rowKey="#{usuario.codigo}"
 				filteredValue="#{cadastroUsuarioBean.filtroUsuarios}"
 				widgetVar="tabelaUsuario">
-
-
-
+				
 				<p:ajax event="rowSelect" update=":frmCadastro:toolbar" />
 				<p:ajax event="rowUnselect" update=":frmCadastro:toolbar" />
 
 				<p:column headerText="Nome" sortBy="#{usuario.nomeCompleto}"
-					filterBy="#{usuario.nomeCompleto}" footerText="Contendo"
+					filterBy="#{usuario.nomeCompleto}" 
 					filterMatchMode="contains">
 					<h:outputText value="#{usuario.nomeCompleto}" />
 				</p:column>
 
 				<p:column headerText="Usuário" sortBy="#{usuario.usuario}"
-					filterBy="#{usuario.usuario}" footerText="contains"
+					filterBy="#{usuario.usuario}" 
 					filterMatchMode="contains">
 					<h:outputText value="#{usuario.usuario}" />
 				</p:column>
 				<p:column headerText="Email" width="250" sortBy="#{usuario.email}"
-					filterBy="#{usuario.email}" footerText="contains"
+					filterBy="#{usuario.email}" 
 					filterMatchMode="contains">
 					<h:outputText value="#{usuario.email}" />
 				</p:column>

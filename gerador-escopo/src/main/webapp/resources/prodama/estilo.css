@@ -125,3 +125,7 @@ h1 {
 .many-checkbox td label {
 	padding-right: 10px;
 }
+
+.ui-widget {
+	font-size: 11px !important;
+}

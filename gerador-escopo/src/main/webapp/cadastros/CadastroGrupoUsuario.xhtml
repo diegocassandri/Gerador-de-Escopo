@@ -59,7 +59,8 @@
 					<p:commandButton value="Associar Usuários"
 						disabled="#{cadastroGrupoBean.grupoSelecionado == null}"
 						process="@this" update="associaUsuarios-Dialog"
-						oncomplete="PF('associaUsuariosDialog').show()">
+						oncomplete="PF('associaUsuariosDialog').show()"
+						icon="ui-icon-circle-plus">
 						<p:resetInput target="associaUsuarios-Dialog" />
 						<f:setPropertyActionListener
 							value="#{cadastroGrupoBean.grupoSelecionado}"
@@ -75,9 +76,7 @@
 				selectionMode="single" rowKey="#{grupo.codigo}"
 				filteredValue="#{cadastroGrupoBean.filtroGrupos}"
 				widgetVar="tabelaGrupo">
-
-
-
+				
 				<p:ajax event="rowSelect" update=":frmCadastro:toolbar" />
 				<p:ajax event="rowUnselect" update=":frmCadastro:toolbar" />
 
@@ -132,12 +131,7 @@
 					action="#{cadastroGrupoBean.salvaListaUsuarios}"
 					process="associaUsuarios-Dialog" 
 					oncomplete="if (!args.validationFailed) PF('associaUsuariosDialog').hide()" />
-
-
 			</p:dialog>
-
 		</h:form>
-
-
 	</ui:define>
 </ui:composition>

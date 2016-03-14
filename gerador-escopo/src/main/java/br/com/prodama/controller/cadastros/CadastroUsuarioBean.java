@@ -76,7 +76,6 @@ public class CadastroUsuarioBean implements Serializable {
 		usuarioEdicao.getGrupos().removeAll(todosGrupos.getSource());
 		usuarioEdicao.getGrupos().removeAll(todosGrupos.getTarget());
 		usuarioEdicao.getGrupos().addAll(todosGrupos.getTarget());
-		System.out.println("------------>>>>>>>" + todosGrupos.getTarget());
 		salvar();
 		
 	}
