@@ -6,6 +6,8 @@ import java.util.Date;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 
+import br.com.prodama.model.Usuario;
+
 @Named
 @SessionScoped
 public class UsuarioLogin implements Serializable {
@@ -14,6 +16,8 @@ public class UsuarioLogin implements Serializable {
 
 	private String nome;
 	private Date dataLogin;
+	
+	private Usuario usuarioLogin = new Usuario();
 	
 	public boolean isLogado() {
 		return nome != null;
@@ -34,5 +38,15 @@ public class UsuarioLogin implements Serializable {
 	public void setDataLogin(Date dataLogin) {
 		this.dataLogin = dataLogin;
 	}
+
+	public Usuario getUsuarioLogin() {
+		return usuarioLogin;
+	}
+
+	public void setUsuarioLogin(Usuario usuarioLogin) {
+		this.usuarioLogin = usuarioLogin;
+	}
+	
+	
 
 }

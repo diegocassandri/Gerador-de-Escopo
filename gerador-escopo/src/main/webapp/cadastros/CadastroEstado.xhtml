@@ -1,0 +1,115 @@
+<ui:composition template="/WEB-INF/template/Layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui">
+
+	<f:metadata>
+		<f:viewAction action="#{cadastroEstadoBean.consultar}" />
+	</f:metadata>
+
+	<ui:define name="titulo">Cadastro de Estado</ui:define>
+
+	<ui:define name="corpo">
+		<h1>Cadastro Estado</h1>
+		<h:form id="frmCadastro">
+
+			<p:messages id="msgs" />
+
+			<p:toolbar id="toolbar">
+				<f:facet name="left">
+					<p:commandButton value="Novo" icon="ui-icon-document"
+						action="#{cadastroEstadoBean.prepararNovoCadastro}"
+						process="@this" update="estado-dialog"
+						oncomplete="PF('edicaoEstadoDialog').show()">
+						<p:resetInput target="estado-dialog" />
+					</p:commandButton>
+
+					<span class="ui-separator"> <span
+						class="ui-icon ui-icon-grip-dotted-vertical" />
+					</span>
+
+					<p:commandButton icon="ui-icon-pencil" title="Editar"
+						process="@this" update="estado-dialog"
+						oncomplete="PF('edicaoEstadoDialog').show()"
+						disabled="#{cadastroEstadoBean.estadoSelecionado == null}">
+						<p:resetInput target="estado-dialog" />
+
+						<f:setPropertyActionListener
+							value="#{cadastroEstadoBean.estadoSelecionado}"
+							target="#{cadastroEstadoBean.estadoEdicao}" />
+					</p:commandButton>
+
+					<p:commandButton icon="ui-icon-trash" title="Excluir"
+						process="@this" update="estado-table msgs toolbar"
+						action="#{cadastroEstadoBean.excluir}"
+						disabled="#{cadastroEstadoBean.estadoSelecionado == null}">
+
+						<p:confirm icon="ui-icon-alert" header="Confirmação de exclusão"
+							message="Tem certeza que deseja excluir o Estado?" />
+
+					</p:commandButton>
+				</f:facet>
+
+			</p:toolbar>
+
+			<p:dataTable value="#{cadastroEstadoBean.todosEstados}"
+				var="estado" emptyMessage="Nenhum estado cadastrado." rows="10"
+				paginator="true" paginatorPosition="bottom" style="margin-top: 10px"
+				id="estado-table"
+				selection="#{cadastroEstadoBean.estadoSelecionado}"
+				selectionMode="single" rowKey="#{estado.codigo}"
+				filteredValue="#{cadastroEstadoBean.filtroEstados}"
+				widgetVar="tabelaEstado">
+
+				<p:ajax event="rowSelect" update=":frmCadastro:toolbar" />
+				<p:ajax event="rowUnselect" update=":frmCadastro:toolbar" />
+
+				<p:column headerText="Código" sortBy="#{estado.codigo}"
+					filterBy="#{estado.codigo}" filterMatchMode="contains">
+					<h:outputText value="#{estado.codigo}" />
+				</p:column>	
+				<p:column headerText="Nome" sortBy="#{estado.nome}"
+					filterBy="#{estado.nome}" filterMatchMode="contains">
+					<h:outputText value="#{estado.nome}" />
+				</p:column>
+
+				<p:column headerText="Sigla" sortBy="#{estado.sigla}"
+					filterBy="#{estado.sigla}" filterMatchMode="contains">
+					<h:outputText value="#{estado.sigla}" />
+				</p:column>
+			</p:dataTable>
+
+			<p:dialog header="Novo Estado" widgetVar="edicaoEstadoDialog"
+				id="estado-dialog" resizable="false" modal="true"
+				closeOnEscape="true">
+
+				<p:messages id="msgs-dialog" />
+
+				<p:defaultCommand target="salvar-button" scope="estado-dialog" />
+
+				<h:panelGrid columns="2" id="painel-dialog">
+					<p:outputLabel value="Código" for="codigo" />
+					<p:inputText id="codigo" size="7" maxlength="10"
+						value="#{cadastroEstadoBean.estadoEdicao.codigo}"
+						readonly="true" />
+
+					<p:outputLabel value="Nome" for="nome" />
+					<p:inputText id="nome" size="20" maxlength="50"
+						value="#{cadastroEstadoBean.estadoEdicao.nome}" />
+						
+					<p:outputLabel value="Sigla" for="sigla" />
+					<p:inputText id="sigla" size="7" maxlength="2"
+						value="#{cadastroEstadoBean.estadoEdicao.sigla}" />
+				
+					<p:commandButton value="Salvar" id="salvar-button"
+						action="#{cadastroEstadoBean.salvar}" process="estado-dialog"
+						update="msgs-dialog painel-dialog"
+						oncomplete="if (!args.validationFailed) PF('edicaoEstadoDialog').hide()" />
+				</h:panelGrid>
+			</p:dialog>
+
+		</h:form>
+	</ui:define>
+</ui:composition>

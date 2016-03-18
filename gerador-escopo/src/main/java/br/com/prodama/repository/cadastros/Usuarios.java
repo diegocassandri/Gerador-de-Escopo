@@ -24,6 +24,14 @@ public class Usuarios implements Serializable {
 	public Usuario pesquisaPorId(Long id) {
 		return manager.find(Usuario.class, id);
 	}
+	
+	public Usuario pesquisaPorN(String usuario) {
+		return manager.find(Usuario.class, usuario);
+	}
+	public void alterarMudarSenha(Usuario usuario){
+		usuario.setMudarSenha(false);
+		manager.merge(usuario);
+	}
 
 	public boolean pesquisaPorNome(Usuario usuario) {
 		Query query = manager.createQuery("From Usuario where usuario = :usuario", Usuario.class);
@@ -34,10 +42,10 @@ public class Usuarios implements Serializable {
 		} else {
 			return true;
 		}
-
 	}
 	
 	public boolean autenticaUsuario(String usuario,String senha) {
+		System.out.println(usuario + " " + senha);
 		Query query = manager.createQuery("From Usuario where usuario = :usuario And senha = :senha", Usuario.class);
 		query.setParameter("usuario", usuario);
 		query.setParameter("senha", senha);
@@ -50,6 +58,19 @@ public class Usuarios implements Serializable {
 		}
 
 	}
+	public boolean verificaMudarSenha(String usuario){
+		Query query = manager.createQuery("From Usuario where usuario = :usuario And mudarSenha = 1 ", Usuario.class);
+		query.setParameter("usuario", usuario);
+		List<?> resultList = query.getResultList();
+		if (resultList.isEmpty()) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	
+	
 	public void excluir(Usuario usuario) {
 		usuario = pesquisaPorId(usuario.getCodigo());
 		manager.remove(usuario);

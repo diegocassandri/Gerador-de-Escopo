@@ -1,6 +1,7 @@
 package br.com.prodama.model;
 
 import java.io.Serializable;
+import java.security.NoSuchAlgorithmException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -21,6 +22,7 @@ import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import br.com.prodama.enun.Status;
+import br.com.prodama.util.CriptografaSenha;
 
 
 @Entity
@@ -37,10 +39,10 @@ public class Usuario implements Serializable {
 	private String usuario;
 	
 	@NotEmpty
-	private String senha;
+	private String senha = "";
 	
 	private String nomeCompleto;
-	
+
 	private Boolean mudarSenha;
 	
 	
@@ -71,12 +73,12 @@ public class Usuario implements Serializable {
 		this.usuario = usuario;
 	}
 
-	public String getSenha() {
-		return senha;
+	public String getSenha() throws NoSuchAlgorithmException {
+		return CriptografaSenha.descriptografa(senha);
 	}
 
-	public void setSenha(String senha) {
-		this.senha = senha;
+	public void setSenha(String senha) throws NoSuchAlgorithmException {
+		this.senha = CriptografaSenha.criptografa(senha);
 	}
 
 	public Boolean getMudarSenha() {

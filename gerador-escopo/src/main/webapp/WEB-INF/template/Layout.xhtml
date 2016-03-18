@@ -36,7 +36,8 @@
 			<h:form style="display: inline-block">
 				<p:menubar styleClass="menu-sistema">
 					<p:submenu label="Cadastros">
-						<p:menuitem value="Sair" action="#{loginBean.logout}" />
+						<p:menuitem value="Estados" outcome="/cadastros/CadastroEstado.xhtml"/>
+						<p:menuitem value="Cidades" outcome="/cadastros/CadastroCidade.xhtml"/>
 					</p:submenu>
 					<p:submenu label="Projetos">
 						<p:menuitem value="Sair" action="#{loginBean.logout}" />

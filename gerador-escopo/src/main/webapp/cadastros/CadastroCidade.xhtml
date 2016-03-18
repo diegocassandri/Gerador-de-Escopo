@@ -1,0 +1,123 @@
+<ui:composition template="/WEB-INF/template/Layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui">
+
+	<f:metadata>
+		<f:viewAction action="#{cadastroCidadeBean.consultar}" />
+	</f:metadata>
+
+	<ui:define name="titulo">Cadastro de Cidade</ui:define>
+
+	<ui:define name="corpo">
+		<h1>Cadastro Cidade</h1>
+		<h:form id="frmCadastro">
+
+			<p:messages id="msgs" />
+
+			<p:toolbar id="toolbar">
+				<f:facet name="left">
+					<p:commandButton value="Novo" icon="ui-icon-document"
+						action="#{cadastroCidadeBean.prepararNovoCadastro}"
+						process="@this" update="cidade-dialog"
+						oncomplete="PF('edicaoCidadeDialog').show()">
+						<p:resetInput target="cidade-dialog" />
+					</p:commandButton>
+
+					<span class="ui-separator"> <span
+						class="ui-icon ui-icon-grip-dotted-vertical" />
+					</span>
+
+					<p:commandButton icon="ui-icon-pencil" title="Editar"
+						process="@this" update="cidade-dialog"
+						oncomplete="PF('edicaoCidadeDialog').show()"
+						disabled="#{cadastroCidadeBean.cidadeSelecionado == null}">
+						<p:resetInput target="cidade-dialog" />
+
+						<f:setPropertyActionListener
+							value="#{cadastroCidadeBean.cidadeSelecionado}"
+							target="#{cadastroCidadeBean.cidadeEdicao}" />
+					</p:commandButton>
+
+					<p:commandButton icon="ui-icon-trash" title="Excluir"
+						process="@this" update="cidade-table msgs toolbar"
+						action="#{cadastroCidadeBean.excluir}"
+						disabled="#{cadastroCidadeBean.cidadeSelecionado == null}">
+
+						<p:confirm icon="ui-icon-alert" header="Confirmação de exclusão"
+							message="Tem certeza que deseja excluir o cidade?" />
+
+					</p:commandButton>
+				</f:facet>
+
+			</p:toolbar>
+
+			<p:dataTable value="#{cadastroCidadeBean.todasCidades}" var="cidade"
+				emptyMessage="Nenhuma cidade cadastrada." rows="10" paginator="true"
+				paginatorPosition="bottom" style="margin-top: 10px"
+				id="cidade-table"
+				selection="#{cadastroCidadeBean.cidadeSelecionado}"
+				selectionMode="single" rowKey="#{cidade.codigo}"
+				filteredValue="#{cadastroCidadeBean.filtroCidades}"
+				widgetVar="tabelacidade">
+
+				<p:ajax event="rowSelect" update=":frmCadastro:toolbar" />
+				<p:ajax event="rowUnselect" update=":frmCadastro:toolbar" />
+
+				<p:column headerText="Código" sortBy="#{cidade.codigo}"
+					filterBy="#{cidade.codigo}" filterMatchMode="contains">
+					<h:outputText value="#{cidade.codigo}" />
+				</p:column>
+				<p:column headerText="Nome" sortBy="#{cidade.nome}"
+					filterBy="#{cidade.nome}" filterMatchMode="contains">
+					<h:outputText value="#{cidade.nome}" />
+				</p:column>
+
+				<p:column headerText="Estado" filterBy="#{cidade.estado.nome}"
+					sortBy="#{cidade.estado.nome}">
+					<h:outputText value="#{cidade.estado.nome}" />
+					<h:outputText value=" - " />
+					<h:outputText value="#{cidade.estado.sigla}" />
+				</p:column>
+			</p:dataTable>
+
+			<p:dialog header="Nova cidade" widgetVar="edicaoCidadeDialog"
+				id="cidade-dialog" resizable="false" modal="true"
+				closeOnEscape="true">
+
+				<p:messages id="msgs-dialog" />
+
+				<p:defaultCommand target="salvar-button" scope="cidade-dialog" />
+
+				<h:panelGrid columns="2" id="painel-dialog">
+					<p:outputLabel value="Código" for="codigo" />
+					<p:inputText id="codigo" size="7" maxlength="10"
+						value="#{cadastroCidadeBean.cidadeEdicao.codigo}" readonly="true" />
+
+					<p:outputLabel value="Nome" for="nome" />
+					<p:inputText id="nome" size="20" maxlength="50"
+						value="#{cadastroCidadeBean.cidadeEdicao.nome}" />
+
+					<p:outputLabel value="Estado:" for="estado" />
+					<p:selectOneMenu filter="true" value="#{cadastroCidadeBean.cidadeEdicao.estado}"
+						converter="omnifaces.SelectItemsConverter" required="true"
+						requiredMessage="O Campo Estado é obrigatório" id="estado">
+						<f:selectItem noSelectionOption="true"
+							itemLabel="Selecione um estado" />
+						<f:selectItems value="#{cadastroCidadeBean.todosEstados}" var="estado"
+							itemValue="#{estado}"
+							itemLabel="#{estado.nome} - #{estado.sigla}" />
+					</p:selectOneMenu>
+
+					<p:commandButton value="Salvar" id="salvar-button"
+						action="#{cadastroCidadeBean.salvar}" process="cidade-dialog"
+						update="msgs-dialog painel-dialog"
+						oncomplete="if (!args.validationFailed) PF('edicaoCidadeDialog').hide()" />
+				</h:panelGrid>
+			</p:dialog>
+
+		</h:form>
+	</ui:define>
+</ui:composition>

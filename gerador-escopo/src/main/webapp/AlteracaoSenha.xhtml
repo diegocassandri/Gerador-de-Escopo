@@ -1,0 +1,32 @@
+<ui:composition template="/WEB-INF/template/Layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<f:metadata>
+		<f:viewAction action="#{cadastroUsuarioBean.consultar}" />
+	</f:metadata>
+	<ui:define name="titulo">Gerenciamento de Escopo</ui:define>
+	<ui:define name="corpo">
+		<h:form id="frmAlteracao">
+			<p:messages id="msgs-alterarSenha" />
+			<h3 style="margin-top: 0">Alterar senha do Usuário</h3>
+			<h:panelGrid columns="2" id="painelAlteracaoSenha">
+
+				<p:outputLabel value="Senha" for="senha" />
+				<p:password id="senha" feedback="true" inline="true"
+					redisplay="true" promptLabel="Digite uma senha segura"
+					goodLabel="Boa" weakLabel="Razoável" strongLabel="Excelente"
+					value="#{cadastroUsuarioBean.usuarioEdicao.senha}" />
+				<p:outputLabel value="Confirmar senha" for="senha2" />
+				<p:password id="senha2" redisplay="true" />
+				<p:commandButton value="Salvar" style="margin-top:10px"
+					action="{#cadastroUsuarioBean.alterSenha}" />
+			</h:panelGrid>
+		</h:form>
+	</ui:define>
+
+
+</ui:composition>

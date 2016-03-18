@@ -79,6 +79,11 @@ public class CadastroUsuarioBean implements Serializable {
 		salvar();
 		
 	}
+	
+	public void alterSenha(){
+		usuarioEdicao.setMudarSenha(false);
+		salvar();
+	}
 
 	public void excluir() {
 		try {

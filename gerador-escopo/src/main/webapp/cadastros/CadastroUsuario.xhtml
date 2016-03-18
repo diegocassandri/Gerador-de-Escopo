@@ -74,24 +74,21 @@
 				selectionMode="single" rowKey="#{usuario.codigo}"
 				filteredValue="#{cadastroUsuarioBean.filtroUsuarios}"
 				widgetVar="tabelaUsuario">
-				
+
 				<p:ajax event="rowSelect" update=":frmCadastro:toolbar" />
 				<p:ajax event="rowUnselect" update=":frmCadastro:toolbar" />
 
 				<p:column headerText="Nome" sortBy="#{usuario.nomeCompleto}"
-					filterBy="#{usuario.nomeCompleto}" 
-					filterMatchMode="contains">
+					filterBy="#{usuario.nomeCompleto}" filterMatchMode="contains">
 					<h:outputText value="#{usuario.nomeCompleto}" />
 				</p:column>
 
 				<p:column headerText="Usuário" sortBy="#{usuario.usuario}"
-					filterBy="#{usuario.usuario}" 
-					filterMatchMode="contains">
+					filterBy="#{usuario.usuario}" filterMatchMode="contains">
 					<h:outputText value="#{usuario.usuario}" />
 				</p:column>
 				<p:column headerText="Email" width="250" sortBy="#{usuario.email}"
-					filterBy="#{usuario.email}" 
-					filterMatchMode="contains">
+					filterBy="#{usuario.email}" filterMatchMode="contains">
 					<h:outputText value="#{usuario.email}" />
 				</p:column>
 				<p:column headerText="Status" width="120" sortBy="#{usuario.status}">
@@ -118,7 +115,9 @@
 						value="#{cadastroUsuarioBean.usuarioEdicao.usuario}" />
 
 					<p:outputLabel value="Senha" for="senha" />
-					<p:password id="senha"
+					<p:password id="senha" feedback="true" inline="true" redisplay="true"
+					promptLabel="Digite uma senha segura"
+						goodLabel="Boa" weakLabel="Razoável" strongLabel="Excelente"
 						value="#{cadastroUsuarioBean.usuarioEdicao.senha}" />
 
 					<p:outputLabel value="Mudar Senha" for="mudarSenha" />
@@ -148,17 +147,17 @@
 				</h:panelGrid>
 			</p:dialog>
 
-			<p:dialog header="Associar Grupos"
-				widgetVar="associaGruposDialog" id="associaGrupos-Dialog"
-				resizable="false" modal="true" closeOnEscape="true">
+			<p:dialog header="Associar Grupos" widgetVar="associaGruposDialog"
+				id="associaGrupos-Dialog" resizable="false" modal="true"
+				closeOnEscape="true">
 				<p:messages id="msgs-associa" />
-				<h3 style="margin-top: 0">Associar Grupos ao Usuario #{cadastroUsuarioBean.usuarioSelecionado} </h3> 
+				<h3 style="margin-top: 0">Associar Grupos ao Usuario
+					#{cadastroUsuarioBean.usuarioSelecionado}</h3>
 				<p:pickList id="pickGrupos"
 					value="#{cadastroUsuarioBean.todosGrupos}" var="grupo"
-					iconOnly="true" itemLabel="#{grupo.nome}"
-					itemValue="#{grupo}" converter="grupoPickConverter"
-					showSourceFilter="true" showTargetFilter="true"
-					filterMatchMode="contains">
+					iconOnly="true" itemLabel="#{grupo.nome}" itemValue="#{grupo}"
+					converter="grupoPickConverter" showSourceFilter="true"
+					showTargetFilter="true" filterMatchMode="contains">
 					<f:facet name="sourceCaption">Disponíveis</f:facet>
 					<f:facet name="targetCaption">Associados</f:facet>
 				</p:pickList>
