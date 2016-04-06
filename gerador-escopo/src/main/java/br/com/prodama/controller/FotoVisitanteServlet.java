@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
 
-import br.com.prodama.model.Visitante;
+import br.com.prodama.model.cadastro.Visitante;
 import br.com.prodama.repository.Visitantes;
 
 @WebServlet(urlPatterns = "/foto-visitante")

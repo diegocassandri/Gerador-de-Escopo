@@ -7,7 +7,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
-import br.com.prodama.model.Cidade;
+import br.com.prodama.model.cadastro.Cidade;
 
 
 

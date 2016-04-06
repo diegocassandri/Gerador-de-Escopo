@@ -25,6 +25,7 @@
 		</plugins>
 	</build>
 	<dependencies>
+	
 		<!-- OmniFaces (utilitarios para JSF) -->
 		<dependency>
 			<groupId>org.omnifaces</groupId>
@@ -141,16 +142,12 @@
 			<version>1.7.7</version>
 			<scope>compile</scope>
 		</dependency>
-
-		<dependency>
-			<groupId>org.apache.directory.studio</groupId>
-			<artifactId>org.apache.commons.codec</artifactId>
+   <dependency>
+			<groupId>org.apache.directory.api</groupId>
+			 <artifactId>api-all</artifactId>
 			<version>1.9</version>
-		</dependency>
+		</dependency> 
+		 
 	</dependencies>
 
-
-
-
-	<url>/gerador-escopo</url>
 </project>

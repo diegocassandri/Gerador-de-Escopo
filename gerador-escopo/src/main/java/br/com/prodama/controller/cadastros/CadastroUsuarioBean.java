@@ -16,8 +16,8 @@ import org.primefaces.context.RequestContext;
 import org.primefaces.model.DualListModel;
 
 import br.com.prodama.enun.Status;
-import br.com.prodama.model.Grupo;
-import br.com.prodama.model.Usuario;
+import br.com.prodama.model.cadastro.Grupo;
+import br.com.prodama.model.cadastro.Usuario;
 import br.com.prodama.repository.cadastros.Usuarios;
 import br.com.prodama.service.cadastro.CadastroUsuario;
 import br.com.prodama.util.FacesMessages;

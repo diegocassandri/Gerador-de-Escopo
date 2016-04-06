@@ -1,4 +1,4 @@
-package br.com.prodama.model;
+package br.com.prodama.model.cadastro;
 
 import java.io.Serializable;
 
@@ -29,7 +29,7 @@ public class Cidade implements Serializable{
 	private String nome;
 	
 	@ManyToOne
-	@JoinColumn(name = "IdEstado")
+	@JoinColumn(name = "CodigoEstado")
 	private Estado estado;
 
 	public Long getCodigo() {
