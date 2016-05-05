@@ -161,9 +161,4 @@ public class CadastroCidadeBean implements Serializable {
 	public void setTodosEstados(List<Estado> todosEstados) {
 		this.todosEstados = todosEstados;
 	}
-
-	
-	
-	
-
 }

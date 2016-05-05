@@ -20,11 +20,9 @@ public class CriptografaSenha {
     
     public static String criptografa(String senha){
     	 return new Base64().encodeToString(senha.getBytes());
-		
     }
     
     public static String descriptografa(String senha){
-    	return new String(new Base64().decode(senha));
-		
+    	return new String(new Base64().decode(senha));	
    }
 }
