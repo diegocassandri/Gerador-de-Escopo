@@ -61,7 +61,7 @@ public class Empresa implements Serializable {
 	private String email;
 	
 	@NotEmpty
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "codigo")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "empresa")
 	private List<Filial> listaFiliais;
 	
 	@JoinColumn(name = "Cidade", referencedColumnName = "codigo")

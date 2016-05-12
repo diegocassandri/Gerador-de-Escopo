@@ -25,7 +25,7 @@ public class Filiais implements Serializable {
 	}
 	
 	public boolean pesquisaPorNome(Filial filial) {
-		Query query = manager.createQuery("From Empresa where RazaoSocial = :filial", Filial.class);
+		Query query = manager.createQuery("From filial where RazaoSocial = :filial", Filial.class);
 		query.setParameter("filial", filial.getRazaoSocial());
 		List<?> resultList = query.getResultList();
 		if (resultList.isEmpty()) {
