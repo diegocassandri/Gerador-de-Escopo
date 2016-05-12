@@ -7,7 +7,7 @@ import javax.faces.convert.FacesConverter;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
-import br.com.prodama.model.Estado;
+import br.com.prodama.model.cadastro.Estado;
 
 
 

@@ -9,7 +9,7 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import br.com.prodama.model.Usuario;
+import br.com.prodama.model.cadastro.Usuario;
 import br.com.prodama.repository.cadastros.Usuarios;
 import br.com.prodama.util.CriptografaSenha;
 

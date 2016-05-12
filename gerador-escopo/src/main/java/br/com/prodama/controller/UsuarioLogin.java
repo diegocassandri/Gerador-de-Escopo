@@ -6,7 +6,7 @@ import java.util.Date;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 
-import br.com.prodama.model.Usuario;
+import br.com.prodama.model.cadastro.Usuario;
 
 @Named
 @SessionScoped

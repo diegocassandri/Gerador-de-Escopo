@@ -12,7 +12,7 @@ import javax.inject.Named;
 
 import org.primefaces.context.RequestContext;
 
-import br.com.prodama.model.Visitante;
+import br.com.prodama.model.cadastro.Visitante;
 import br.com.prodama.repository.Visitantes;
 
 

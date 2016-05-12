@@ -1,4 +1,4 @@
-package br.com.prodama.model;
+package br.com.prodama.model.cadastro;
 
 import java.io.Serializable;
 import java.util.Date;

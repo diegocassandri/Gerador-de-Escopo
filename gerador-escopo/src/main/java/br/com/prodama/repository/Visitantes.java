@@ -6,7 +6,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
-import br.com.prodama.model.Visitante;
+import br.com.prodama.model.cadastro.Visitante;
 
 
 public class Visitantes implements Serializable {

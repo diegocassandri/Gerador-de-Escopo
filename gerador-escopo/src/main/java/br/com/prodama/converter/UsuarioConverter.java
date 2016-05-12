@@ -7,7 +7,7 @@ import javax.faces.convert.FacesConverter;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
-import br.com.prodama.model.Usuario;
+import br.com.prodama.model.cadastro.Usuario;
 
 
 @FacesConverter(forClass = Usuario.class,value = "usuarioPickConverter")
