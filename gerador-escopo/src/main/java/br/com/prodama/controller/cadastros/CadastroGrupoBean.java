@@ -15,6 +15,7 @@ import org.primefaces.context.RequestContext;
 import org.primefaces.model.DualListModel;
 
 import br.com.prodama.model.cadastro.Grupo;
+import br.com.prodama.model.cadastro.Tela;
 import br.com.prodama.model.cadastro.Usuario;
 import br.com.prodama.repository.cadastros.Grupos;
 import br.com.prodama.repository.cadastros.Usuarios;
@@ -38,7 +39,7 @@ public class CadastroGrupoBean implements Serializable {
 
 	@Inject
 	private Usuarios usuarios;
-
+	
 	@Inject
 	private CadastroUsuario usuarioService;
 
@@ -49,14 +50,20 @@ public class CadastroGrupoBean implements Serializable {
 	private List<Grupo> filtroGrupos;
 
 	private DualListModel<Usuario> todosUsuarios;
+	private DualListModel<Tela> todasTelas;
 
 	List<Usuario> usuariosSource = new ArrayList<Usuario>();
 	List<Usuario> usuariosTarget = new ArrayList<Usuario>();
+	
+	List<Tela> telasSource = new ArrayList<Tela>();
+	List<Tela> telasTarget = new ArrayList<Tela>();
+
 
 	@PostConstruct
 	public void prepararNovoCadastro() {
 		grupoEdicao = new Grupo();
 		todosUsuarios = new DualListModel<Usuario>();
+		todasTelas = new DualListModel<Tela>();
 	}
 
 	public void salvar() {
@@ -131,10 +138,14 @@ public class CadastroGrupoBean implements Serializable {
 	public void setGrupoEdicao(Grupo grupoEdicao) {
 		this.grupoEdicao = grupos.pesquisaPorId(grupoEdicao.getCodigo());
 		usuariosSource = grupos.usariosNaoAssociados(grupoEdicao);
-
 		usuariosTarget = grupos.usariosAssociados(this.grupoEdicao);
 
 		todosUsuarios = new DualListModel<Usuario>(usuariosSource, usuariosTarget);
+		
+		telasSource = grupos.telasNaoAssociadas(grupoEdicao);
+		telasTarget = grupos.telasAssociadas(this.grupoEdicao);
+		
+		todasTelas = new DualListModel<Tela>(telasSource, telasTarget);
 	}
 
 	public Grupo getGrupoSelecionado() {
@@ -177,4 +188,13 @@ public class CadastroGrupoBean implements Serializable {
 		this.usuarioEdicao = usuarioEdicao;
 	}
 
+	public DualListModel<Tela> getTodasTelas() {
+		return todasTelas;
+	}
+
+	public void setTodasTelas(DualListModel<Tela> todasTelas) {
+		this.todasTelas = todasTelas;
+	}
+
+	
 }

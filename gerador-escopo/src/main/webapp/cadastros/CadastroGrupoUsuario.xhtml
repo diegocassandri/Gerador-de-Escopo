@@ -76,7 +76,7 @@
 				selectionMode="single" rowKey="#{grupo.codigo}"
 				filteredValue="#{cadastroGrupoBean.filtroGrupos}"
 				widgetVar="tabelaGrupo">
-				
+
 				<p:ajax event="rowSelect" update=":frmCadastro:toolbar" />
 				<p:ajax event="rowUnselect" update=":frmCadastro:toolbar" />
 
@@ -95,29 +95,52 @@
 			<p:dialog header="Novo Grupo" widgetVar="edicaoGrupoDialog"
 				id="grupo-dialog" resizable="false" modal="true"
 				closeOnEscape="true">
+				<h:form id="frmGrupo">
+					<p:tabView id="tabView" widgetVar="tab">
+						<p:tab title="Geral">
+							<p:messages id="msgs-dialog" />
+							<h:panelGrid columns="2" id="painel-dialog">
+								<p:outputLabel value="Código" for="codigo" />
+								<p:inputText id="codigo" size="5" maxlength="20"
+									value="#{cadastroGrupoBean.grupoEdicao.codigo}" readonly="true" />
+								<p:outputLabel value="Nome" for="nome" />
+								<p:inputText id="nome" required="true"
+									value="#{cadastroGrupoBean.grupoEdicao.nome}" />
 
-				<p:messages id="msgs-dialog" />
+								<p:commandButton value="Salvar" id="salvar-button"
+									action="#{cadastroGrupoBean.salvar}" process="painel-dialog"
+									update="msgs-dialog painel-dialog"
+									oncomplete="if (!args.validationFailed) PF('edicaoGrupoDialog').hide()"
+									rendered="false" />
+							</h:panelGrid>
+						</p:tab>
+						<p:tab title="Permissões">
+							<p:pickList id="pickTelas"
+								value="#{cadastroGrupoBean.todasTelas}" var="tela" 
+								iconOnly="true" itemLabel="#{tela.descricao}"
+								itemValue="#{tela}" converter="telaPickConverter"
+								showSourceFilter="true" showTargetFilter="true"
+								filterMatchMode="contains">
+								<f:facet name="sourceCaption">Disponíveis</f:facet>
+								<f:facet name="targetCaption">Associadas</f:facet>
+							</p:pickList>
+						</p:tab>
+					</p:tabView>
+					<p:separator />
 
-				<p:defaultCommand target="salvar-button" scope="grupo-dialog" />
-				<h:panelGrid columns="2" id="painel-dialog">
-					<p:outputLabel value="Código" for="codigo" />
-					<p:inputText id="codigo" size="5" maxlength="20"
-						value="#{cadastroGrupoBean.grupoEdicao.codigo}" readonly="true" />
-					<p:outputLabel value="Nome" for="nome" />
-					<p:inputText id="nome" required="true"
-						value="#{cadastroGrupoBean.grupoEdicao.nome}" />
-					<p:commandButton value="Salvar" id="salvar-button"
-						action="#{cadastroGrupoBean.salvar}" process="grupo-dialog"
-						update="msgs-dialog painel-dialog"
+					<p:commandButton value="Salvar" id="salvar-button2"
+						action="#{cadastroGrupoBean.salvar}" process="frmGrupo"
+						update=" frmGrupo"
 						oncomplete="if (!args.validationFailed) PF('edicaoGrupoDialog').hide()" />
-				</h:panelGrid>
+				</h:form>
 			</p:dialog>
 
 			<p:dialog header="Associar usuários"
 				widgetVar="associaUsuariosDialog" id="associaUsuarios-Dialog"
 				resizable="false" modal="true" closeOnEscape="true">
 				<p:messages id="msgs-associa" />
-				<h3 style="margin-top: 0">Associar Usuários ao Grupo #{cadastroGrupoBean.grupoSelecionado.nome}</h3>
+				<h3 style="margin-top: 0">Associar Usuários ao Grupo
+					#{cadastroGrupoBean.grupoSelecionado.nome}</h3>
 				<p:pickList id="pickUsuarios"
 					value="#{cadastroGrupoBean.todosUsuarios}" var="usuario"
 					iconOnly="true" itemLabel="#{usuario.usuario}"
@@ -129,7 +152,7 @@
 				</p:pickList>
 				<p:commandButton value="Salvar" style="margin-top:10px"
 					action="#{cadastroGrupoBean.salvaListaUsuarios}"
-					process="associaUsuarios-Dialog" 
+					process="associaUsuarios-Dialog"
 					oncomplete="if (!args.validationFailed) PF('associaUsuariosDialog').hide()" />
 			</p:dialog>
 		</h:form>

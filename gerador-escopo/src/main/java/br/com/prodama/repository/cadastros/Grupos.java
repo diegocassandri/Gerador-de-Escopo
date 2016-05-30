@@ -8,6 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import br.com.prodama.model.cadastro.Grupo;
+import br.com.prodama.model.cadastro.Tela;
 import br.com.prodama.model.cadastro.Usuario;
 
 public class Grupos implements Serializable {
@@ -42,7 +43,6 @@ public class Grupos implements Serializable {
 	public void excluir(Grupo grupo) {
 		grupo = pesquisaPorId(grupo.getCodigo());
 		manager.remove(grupo);
-
 	}
 
 	public List<Grupo> todos() {
@@ -60,6 +60,19 @@ public class Grupos implements Serializable {
 
 	public List<Usuario> usariosAssociados(Grupo grupo) {
 		return grupo.getUsuarios();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Tela> telasNaoAssociadas(Grupo grupo) {
+
+		Query query = manager.createQuery("Select u From tela u Where not exists (Select g from u.grupos g Where g = :grupo)", Tela.class);
+		query.setParameter("grupo", grupo);
+		return query.getResultList();
+
+	}
+	
+	public List<Tela> telasAssociadas(Grupo grupo) {
+		return grupo.getTelas();
 	}
 	
 	public Grupo Atualizar(Grupo grupo){

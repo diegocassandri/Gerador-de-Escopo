@@ -11,6 +11,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -31,6 +33,10 @@ public class Grupo implements Serializable {
 
 	@ManyToMany(mappedBy="grupos",cascade=CascadeType.ALL,fetch=FetchType.EAGER)
 	private List<Usuario> usuarios = new LinkedList<Usuario>();
+	
+	@ManyToMany(cascade=CascadeType.ALL,fetch=FetchType.EAGER)
+	@JoinTable(name = "grupo_tela", joinColumns = @JoinColumn(name = "codigo_grupo"), inverseJoinColumns = @JoinColumn(name = "codigo_tela"))
+	private List<Tela> telas = new LinkedList<Tela>();
 	
 	public Long getCodigo() {
 		return codigo;
@@ -62,6 +68,16 @@ public class Grupo implements Serializable {
 
 	public void setUsuarios(List<Usuario> usuarios) {
 		this.usuarios = usuarios;
+	}
+
+	
+	
+	public List<Tela> getTelas() {
+		return telas;
+	}
+
+	public void setTelas(List<Tela> telas) {
+		this.telas = telas;
 	}
 
 	@Override

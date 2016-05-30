@@ -65,7 +65,6 @@ public class CadastroEstadoBean implements Serializable {
 
 	public void excluir() {
 		try {
-			System.out.println("exlcuir");
 			this.cadastroEstado.excluir(estadoSelecionado);
 			estadoSelecionado = null;
 
