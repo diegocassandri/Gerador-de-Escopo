@@ -142,10 +142,10 @@ public class CadastroGrupoBean implements Serializable {
 
 		todosUsuarios = new DualListModel<Usuario>(usuariosSource, usuariosTarget);
 		
-		telasSource = grupos.telasNaoAssociadas(grupoEdicao);
+		/*telasSource = grupos.telasNaoAssociadas(grupoEdicao);
 		telasTarget = grupos.telasAssociadas(this.grupoEdicao);
 		
-		todasTelas = new DualListModel<Tela>(telasSource, telasTarget);
+		todasTelas = new DualListModel<Tela>(telasSource, telasTarget);*/
 	}
 
 	public Grupo getGrupoSelecionado() {
