@@ -17,10 +17,10 @@ public class CadastroTela  implements Serializable {
 	
 	@Transactional
 	public void salvar(Tela tela) throws NegocioException {
-		/*if (telas.pesquisaPorNome(tela) && (tela.getCodigo() == null || tela.getCodigo()==0)) {
+		if (telas.pesquisaPorNome(tela) && (tela.getCodigo() == null || tela.getCodigo()==0)) {
 			throw new NegocioException(
 					"Já existe uma tela com este nome: "+ tela.getDescricao());
-		}*/	
+		}
 			this.telas.adicionar(tela);
 	}
 

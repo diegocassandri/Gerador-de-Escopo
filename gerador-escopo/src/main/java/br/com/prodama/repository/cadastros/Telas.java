@@ -25,7 +25,7 @@ public class Telas implements Serializable{
 	}
 	
 	public boolean pesquisaPorNome(Tela tela) {
-		Query query = manager.createQuery("From tela where descricao = :tela", Tela.class);
+		Query query = manager.createQuery("From Tela where descricao = :tela", Tela.class);
 		query.setParameter("tela", tela.getDescricao());
 		List<?> resultList = query.getResultList();
 		if (resultList.isEmpty()) {
@@ -43,4 +43,11 @@ public class Telas implements Serializable{
 	public List<Tela> todos() {
 		return manager.createQuery("from Tela", Tela.class).getResultList();
 	}
+	
+	public List<Tela> raizes() {
+
+		return (List<Tela>) manager.createQuery("from Tela where telaPai is null", Tela.class).getResultList();
+		 
+	}
+	
 }

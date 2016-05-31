@@ -104,7 +104,7 @@
 						
 					<p:outputLabel value="Tela Pai:" for="tela_pai" />
 					<p:selectOneMenu filter="true" value="#{cadastroTelaBean.telaEdicao.telaPai}"
-						 
+					 converter="omnifaces.SelectItemsConverter" 
 					   id="tela_pai">
 						<f:selectItem noSelectionOption="true"
 							itemLabel="Selecione" />

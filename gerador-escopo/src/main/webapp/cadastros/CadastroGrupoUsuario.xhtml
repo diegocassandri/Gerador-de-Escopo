@@ -115,15 +115,19 @@
 							</h:panelGrid>
 						</p:tab>
 						<p:tab title="Permissões">
-							<p:pickList id="pickTelas"
-								value="#{cadastroGrupoBean.todasTelas}" var="tela" 
-								iconOnly="true" itemLabel="#{tela.descricao}"
-								itemValue="#{tela}" converter="telaPickConverter"
-								showSourceFilter="true" showTargetFilter="true"
-								filterMatchMode="contains">
-								<f:facet name="sourceCaption">Disponíveis</f:facet>
-								<f:facet name="targetCaption">Associadas</f:facet>
-							</p:pickList>
+							<p:treeTable value="#{cadastroGrupoBean.raiz}" selectionMode="checkbox"
+                            	selection="#{cadastroGrupoBean.selecionadas}"  
+								var="document">
+								<f:facet name="header">
+                                        Permissões de Tela
+                                </f:facet>
+								<p:column headerText="Name">
+									<h:outputText value="#{document.descricao}" />
+								</p:column>
+								<p:column headerText="Url">
+									<h:outputText value="#{document.url}" />
+								</p:column>
+							</p:treeTable>
 						</p:tab>
 					</p:tabView>
 					<p:separator />
