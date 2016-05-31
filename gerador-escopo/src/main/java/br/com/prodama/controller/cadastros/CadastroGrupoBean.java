@@ -1,6 +1,7 @@
 package br.com.prodama.controller.cadastros;
 
 import java.io.Serializable;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -65,6 +66,7 @@ public class CadastroGrupoBean implements Serializable {
 	
 	private TreeNode raiz;
 	private TreeNode selecionadas;
+	
 
 
 	@PostConstruct
@@ -72,6 +74,7 @@ public class CadastroGrupoBean implements Serializable {
 		grupoEdicao = new Grupo();
 		todosUsuarios = new DualListModel<Usuario>();
 		this.raiz = new DefaultTreeNode("Raiz", null);
+		checkboxSelectedNodes = null;
 	}
 
 	public void salvar() {
@@ -95,15 +98,6 @@ public class CadastroGrupoBean implements Serializable {
 			TreeNode no = new DefaultTreeNode(tela, pai);
 
 			adicionarNos(tela.getTelasfilhas(), no);
-		}
-	}
-	
-	private void adicionarSelecionados(List<Tela> telas, TreeNode pai) {
-		for (Tela tela : telas) {
-
-			TreeNode no = new DefaultTreeNode(tela, pai);
-
-			adicionarNos(grupos.telasAssociadas(grupoEdicao), no);
 		}
 	}
 	
@@ -170,18 +164,20 @@ public class CadastroGrupoBean implements Serializable {
 
 		todosUsuarios = new DualListModel<Usuario>(usuariosSource, usuariosTarget);
 			
+		carregaPermissoesGrupo(grupoEdicao);
+		
+	}
+	
+	
+	public void carregaPermissoesGrupo(Grupo grupoEdicao)  {
 		List<Tela> telasRaizes = telas.raizes();
+		List<Tela> telasAssciadas = grupoEdicao.getTelas();
 		this.raiz = new DefaultTreeNode("Raiz", null);
 		adicionarNos(telasRaizes, this.raiz);
-		
-		selecionadas = raiz;
-		
-		/*List<Tela> telasSelecionadas = grupos.telasAssociadas(grupoEdicao);
-		System.out.println(telasSelecionadas);
-		adicionarSelecionados(telasSelecionadas, this.selecionadas);*/
-
-	}
-
+		/*raiz.setSelected(true);*/
+    }
+	
+	
 	public TreeNode getSelecionadas() {
 		return selecionadas;
 	}
@@ -246,5 +242,8 @@ public class CadastroGrupoBean implements Serializable {
 	public void setCheckboxSelectedNodes(TreeNode[] checkboxSelectedNodes) {
 		this.checkboxSelectedNodes = checkboxSelectedNodes;
 	}
+
+
+	
 	
 }

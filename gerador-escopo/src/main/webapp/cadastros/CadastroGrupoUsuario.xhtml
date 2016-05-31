@@ -115,8 +115,9 @@
 							</h:panelGrid>
 						</p:tab>
 						<p:tab title="Permissões">
-							<p:treeTable value="#{cadastroGrupoBean.raiz}" selectionMode="checkbox"
-                            	selection="#{cadastroGrupoBean.selecionadas}"  
+							<p:treeTable value="#{cadastroGrupoBean.raiz}"
+								selectionMode="checkbox"
+								selection="#{cadastroGrupoBean.checkboxSelectedNodes}"
 								var="document">
 								<f:facet name="header">
                                         Permissões de Tela
@@ -128,6 +129,15 @@
 									<h:outputText value="#{document.url}" />
 								</p:column>
 							</p:treeTable>
+							<p:tree value="#{cadastroGrupoBean.raiz}"
+								selectionMode="checkbox" var="no" expanded="true"
+								expandAnim="FADE_IN" collapseAnim="FADE_OUT"
+								selection="#{cadastroGrupoBean.checkboxSelectedNodes}"
+								propagateSelectionUp="true" propagateSelectionDown="true">
+								<p:treeNode>
+									<h:outputText value="#{no.descricao}" style="margin-left: 10px;" />
+								</p:treeNode>
+							</p:tree>
 						</p:tab>
 					</p:tabView>
 					<p:separator />
