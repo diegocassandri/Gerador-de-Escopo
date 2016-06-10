@@ -1,7 +1,6 @@
 package br.com.prodama.controller.cadastros;
 
 import java.io.Serializable;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -92,15 +91,7 @@ public class CadastroGrupoBean implements Serializable {
 
 	}
 	
-	private void adicionarNos(List<Tela> telas, TreeNode pai) {
-		for (Tela tela : telas) {
 
-			TreeNode no = new DefaultTreeNode(tela, pai);
-
-			adicionarNos(tela.getTelasfilhas(), no);
-		}
-	}
-	
 
 	public void salvaListaUsuarios() {
 		grupoEdicao.getUsuarios().clear();
@@ -168,14 +159,23 @@ public class CadastroGrupoBean implements Serializable {
 		
 	}
 	
+	private void adicionarNos(List<Tela> telas, TreeNode pai) {
+		for (Tela tela : telas) {
+
+			TreeNode no = new DefaultTreeNode(tela, pai);
+
+			adicionarNos(tela.getTelasfilhas(), no);
+			no.setSelected(true);
+		}
+	}
+	
 	
 	public void carregaPermissoesGrupo(Grupo grupoEdicao)  {
 		List<Tela> telasRaizes = telas.raizes();
-		List<Tela> telasAssciadas = grupoEdicao.getTelas();
+		List<Tela> telasAssociadas = grupoEdicao.getTelas();
 		this.raiz = new DefaultTreeNode("Raiz", null);
 		adicionarNos(telasRaizes, this.raiz);
-		/*raiz.setSelected(true);*/
-    }
+	}
 	
 	
 	public TreeNode getSelecionadas() {
