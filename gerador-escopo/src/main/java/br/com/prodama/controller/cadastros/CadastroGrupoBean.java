@@ -12,12 +12,15 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.primefaces.context.RequestContext;
+import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.DualListModel;
+import org.primefaces.model.TreeNode;
 
 import br.com.prodama.model.cadastro.Grupo;
 import br.com.prodama.model.cadastro.Tela;
 import br.com.prodama.model.cadastro.Usuario;
 import br.com.prodama.repository.cadastros.Grupos;
+import br.com.prodama.repository.cadastros.Telas;
 import br.com.prodama.repository.cadastros.Usuarios;
 import br.com.prodama.service.cadastro.CadastroGrupo;
 import br.com.prodama.service.cadastro.CadastroUsuario;
@@ -41,6 +44,9 @@ public class CadastroGrupoBean implements Serializable {
 	private Usuarios usuarios;
 	
 	@Inject
+	private Telas telas;
+	
+	@Inject
 	private CadastroUsuario usuarioService;
 
 	private Grupo grupoEdicao = new Grupo();
@@ -50,20 +56,24 @@ public class CadastroGrupoBean implements Serializable {
 	private List<Grupo> filtroGrupos;
 
 	private DualListModel<Usuario> todosUsuarios;
-	private DualListModel<Tela> todasTelas;
+	
 
 	List<Usuario> usuariosSource = new ArrayList<Usuario>();
 	List<Usuario> usuariosTarget = new ArrayList<Usuario>();
 	
-	List<Tela> telasSource = new ArrayList<Tela>();
-	List<Tela> telasTarget = new ArrayList<Tela>();
+	private TreeNode [] checkboxSelectedNodes;
+	
+	private TreeNode raiz;
+	private TreeNode selecionadas;
+	
 
 
 	@PostConstruct
 	public void prepararNovoCadastro() {
 		grupoEdicao = new Grupo();
 		todosUsuarios = new DualListModel<Usuario>();
-		todasTelas = new DualListModel<Tela>();
+		this.raiz = new DefaultTreeNode("Raiz", null);
+		checkboxSelectedNodes = null;
 	}
 
 	public void salvar() {
@@ -80,6 +90,8 @@ public class CadastroGrupoBean implements Serializable {
 		}
 
 	}
+	
+
 
 	public void salvaListaUsuarios() {
 		grupoEdicao.getUsuarios().clear();
@@ -129,6 +141,7 @@ public class CadastroGrupoBean implements Serializable {
 
 	public void consultar() {
 		todosGrupos = grupos.todos();
+		
 	}
 
 	public Grupo getGrupoEdicao() {
@@ -141,11 +154,36 @@ public class CadastroGrupoBean implements Serializable {
 		usuariosTarget = grupos.usariosAssociados(this.grupoEdicao);
 
 		todosUsuarios = new DualListModel<Usuario>(usuariosSource, usuariosTarget);
+			
+		carregaPermissoesGrupo(grupoEdicao);
 		
-		/*telasSource = grupos.telasNaoAssociadas(grupoEdicao);
-		telasTarget = grupos.telasAssociadas(this.grupoEdicao);
-		
-		todasTelas = new DualListModel<Tela>(telasSource, telasTarget);*/
+	}
+	
+	private void adicionarNos(List<Tela> telas, TreeNode pai) {
+		for (Tela tela : telas) {
+
+			TreeNode no = new DefaultTreeNode(tela, pai);
+
+			adicionarNos(tela.getTelasfilhas(), no);
+			no.setSelected(true);
+		}
+	}
+	
+	
+	public void carregaPermissoesGrupo(Grupo grupoEdicao)  {
+		List<Tela> telasRaizes = telas.raizes();
+		List<Tela> telasAssociadas = grupoEdicao.getTelas();
+		this.raiz = new DefaultTreeNode("Raiz", null);
+		adicionarNos(telasRaizes, this.raiz);
+	}
+	
+	
+	public TreeNode getSelecionadas() {
+		return selecionadas;
+	}
+
+	public void setSelecionadas(TreeNode selecionadas) {
+		this.selecionadas = selecionadas;
 	}
 
 	public Grupo getGrupoSelecionado() {
@@ -188,13 +226,24 @@ public class CadastroGrupoBean implements Serializable {
 		this.usuarioEdicao = usuarioEdicao;
 	}
 
-	public DualListModel<Tela> getTodasTelas() {
-		return todasTelas;
+
+	public TreeNode getRaiz() {
+		return raiz;
 	}
 
-	public void setTodasTelas(DualListModel<Tela> todasTelas) {
-		this.todasTelas = todasTelas;
+	public void setRaiz(TreeNode raiz) {
+		this.raiz = raiz;
 	}
 
+	public TreeNode[] getCheckboxSelectedNodes() {
+		return checkboxSelectedNodes;
+	}
+
+	public void setCheckboxSelectedNodes(TreeNode[] checkboxSelectedNodes) {
+		this.checkboxSelectedNodes = checkboxSelectedNodes;
+	}
+
+
+	
 	
 }

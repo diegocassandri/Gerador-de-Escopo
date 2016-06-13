@@ -16,6 +16,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -48,6 +49,9 @@ public class Tela implements Serializable {
 	@JoinColumn(name = "tela_pai", updatable = false)
 	private List<Tela> telasfilhas;
 
+	@Transient
+	private Boolean status;
+	
 	public Long getCodigo() {
 		return codigo;
 	}
@@ -94,6 +98,18 @@ public class Tela implements Serializable {
 
 	public void setTelasfilhas(List<Tela> telasfilhas) {
 		this.telasfilhas = telasfilhas;
+	}
+
+	public Boolean getStatus() {
+		if(getGrupos().isEmpty()){
+			return false;
+		} else{
+			return true;
+		}
+	}
+
+	public void setStatus(Boolean status) {
+		this.status = status;
 	}
 
 	@Override

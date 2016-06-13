@@ -11,7 +11,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.primefaces.context.RequestContext;
-
+import org.primefaces.model.TreeNode;
 import br.com.prodama.model.cadastro.Tela;
 import br.com.prodama.repository.cadastros.Telas;
 import br.com.prodama.service.cadastro.CadastroTela;
@@ -37,6 +37,8 @@ public class CadastroTelaBean implements Serializable {
 	private List<Tela> todasTelas;
 	private List<Tela> filtroTelas;
 	
+	private TreeNode raiz;
+	
 	@PostConstruct
 	public void prepararNovoCadastro(){
 		telaEdicao = new Tela();
@@ -60,6 +62,8 @@ public class CadastroTelaBean implements Serializable {
 		}
 
 	}
+	
+	
 	
 	public void excluir() {
 		try {
@@ -106,6 +110,14 @@ public class CadastroTelaBean implements Serializable {
 
 	public void setFiltroTelas(List<Tela> filtroTelas) {
 		this.filtroTelas = filtroTelas;
+	}
+
+	public TreeNode getRaiz() {
+		return raiz;
+	}
+
+	public void setRaiz(TreeNode raiz) {
+		this.raiz = raiz;
 	}
 	
 	

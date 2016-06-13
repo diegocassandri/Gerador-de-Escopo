@@ -43,4 +43,11 @@ public class Telas implements Serializable{
 	public List<Tela> todos() {
 		return manager.createQuery("from Tela", Tela.class).getResultList();
 	}
+	
+	public List<Tela> raizes() {
+
+		return (List<Tela>) manager.createQuery("from Tela where telaPai is null", Tela.class).getResultList();
+		 
+	}
+	
 }
