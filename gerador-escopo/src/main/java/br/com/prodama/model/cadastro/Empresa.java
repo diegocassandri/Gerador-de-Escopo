@@ -3,7 +3,13 @@ package br.com.prodama.model.cadastro;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+
 import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.br.CNPJ;
+import org.hibernate.validator.constraints.br.CPF;
+
+import br.com.prodama.enun.TipoEmpresa;
 
 @Entity
 @Table(name = "Empresa")
@@ -18,25 +24,31 @@ public class Empresa implements Serializable {
 
 	@NotEmpty
 	@Basic(optional = false)
-	@Column(name = "RazaoSocial", nullable = false, length = 100)
+	@Column(name = "RazaoSocial", nullable = false, length = 250)
 	private String razaoSocial;
 
 	@NotEmpty
-	@Column(name = "Fantasia", nullable = false, length = 100)
+	@Column(name = "Fantasia", nullable = false, length = 250)
 	private String fantasia;
 
+	@CNPJ
 	@NotEmpty
-	@Column(name = "CpfCnpj", length = 18)
-	private String cpfCnpj;
+	@Column(name = "Cnpj", length = 18)
+	private String cnpj;
+	
+	@CPF
+	@NotEmpty
+	@Column(name = "Cpf", length = 14)
+	private String cpf;
 
 	@NotEmpty
-	@Column(name = "IncricaoEstadual", length = 18)
+	@Column(name = "IncricaoEstadual", length =25)
 	private String incricaoEstadual;
 
-	@Column(name = "Endereco", nullable = true, length = 100)
+	@Column(name = "Endereco", nullable = true, length = 400)
 	private String endereco;
 
-	@Column(name = "Numero", nullable = true, length = 8)
+	@Column(name = "Numero", nullable = true, length = 20)
 	private String numero;
 
 	@Column(name = "Complemento", length = 50)
@@ -59,6 +71,10 @@ public class Empresa implements Serializable {
 
 	@Column(name = "Email", length = 50)
 	private String email;
+	
+	@NotNull
+	@Column(name = "TipoEmpresa")
+	private TipoEmpresa tipoEmpresa;
 	
 	@NotEmpty
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "empresa")
@@ -100,12 +116,20 @@ public class Empresa implements Serializable {
 		this.fantasia = fantasia;
 	}
 
-	public String getCpfCnpj() {
-		return cpfCnpj;
+	public String getCnpj() {
+		return cnpj;
 	}
 
-	public void setCpfCnpj(String cpfCnpj) {
-		this.cpfCnpj = cpfCnpj;
+	public void setCnpj(String cnpj) {
+		this.cnpj = cnpj;
+	}
+
+	public String getCpf() {
+		return cpf;
+	}
+
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
 	}
 
 	public String getIncricaoEstadual() {
@@ -219,6 +243,15 @@ public class Empresa implements Serializable {
 
 	public void setListaFiliais(List<Filial> listaFiliais) {
 		this.listaFiliais = listaFiliais;
+	}
+
+	
+	public TipoEmpresa getTipoEmpresa() {
+		return tipoEmpresa;
+	}
+
+	public void setTipoEmpresa(TipoEmpresa tipoEmpresa) {
+		this.tipoEmpresa = tipoEmpresa;
 	}
 
 	@Override

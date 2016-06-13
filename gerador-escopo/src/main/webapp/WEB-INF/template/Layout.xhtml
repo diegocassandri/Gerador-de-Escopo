@@ -32,6 +32,7 @@
 			<h:form style="display: inline-block">
 				<p:menubar styleClass="menu-sistema">
 					<p:submenu label="Cadastros">
+					    <p:menuitem value="Empresas" outcome="/cadastros/CadastroEmpresa.xhtml"/>
 						<p:menuitem value="Estados" outcome="/cadastros/CadastroEstado.xhtml"/>
 						<p:menuitem value="Cidades" outcome="/cadastros/CadastroCidade.xhtml"/>
 					</p:submenu>
@@ -43,7 +44,7 @@
 						<p:menuitem value="Cadastro Grupo" outcome="/cadastros/CadastroGrupoUsuario.xhtml"/>
 						<p:menuitem value="Cadastro Tela" outcome="/cadastros/CadastroTela.xhtml"/>
 					</p:submenu>
-					<p:menuitem value="Sair" action="#{loginBean.logout}" icon="ui-icon-close"/>
+					<p:menuitem value="#{usuarioLogin.nome}" action="#{loginBean.logout}" icon="ui-icon-close"/>
 				</p:menubar>
 			</h:form>
 		</div>

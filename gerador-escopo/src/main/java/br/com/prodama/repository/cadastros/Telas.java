@@ -25,7 +25,7 @@ public class Telas implements Serializable{
 	}
 	
 	public boolean pesquisaPorNome(Tela tela) {
-		Query query = manager.createQuery("From tela where descricao = :tela", Tela.class);
+		Query query = manager.createQuery("From Tela where descricao = :tela", Tela.class);
 		query.setParameter("tela", tela.getDescricao());
 		List<?> resultList = query.getResultList();
 		if (resultList.isEmpty()) {
