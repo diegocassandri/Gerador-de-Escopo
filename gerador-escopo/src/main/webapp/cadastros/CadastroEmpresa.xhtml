@@ -6,13 +6,13 @@
 	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui">
 
 	<f:metadata>
-		<f:viewAction action="#{cadastroUsuarioBean.consultar}" />
+		<f:viewAction action="#{cadastroEmpresaBean.consultar}" />
 	</f:metadata>
 
-	<ui:define name="titulo">Cadastro de Usuário</ui:define>
+	<ui:define name="titulo">Cadastro de Empresa</ui:define>
 
 	<ui:define name="corpo">
-		<h1>Cadastro Usuário</h1>
+		<h1>Cadastro Empresa</h1>
 		<h:form id="frmCadastro">
 
 			<p:messages id="msgs" />
@@ -20,10 +20,10 @@
 			<p:toolbar id="toolbar">
 				<f:facet name="left">
 					<p:commandButton value="Novo" icon="ui-icon-document"
-						action="#{cadastroUsuarioBean.prepararNovoCadastro}"
-						process="@this" update="usuario-dialog"
-						oncomplete="PF('edicaoUsuarioDialog').show()">
-						<p:resetInput target="usuario-dialog" />
+						action="#{cadastroEmpresaBean.prepararNovoCadastro}"
+						process="@this" update="empresa-dialog"
+						oncomplete="PF('edicaoEmpresaDialog').show()">
+						<p:resetInput target="empresa-dialog" />
 					</p:commandButton>
 
 					<span class="ui-separator"> <span
@@ -31,141 +31,121 @@
 					</span>
 
 					<p:commandButton icon="ui-icon-pencil" title="Editar"
-						process="@this" update="usuario-dialog"
-						oncomplete="PF('edicaoUsuarioDialog').show()"
-						disabled="#{cadastroUsuarioBean.usuarioSelecionado == null}">
-						<p:resetInput target="usuario-dialog" />
+						process="@this" update="empresa-dialog"
+						oncomplete="PF('edicaoEmpresaDialog').show()"
+						disabled="#{cadastroEmpresaBean.empresaSelecionado == null}">
+						<p:resetInput target="empresa-dialog" />
 
 						<f:setPropertyActionListener
-							value="#{cadastroUsuarioBean.usuarioSelecionado}"
-							target="#{cadastroUsuarioBean.usuarioEdicao}" />
+							value="#{cadastroEmpresaBean.empresaSelecionado}"
+							target="#{cadastroEmpresaBean.empresaEdicao}" />
 					</p:commandButton>
 
 					<p:commandButton icon="ui-icon-trash" title="Excluir"
-						process="@this" update="usuario-table msgs toolbar"
-						action="#{cadastroUsuarioBean.excluir}"
-						disabled="#{cadastroUsuarioBean.usuarioSelecionado == null}">
+						process="@this" update="empresa-table msgs toolbar"
+						action="#{cadastroEmpresaBean.excluir}"
+						disabled="#{cadastroEmpresaBean.empresaSelecionado == null}">
 
 						<p:confirm icon="ui-icon-alert" header="Confirmação de exclusão"
-							message="Tem certeza que deseja excluir o Usuario?" />
+							message="Tem certeza que deseja excluir a empresa?" />
 
 					</p:commandButton>
 				</f:facet>
 
-				<f:facet name="right">
-					<p:commandButton value="Associar Grupos"
-						disabled="#{cadastroUsuarioBean.usuarioSelecionado == null}"
-						process="@this" update="associaGrupos-Dialog"
-						oncomplete="PF('associaGruposDialog').show()"
-						icon="ui-icon-circle-plus">
-						<p:resetInput target="associaGrupos-Dialog" />
-						<f:setPropertyActionListener
-							value="#{cadastroUsuarioBean.usuarioSelecionado}"
-							target="#{cadastroUsuarioBean.usuarioEdicao}" />
-					</p:commandButton>
-				</f:facet>
 			</p:toolbar>
 
-			<p:dataTable value="#{cadastroUsuarioBean.todosUsuarios}"
-				var="usuario" emptyMessage="Nenhum usuário cadastrado." rows="10"
+			<p:dataTable value="#{cadastroEmpresaBean.todasEmpresas}"
+				var="empresa" emptyMessage="Nenhuma empresa cadastrada." rows="10"
 				paginator="true" paginatorPosition="bottom" style="margin-top: 10px"
-				id="usuario-table"
-				selection="#{cadastroUsuarioBean.usuarioSelecionado}"
-				selectionMode="single" rowKey="#{usuario.codigo}"
-				filteredValue="#{cadastroUsuarioBean.filtroUsuarios}"
-				widgetVar="tabelaUsuario">
+				id="empresa-table"
+				selection="#{cadastroEmpresaBean.empresaSelecionado}"
+				selectionMode="single" rowKey="#{empresa.codigo}"
+				filteredValue="#{cadastroEmpresaBean.filtroEmpresas}"
+				widgetVar="tabelaEmpresa">
 
 				<p:ajax event="rowSelect" update=":frmCadastro:toolbar" />
 				<p:ajax event="rowUnselect" update=":frmCadastro:toolbar" />
 
-				<p:column headerText="Nome" sortBy="#{usuario.nomeCompleto}"
-					filterBy="#{usuario.nomeCompleto}" filterMatchMode="contains">
-					<h:outputText value="#{usuario.nomeCompleto}" />
+				<p:column headerText="Código" sortBy="#{empresa.codigo}"
+					filterBy="#{empresa.codigo}" filterMatchMode="contains">
+					<h:outputText value="#{empresa.codigo}" />
 				</p:column>
-
-				<p:column headerText="Usuário" sortBy="#{usuario.usuario}"
-					filterBy="#{usuario.usuario}" filterMatchMode="contains">
-					<h:outputText value="#{usuario.usuario}" />
-				</p:column>
-				<p:column headerText="Email" width="250" sortBy="#{usuario.email}"
-					filterBy="#{usuario.email}" filterMatchMode="contains">
-					<h:outputText value="#{usuario.email}" />
-				</p:column>
-				<p:column headerText="Status" width="120" sortBy="#{usuario.status}">
-					<h:outputText value="#{usuario.status} " />
+				<p:column headerText="Razão Social" sortBy="#{empresa.razaosocial}"
+					filterBy="#{empresa.razaosocial}" filterMatchMode="contains">
+					<h:outputText value="#{empresa.razaosocial}" />
 				</p:column>
 			</p:dataTable>
 
-			<p:dialog header="Novo Usuário" widgetVar="edicaoUsuarioDialog"
-				id="usuario-dialog" resizable="false" modal="true"
+			<p:dialog header="Nova empresa" widgetVar="edicaoEmpresaDialog"
+				id="empresa-dialog" resizable="false" modal="true"
 				closeOnEscape="true">
 
 				<p:messages id="msgs-dialog" />
 
-				<p:defaultCommand target="salvar-button" scope="usuario-dialog" />
+				<p:defaultCommand target="salvar-button" scope="empresa-dialog" />
+				<p:outputPanel id="pnlPessoa">
+					<h:panelGrid columns="2" id="painel-dialog">
+						<p:outputLabel value="Código" for="codigo" />
+						<p:inputText id="codigo" size="7" maxlength="10"
+							value="#{cadastroEmpresaBean.empresaEdicao.codigo}"
+							readonly="true" />
 
-				<h:panelGrid columns="2" id="painel-dialog">
-					<p:outputLabel value="Código" for="codigo" />
-					<p:inputText id="codigo" size="20" maxlength="20"
-						value="#{cadastroUsuarioBean.usuarioEdicao.codigo}"
-						readonly="true" />
+						<p:outputLabel value="Tipo de Empresa" for="tipo" />
+						<p:selectOneMenu id="tipo"
+							value="#{cadastroEmpresaBean.empresaEdicao.tipoEmpresa}">
+							<f:selectItem itemLabel="Selecione" />
+							<f:selectItems value="#{cadastroEmpresaBean.tiposEmpresas}"
+								var="tipo" itemLabel="#{tipo.descricao}" itemValue="#{tipo}" />
+							<p:ajax event="change" update="pnlPessoa" process="tipo" />
+						</p:selectOneMenu>
 
-					<p:outputLabel value="Usuário" for="nome" />
-					<p:inputText id="nome"
-						value="#{cadastroUsuarioBean.usuarioEdicao.usuario}" />
+						<p:outputLabel value="Razão Social" for="razaoSocial" />
+						<p:inputText id="razaoSocial" size="80" maxlength="250"
+							value="#{cadastroEmpresaBean.empresaEdicao.razaoSocial}" />
 
-					<p:outputLabel value="Senha" for="senha" />
-					<p:password id="senha" feedback="true" inline="true" redisplay="true"
-					promptLabel="Digite uma senha segura"
-						goodLabel="Boa" weakLabel="Razoável" strongLabel="Excelente"
-						value="#{cadastroUsuarioBean.usuarioEdicao.senha}" />
+						<p:outputLabel value="Nome Fantasia" for="fantasia" />
+						<p:inputText id="fantasia" size="80" maxlength="250"
+							value="#{cadastroEmpresaBean.empresaEdicao.fantasia}" />
 
-					<p:outputLabel value="Mudar Senha" for="mudarSenha" />
 
-					<p:selectBooleanButton id="mudarSenha"
-						value="#{cadastroUsuarioBean.usuarioEdicao.mudarSenha}"
-						onLabel="Sim" offLabel="Não" style="width:60px" />
+						<p:outputLabel value="CNPJ" for="cnpj"
+							rendered="#{cadastroEmpresaBean.empresaEdicao.tipoEmpresa=='JURIDICA'}" />
+						<p:inputMask id="cnpj" size="18" maxlength="18"
+							rendered="#{cadastroEmpresaBean.empresaEdicao.tipoEmpresa=='JURIDICA'}"
+							value="#{cadastroEmpresaBean.empresaEdicao.cnpj}"
+							mask="99.999.999/9999-99" />
 
-					<p:outputLabel value="Nome Completo" for="nomeCompleto" />
-					<p:inputText id="nomeCompleto" size="20" maxlength="100"
-						value="#{cadastroUsuarioBean.usuarioEdicao.nomeCompleto}" />
+						<p:outputLabel value="CPF" for="cpf"
+							rendered="#{cadastroEmpresaBean.empresaEdicao.tipoEmpresa=='FISICA'}" />
+						<p:inputMask id="cpf" size="14" maxlength="18"
+							rendered="#{cadastroEmpresaBean.empresaEdicao.tipoEmpresa=='FISICA'}"
+							value="#{cadastroEmpresaBean.empresaEdicao.cpf}"
+							mask="999.999.999-99" />
 
-					<p:outputLabel value="Email" for="email" />
-					<p:inputText id="email"
-						value="#{cadastroUsuarioBean.usuarioEdicao.email}" />
+						<p:outputLabel value="Inscrição Estadual" for="inscricao" />
+						<p:inputText id="inscricao" size="25" maxlength="25"
+							value="#{cadastroEmpresaBean.empresaEdicao.incricaoEstadual}" />
 
-					<p:outputLabel value="Status" for="status" />
-					<p:selectOneMenu id="status"
-						value="#{cadastroUsuarioBean.usuarioEdicao.status}">
-						<f:selectItems value="#{cadastroUsuarioBean.statusList}" />
-					</p:selectOneMenu>
-
-					<p:commandButton value="Salvar" id="salvar-button"
-						action="#{cadastroUsuarioBean.salvar}" process="usuario-dialog"
-						update="msgs-dialog painel-dialog"
-						oncomplete="if (!args.validationFailed) PF('edicaoUsuarioDialog').hide()" />
-				</h:panelGrid>
+						<p:outputLabel value="Endereço" for="endereco" />
+						<p:inputText id="endereco" size="80" maxlength="400"
+							value="#{cadastroEmpresaBean.empresaEdicao.endereco}" />
+						
+						<p:outputLabel value="Número" for="numero" />
+						<p:inputText id="numero" size="20" maxlength="20"
+							value="#{cadastroEmpresaBean.empresaEdicao.numero}" />
+						
+						<p:outputLabel value="Bairro" for="bairro" />
+						<p:inputText id="bairro" size="80" maxlength="250"
+							value="#{cadastroEmpresaBean.empresaEdicao.numero}" />
+								
+						<p:commandButton value="Salvar" id="salvar-button"
+							action="#{cadastroEmpresaBean.salvar}" process="empresa-dialog"
+							update="msgs-dialog painel-dialog"
+							oncomplete="if (!args.validationFailed) PF('edicaoEmpresaDialog').hide()" />
+					</h:panelGrid>
+				</p:outputPanel>
 			</p:dialog>
 
-			<p:dialog header="Associar Grupos" widgetVar="associaGruposDialog"
-				id="associaGrupos-Dialog" resizable="false" modal="true"
-				closeOnEscape="true">
-				<p:messages id="msgs-associa" />
-				<h3 style="margin-top: 0">Associar Grupos ao Usuario
-					#{cadastroUsuarioBean.usuarioSelecionado}</h3>
-				<p:pickList id="pickGrupos"
-					value="#{cadastroUsuarioBean.todosGrupos}" var="grupo"
-					iconOnly="true" itemLabel="#{grupo.nome}" itemValue="#{grupo}"
-					converter="grupoPickConverter" showSourceFilter="true"
-					showTargetFilter="true" filterMatchMode="contains">
-					<f:facet name="sourceCaption">Disponíveis</f:facet>
-					<f:facet name="targetCaption">Associados</f:facet>
-				</p:pickList>
-				<p:commandButton value="Salvar" style="margin-top:10px"
-					action="#{cadastroUsuarioBean.salvaListaGrupos}"
-					process="associaGrupos-Dialog" update="msgs-associa"
-					oncomplete="if (!args.validationFailed) PF('associaGruposDialog').hide()" />
-			</p:dialog>
 		</h:form>
 	</ui:define>
 </ui:composition>
