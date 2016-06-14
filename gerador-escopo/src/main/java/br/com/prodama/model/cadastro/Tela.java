@@ -1,7 +1,6 @@
 package br.com.prodama.model.cadastro;
 
 import java.io.Serializable;
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -12,7 +11,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -38,8 +36,7 @@ public class Tela implements Serializable {
 	@Column(nullable = false, length = 150)
 	private String url;
 
-	@ManyToMany(mappedBy = "telas", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private List<Grupo> grupos = new LinkedList<Grupo>();
+	
 
 	@ManyToOne
 	@JoinColumn(name = "tela_pai", nullable = true)
@@ -76,13 +73,6 @@ public class Tela implements Serializable {
 		this.url = url;
 	}
 
-	public List<Grupo> getGrupos() {
-		return grupos;
-	}
-
-	public void setGrupos(List<Grupo> grupos) {
-		this.grupos = grupos;
-	}
 	
 	public Tela getTelaPai() {
 		return telaPai;
@@ -100,13 +90,6 @@ public class Tela implements Serializable {
 		this.telasfilhas = telasfilhas;
 	}
 
-	public Boolean getStatus() {
-		if(getGrupos().isEmpty()){
-			return false;
-		} else{
-			return true;
-		}
-	}
 
 	public void setStatus(Boolean status) {
 		this.status = status;

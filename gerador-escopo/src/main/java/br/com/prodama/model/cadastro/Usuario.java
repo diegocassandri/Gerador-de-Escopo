@@ -21,6 +21,7 @@ import javax.persistence.Table;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
+
 import br.com.prodama.enun.Status;
 import br.com.prodama.util.CriptografaSenha;
 

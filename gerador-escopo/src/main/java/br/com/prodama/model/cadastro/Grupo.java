@@ -15,6 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+
 import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
@@ -31,7 +32,7 @@ public class Grupo implements Serializable {
 	@Column(nullable = false, length = 80)
 	private String descricao;
 
-	@ManyToMany(mappedBy="grupos",cascade=CascadeType.ALL,fetch=FetchType.EAGER)
+	@ManyToMany(mappedBy="grupos",cascade=CascadeType.REMOVE,fetch=FetchType.EAGER)
 	private List<Usuario> usuarios = new LinkedList<Usuario>();
 	
 	@ManyToMany(cascade=CascadeType.ALL,fetch=FetchType.EAGER)
@@ -70,7 +71,6 @@ public class Grupo implements Serializable {
 		this.usuarios = usuarios;
 	}
 
-	
 	
 	public List<Tela> getTelas() {
 		return telas;

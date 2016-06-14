@@ -5,28 +5,34 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 
-	<f:metadata>
-		<f:viewAction action="#{cadastroUsuarioBean.consultar}" />
-	</f:metadata>
+
 	<ui:define name="titulo">Gerenciamento de Escopo</ui:define>
 	<ui:define name="corpo">
-		<h:form id="frmAlteracao">
-			<p:messages id="msgs-alterarSenha" />
-			<h3 style="margin-top: 0">Alterar senha do Usuário</h3>
-			<h:panelGrid columns="2" id="painelAlteracaoSenha">
+		<h:form id="frm" style="margin-top:10px">
+			<p:panel header="Alterar Senha">
+				<h:form id="frmsenha">
+					<p:messages id="msgs-dialog" />
 
-				<p:outputLabel value="Senha" for="senha" />
-				<p:password id="senha" feedback="true" inline="true"
-					redisplay="true" promptLabel="Digite uma senha segura"
-					goodLabel="Boa" weakLabel="Razoável" strongLabel="Excelente"
-					value="#{cadastroUsuarioBean.usuarioEdicao.senha}" />
-				<p:outputLabel value="Confirmar senha" for="senha2" />
-				<p:password id="senha2" redisplay="true" />
-				<p:commandButton value="Salvar" style="margin-top:10px"
-					action="{#cadastroUsuarioBean.alterSenha}" />
-			</h:panelGrid>
+					<p:defaultCommand target="salvar-button" />
+
+					<h:panelGrid columns="2" id="painel-dialog">
+						<p:outputLabel value="Senha" for="senh" />
+						<p:password id="senh" feedback="true" inline="true"
+							redisplay="true" promptLabel="Digite uma senha segura"
+							required="true" goodLabel="Boa" weakLabel="Razoável"
+							strongLabel="Excelente" value="#{loginBean.senha}" />
+
+						<p:outputLabel value="Confirmar Senha" for="senha2" />
+						<p:password id="senha2" inline="true" redisplay="true"
+							promptLabel="Digite uma senha segura" required="true"
+							value="#{loginBean.senha2}" />
+
+						<p:commandButton value="Salvar" id="salvar-button"
+							action="#{loginBean.alterarSenha}" process="@form"
+							update="msgs-dialog painel-dialog" onsuccess="/Home.xhtml" />
+					</h:panelGrid>
+				</h:form>
+			</p:panel>
 		</h:form>
 	</ui:define>
-
-
 </ui:composition>

@@ -24,26 +24,41 @@
 	<header>
 		<h:graphicImage library="prodama" name="logo.png" />
 
-		<div style="float: right; margin-right: 20px; margin-top: 8px">
-			Olá #{usuarioLogin.nome}!</div>
-		
+		<div style="float: right; margin-right: 80px; margin-top: 2px">
+			<h:form style="display: inline-block">
+				<p:menubar styleClass="menu-sistema">
+					<p:submenu label="Olá #{usuarioLogin.nome}!">
+						<p:menuitem value="Alterar Senha" outcome="/AlteracaoSenha.xhtml"/>
+						<p:menuitem value="Sair" action="#{loginBean.logout}"
+							icon="ui-icon-close" />
+					</p:submenu>
+				</p:menubar>
+			</h:form>
+		</div>
+
 
 		<div style="float: right; margin-right: 110px">
 			<h:form style="display: inline-block">
 				<p:menubar styleClass="menu-sistema">
 					<p:submenu label="Cadastros">
-						<p:menuitem value="Estados" outcome="/cadastros/CadastroEstado.xhtml"/>
-						<p:menuitem value="Cidades" outcome="/cadastros/CadastroCidade.xhtml"/>
+						<p:menuitem value="Estados"
+							outcome="/cadastros/CadastroEstado.xhtml" />
+						<p:menuitem value="Cidades"
+							outcome="/cadastros/CadastroCidade.xhtml" />
 					</p:submenu>
 					<p:submenu label="Projetos">
 						<p:menuitem value="Sair" action="#{loginBean.logout}" />
 					</p:submenu>
 					<p:submenu label="Configurações">
-						<p:menuitem value="Cadastro Usuário" outcome="/cadastros/CadastroUsuario.xhtml"/>
-						<p:menuitem value="Cadastro Grupo" outcome="/cadastros/CadastroGrupoUsuario.xhtml"/>
-						<p:menuitem value="Cadastro Tela" outcome="/cadastros/CadastroTela.xhtml"/>
+						<p:menuitem value="Cadastro Usuário"
+							outcome="/cadastros/CadastroUsuario.xhtml" />
+						<p:menuitem value="Cadastro Grupo"
+							outcome="/cadastros/CadastroGrupoUsuario.xhtml" />
+						<p:menuitem value="Cadastro Tela"
+							outcome="/cadastros/CadastroTela.xhtml" />
 					</p:submenu>
-					<p:menuitem value="Sair" action="#{loginBean.logout}" icon="ui-icon-close"/>
+
+
 				</p:menubar>
 			</h:form>
 		</div>
@@ -60,11 +75,11 @@
 	<footer> Sistema de Gerenciamento de Escopo - Prodama </footer>
 	<h:form>
 		<p:confirmDialog global="true">
-			<p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no"
-				icon="ui-icon-close" />
-				
-			<p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes"
-				icon="ui-icon-check" />
+			<p:commandButton value="Não" type="button"
+				styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+
+			<p:commandButton value="Sim" type="button"
+				styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
 		</p:confirmDialog>
 	</h:form>
 </h:body>

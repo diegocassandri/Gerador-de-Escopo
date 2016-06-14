@@ -26,6 +26,8 @@ import br.com.prodama.service.cadastro.CadastroGrupo;
 import br.com.prodama.service.cadastro.CadastroUsuario;
 import br.com.prodama.util.FacesMessages;
 
+
+
 @Named
 @ViewScoped
 public class CadastroGrupoBean implements Serializable {
@@ -81,7 +83,7 @@ public class CadastroGrupoBean implements Serializable {
 			this.gruposService.salvar(grupoEdicao);
 			consultar();
 			messages.info("Grupo salvo com sucesso!");
-			RequestContext.getCurrentInstance().update(Arrays.asList("frmCadastro:msgs", "frmCadastro:grupo-table"));
+			RequestContext.getCurrentInstance().update(Arrays.asList("frmCadastro:msgs", "frmCadastro:grupo-table","frmCadastro:associaTelas-Dialog"));
 		} catch (Exception e) {
 			FacesMessage mensagem = new FacesMessage(e.getMessage());
 			messages.error("Erro ao salvar grupo! \n Motivo:" + mensagem.getDetail());
@@ -94,6 +96,7 @@ public class CadastroGrupoBean implements Serializable {
 
 
 	public void salvaListaUsuarios() {
+		System.out.println("Salva Usuarios");
 		grupoEdicao.getUsuarios().clear();
 		salvar();
 		for (Usuario usuario : todosUsuarios.getSource()) {
@@ -149,32 +152,50 @@ public class CadastroGrupoBean implements Serializable {
 	}
 
 	public void setGrupoEdicao(Grupo grupoEdicao) {
+		todosUsuarios = null;
+		usuariosTarget = null;
 		this.grupoEdicao = grupos.pesquisaPorId(grupoEdicao.getCodigo());
 		usuariosSource = grupos.usariosNaoAssociados(grupoEdicao);
-		usuariosTarget = grupos.usariosAssociados(this.grupoEdicao);
 
+		usuariosTarget = grupos.usariosAssociados(this.grupoEdicao);
 		todosUsuarios = new DualListModel<Usuario>(usuariosSource, usuariosTarget);
 			
 		carregaPermissoesGrupo(grupoEdicao);
 		
 	}
 	
-	private void adicionarNos(List<Tela> telas, TreeNode pai) {
+	private void adicionarNos(List<Tela> telas, TreeNode pai,List<Tela> telasSelecionadas) {
 		for (Tela tela : telas) {
 
 			TreeNode no = new DefaultTreeNode(tela, pai);
 
-			adicionarNos(tela.getTelasfilhas(), no);
-			no.setSelected(true);
+			adicionarNos(tela.getTelasfilhas(), no,telasSelecionadas);
+			for (Tela tela2 : telasSelecionadas){
+				if(tela2.equals(tela) ){
+					no.setSelected(true);
+				}
+			}
 		}
 	}
 	
+	public void salvaPermissoesGrupo(){
+	   Tela telaTemp;
+	   grupoEdicao.getTelas().clear();
+		for (TreeNode no : checkboxSelectedNodes){
+				System.out.println("--->" + no.getData());
+				telaTemp = ((Tela)no.getData());
+				grupoEdicao.getTelas().remove(telaTemp);
+				grupoEdicao.getTelas().add(telaTemp);
+
+		}
+		salvar();
+	}
 	
 	public void carregaPermissoesGrupo(Grupo grupoEdicao)  {
 		List<Tela> telasRaizes = telas.raizes();
 		List<Tela> telasAssociadas = grupoEdicao.getTelas();
 		this.raiz = new DefaultTreeNode("Raiz", null);
-		adicionarNos(telasRaizes, this.raiz);
+		adicionarNos(telasRaizes, this.raiz,telasAssociadas);
 	}
 	
 	
