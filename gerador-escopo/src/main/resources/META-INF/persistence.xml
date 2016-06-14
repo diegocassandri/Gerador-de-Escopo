@@ -9,6 +9,7 @@
 	<class>br.com.prodama.model.cadastro.Grupo</class>
 	<class>br.com.prodama.model.cadastro.Pessoa</class>
 	<class>br.com.prodama.model.cadastro.Tela</class>
+	<class>br.com.prodama.model.cadastro.TipoDeHora</class>
 	<class>br.com.prodama.model.cadastro.Usuario</class>
 	<class>br.com.prodama.model.cadastro.Visitante</class>
 
