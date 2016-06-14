@@ -35,7 +35,7 @@
 		</div>
 			
 		<p:dataGrid value="#{registroVisitanteBean.todosVisitantes}" var="visitante"
-			columns="3" layout="grid" id="grid-visitantes">
+			columns="3" layout="grid" id="grid-visitantes" emptyMessage="nenhum registro encontrado" >
 			<p:panel header="#{visitante.nome}" style="text-align: center">
 				<h:graphicImage value="/foto-visitante?visitante=#{visitante.id}"/>
 				<h:outputText value="#{visitante.dataVisita}">

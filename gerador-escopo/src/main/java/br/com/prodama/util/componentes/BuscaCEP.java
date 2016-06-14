@@ -29,4 +29,10 @@ public class BuscaCEP {
         }
         return null;
     }
+
+	public XmlCEP getXmlCep() {
+		return xmlCep;
+	}
+	
+	
 }
