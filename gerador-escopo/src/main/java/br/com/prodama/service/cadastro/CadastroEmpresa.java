@@ -9,27 +9,33 @@ import br.com.prodama.repository.cadastros.Empresas;
 import br.com.prodama.service.NegocioException;
 import br.com.prodama.util.Transactional;
 
-public class CadastroEmpresa  implements Serializable{
+public class CadastroEmpresa implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
+	private String validacao;
+
 	@Inject
 	private Empresas empresas;
-	
+
 	@Transactional
 	public void salvar(Empresa empresa) throws NegocioException {
-		if (empresas.pesquisaPorNome(empresa) && (empresa.getCodigo() == null || empresa.getCodigo()==0)) {
-			throw new NegocioException(
-					"Já existe um cadastro com esta razão social: "+empresa.getRazaoSocial());
+
+		if ((empresa.getCodigo() == null || empresa.getCodigo() == 0)) {
+			validacao = empresas.pesquisaEmpresa(empresa);
+			if (!validacao.equals("OK")) {
+				throw new NegocioException(validacao);
+			}
+
 		}
-		
+
 		this.empresas.adicionar(empresa);
 	}
 
 	@Transactional
 	public void excluir(Empresa empresa) {
 		empresas.excluir(empresa);
-		
+
 	}
 
 }
