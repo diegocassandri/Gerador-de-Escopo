@@ -87,7 +87,6 @@ public class CadastroUsuarioBean implements Serializable {
 
 	public void excluir() {
 		try {
-			System.out.println("exlcuir");
 			this.cadastrosUsuario.excluir(usuarioSelecionado);
 			usuarioSelecionado = null;
 

@@ -160,7 +160,7 @@ public class CadastroGrupoBean implements Serializable {
 		usuariosTarget = grupos.usariosAssociados(this.grupoEdicao);
 		todosUsuarios = new DualListModel<Usuario>(usuariosSource, usuariosTarget);
 			
-		carregaPermissoesGrupo(grupoEdicao);
+		carregaPermissoesGrupo(this.grupoEdicao);
 		
 	}
 	
@@ -196,6 +196,7 @@ public class CadastroGrupoBean implements Serializable {
 		List<Tela> telasAssociadas = grupoEdicao.getTelas();
 		this.raiz = new DefaultTreeNode("Raiz", null);
 		adicionarNos(telasRaizes, this.raiz,telasAssociadas);
+		RequestContext.getCurrentInstance().update(Arrays.asList(":frmCadastro:associaTelas-Dialog"));
 	}
 	
 	
