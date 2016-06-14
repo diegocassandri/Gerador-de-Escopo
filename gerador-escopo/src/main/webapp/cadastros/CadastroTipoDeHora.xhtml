@@ -1,0 +1,106 @@
+<ui:composition template="/WEB-INF/template/Layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui">
+
+	<f:metadata>
+		<f:viewAction action="#{cadastroTipoDeHoraBean.consultar}" />
+	</f:metadata>
+
+	<ui:define name="titulo">Cadastro de Tipo De Hora</ui:define>
+
+	<ui:define name="corpo">
+		<h1>Cadastro Tipo de Hora</h1>
+		<h:form id="frmCadastro">
+
+			<p:messages id="msgs" />
+
+			<p:toolbar id="toolbar">
+				<f:facet name="left">
+					<p:commandButton value="Novo" icon="ui-icon-document"
+						action="#{cadastroTipoDeHoraBean.prepararNovoCadastro}"
+						process="@this" update="tipo-dialog"
+						oncomplete="PF('edicaoTipoDialog').show()">
+						<p:resetInput target="tipo-dialog" />
+					</p:commandButton>
+
+					<span class="ui-separator"> <span
+						class="ui-icon ui-icon-grip-dotted-vertical" />
+					</span>
+
+					<p:commandButton icon="ui-icon-pencil" title="Editar"
+						process="@this" update="tipo-dialog"
+						oncomplete="PF('edicaoTipoDialog').show()"
+						disabled="#{cadastroTipoDeHoraBean.tipoDeHoraSelecionado == null}">
+						<p:resetInput target="tipo-dialog" />
+
+						<f:setPropertyActionListener
+							value="#{cadastroTipoDeHoraBean.tipoDeHoraSelecionado}"
+							target="#{cadastroTipoDeHoraBean.tipoDeHoraEdicao}" />
+					</p:commandButton>
+
+					<p:commandButton icon="ui-icon-trash" title="Excluir"
+						process="@this" update="tipo-table msgs toolbar"
+						action="#{cadastroTipoDeHoraBean.excluir}"
+						disabled="#{cadastroTipoDeHoraBean.tipoDeHoraSelecionado == null}">
+
+						<p:confirm icon="ui-icon-alert" header="Confirmação de exclusão"
+							message="Tem certeza que deseja excluir o Tipo de Hora?" />
+
+					</p:commandButton>
+				</f:facet>
+
+			</p:toolbar>
+
+			<p:dataTable value="#{cadastroTipoDeHoraBean.todosTipoDeHora}"
+				var="tipo" emptyMessage="Nenhum Tipo de Hora cadastrado." rows="10"
+				paginator="true" paginatorPosition="bottom" style="margin-top: 10px"
+				id="tipo-table"
+				selection="#{cadastroTipoDeHoraBean.tipoDeHoraSelecionado}"
+				selectionMode="single" rowKey="#{tipo.codigo}"
+				widgetVar="tabelaTipo">
+
+				<p:ajax event="rowSelect" update=":frmCadastro:toolbar" />
+				<p:ajax event="rowUnselect" update=":frmCadastro:toolbar" />
+
+				<p:column headerText="Código" sortBy="#{tipo.codigo}" width="200"
+					filterBy="#{tipo.codigo}" filterMatchMode="contains">
+					<h:outputText value="#{tipo.codigo}" />
+				</p:column>	
+				<p:column headerText="Descrição" sortBy="#{tipo.descricao}"
+					filterBy="#{tipo.descricao}" filterMatchMode="contains">
+					<h:outputText value="#{tipo.descricao}" />
+				</p:column>
+
+			</p:dataTable>
+
+			<p:dialog header="Cadastro Tipo de Hora" widgetVar="edicaoTipoDialog"
+				id="tipo-dialog" resizable="false" modal="true"
+				closeOnEscape="true">
+
+				<p:messages id="msgs-dialog" />
+
+				<p:defaultCommand target="salvar-button" scope="tipo-dialog" />
+
+				<h:panelGrid columns="2" id="painel-dialog">
+					<p:outputLabel value="Código" for="codigo" />
+					<p:inputText id="codigo" size="7" maxlength="10"
+						value="#{cadastroTipoDeHoraBean.tipoDeHoraEdicao.codigo}"
+						readonly="true" />
+
+					<p:outputLabel value="Descrição" for="descricao" />
+					<p:inputText id="descricao" size="20" maxlength="50"
+						value="#{cadastroTipoDeHoraBean.tipoDeHoraEdicao.descricao}" />
+				
+					<p:commandButton value="Salvar" id="salvar-button"
+						action="#{cadastroTipoDeHoraBean.salvar}" process="tipo-dialog"
+						update="msgs-dialog painel-dialog"
+						oncomplete="if (!args.validationFailed) PF('edicaoTipoDialog').hide()" />
+				</h:panelGrid>
+			</p:dialog>
+
+		</h:form>
+	</ui:define>
+</ui:composition>
