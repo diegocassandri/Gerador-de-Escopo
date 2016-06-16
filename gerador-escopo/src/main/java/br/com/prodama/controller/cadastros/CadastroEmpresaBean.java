@@ -64,6 +64,7 @@ public class CadastroEmpresaBean implements Serializable {
 	@PostConstruct
 	public void prepararNovoCadastro() {
 		empresaEdicao = new Empresa();
+		todasCidades = cidades.todos();
 		todosEstados = estados.todos();
 	}
 
