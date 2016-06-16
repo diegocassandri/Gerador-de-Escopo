@@ -9,6 +9,8 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<title><ui:insert name="titulo">Gerador de Escopo</ui:insert></title>
 	<h:outputStylesheet library="prodama" name="estilo.css" />
+	<h:outputScript target="body" library="prodama" name="MaskMoney.js" />
+	
 </h:head>
 
 <h:body>
@@ -46,10 +48,13 @@
 						<p:menuitem value="Cidades"
 							outcome="/cadastros/CadastroCidade.xhtml" />
 					    <p:menuitem value="Empresas" outcome="/cadastros/CadastroEmpresa.xhtml"/>
+					    <p:submenu label="Projetos">
+					    	<p:menuitem value="Tipos de hora"
+							outcome="/cadastros/CadastroTipoDeHora.xhtml" />
+					    </p:submenu>
 					</p:submenu>
 					<p:submenu label="Projetos">
-						<p:menuitem value="Tipos de hora"
-							outcome="/cadastros/CadastroTipoDeHora.xhtml" />
+						
 					</p:submenu>
 					<p:submenu label="Configurações">
 						<p:menuitem value="Cadastro Usuário"

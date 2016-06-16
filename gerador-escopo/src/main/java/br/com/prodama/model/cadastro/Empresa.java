@@ -18,7 +18,8 @@ public class Empresa implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="gen_empresa") 
+    @SequenceGenerator(name="gen_empresa", sequenceName = "seq_empresa", initialValue=1, allocationSize=1)
 	@Column(name = "Codigo", nullable = false)
 	private Long codigo;
 
@@ -32,12 +33,10 @@ public class Empresa implements Serializable {
 	private String fantasia;
 
 	@CNPJ
-	@NotEmpty
 	@Column(name = "Cnpj", length = 18)
 	private String cnpj;
 	
 	@CPF
-	@NotEmpty
 	@Column(name = "Cpf", length = 14)
 	private String cpf;
 
@@ -75,14 +74,17 @@ public class Empresa implements Serializable {
 	@NotNull
 	@Column(name = "TipoEmpresa")
 	private TipoEmpresa tipoEmpresa;
-	
-	@NotEmpty
+
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "empresa")
 	private List<Filial> listaFiliais;
 	
 	@JoinColumn(name = "Cidade", referencedColumnName = "codigo")
 	@ManyToOne(optional = true)
 	private Cidade cidade;
+	
+	@JoinColumn(name = "Estado", referencedColumnName = "codigo")
+	@ManyToOne(optional = true)
+	private Estado estado;
 
 	@JoinColumn(name = "CodigoUsuarioInclusao", referencedColumnName = "codigo")
 	@ManyToOne(optional = true, fetch = FetchType.LAZY)
@@ -252,6 +254,16 @@ public class Empresa implements Serializable {
 
 	public void setTipoEmpresa(TipoEmpresa tipoEmpresa) {
 		this.tipoEmpresa = tipoEmpresa;
+	}
+	
+	
+
+	public Estado getEstado() {
+		return estado;
+	}
+
+	public void setEstado(Estado estado) {
+		this.estado = estado;
 	}
 
 	@Override

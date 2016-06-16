@@ -12,7 +12,8 @@ public class Filial implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="gen_filial") 
+    @SequenceGenerator(name="gen_filial", sequenceName = "filial", initialValue=1, allocationSize=1)
 	@Column(name = "Codigo", nullable = false)
 	private Long codigo;
 

@@ -7,6 +7,7 @@
 
 	<f:metadata>
 		<f:viewAction action="#{cadastroTipoDeHoraBean.consultar}" />
+		
 	</f:metadata>
 
 	<ui:define name="titulo">Cadastro de Tipo De Hora.</ui:define>
@@ -68,17 +69,23 @@
 				<p:column headerText="Código" sortBy="#{tipo.codigo}" width="200"
 					filterBy="#{tipo.codigo}" filterMatchMode="contains">
 					<h:outputText value="#{tipo.codigo}" />
-				</p:column>	
+				</p:column>
 				<p:column headerText="Descrição" sortBy="#{tipo.descricao}"
 					filterBy="#{tipo.descricao}" filterMatchMode="contains">
 					<h:outputText value="#{tipo.descricao}" />
 				</p:column>
 
+				<p:column headerText="Valor Padrão" sortBy="#{tipo.valor}"
+					filterBy="#{tipo.valor}" filterMatchMode="contains">
+					<h:outputText value="#{tipo.valor}" >
+						<f:convertNumber type="currency" locale="pt_BR" />
+					</h:outputText>
+				</p:column>
+
 			</p:dataTable>
 
 			<p:dialog header="Cadastro Tipo de Hora" widgetVar="edicaoTipoDialog"
-				id="tipo-dialog" resizable="false" modal="true"
-				closeOnEscape="true">
+				id="tipo-dialog" resizable="false" modal="true" closeOnEscape="true">
 
 				<p:messages id="msgs-dialog" />
 
@@ -93,7 +100,14 @@
 					<p:outputLabel value="Descrição" for="descricao" />
 					<p:inputText id="descricao" size="20" maxlength="50"
 						value="#{cadastroTipoDeHoraBean.tipoDeHoraEdicao.descricao}" />
-				
+					
+					<p:outputLabel value="Valor Padrão" for="valor" />
+					<p:inputText id="valor"
+						value="#{cadastroTipoDeHoraBean.tipoDeHoraEdicao.valor}"
+						onfocus="maskMoney(this)">
+						<f:convertNumber pattern="#,##0.00"/>
+					</p:inputText>
+
 					<p:commandButton value="Salvar" id="salvar-button"
 						action="#{cadastroTipoDeHoraBean.salvar}" process="tipo-dialog"
 						update="msgs-dialog painel-dialog"

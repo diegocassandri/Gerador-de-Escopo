@@ -13,18 +13,18 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.JoinColumn;
+
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
-
 import br.com.prodama.enun.Status;
 import br.com.prodama.util.CriptografaSenha;
-
 
 @Entity
 @Table(name = "usuario")
@@ -33,7 +33,8 @@ public class Usuario implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="gen_usuario") 
+    @SequenceGenerator(name="gen_usuario", sequenceName = "seq_usuario", initialValue=1, allocationSize=1)
 	private Long codigo;
 	
 	@NotEmpty
@@ -147,10 +148,4 @@ public class Usuario implements Serializable {
 		return true;
 	}
 
-	@Override
-	public String toString() {
-		return  usuario ;
-	}
-	
-	
 }

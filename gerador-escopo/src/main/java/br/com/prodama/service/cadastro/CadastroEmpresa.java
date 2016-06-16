@@ -28,7 +28,6 @@ public class CadastroEmpresa implements Serializable {
 			}
 
 		}
-
 		this.empresas.adicionar(empresa);
 	}
 

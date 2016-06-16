@@ -97,7 +97,7 @@ public class LoginBean {
 	}
 	
 	public void alteraSenha(){
-		System.out.println(usuarioLogin);
+
 	}
 	
 	public String getNomeUsuario() {
