@@ -2,57 +2,62 @@ package br.com.prodama.model.cadastro;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.br.CNPJ;
+import org.hibernate.validator.constraints.br.CPF;
+
+import br.com.prodama.enun.TipoEmpresa;
 
 @Entity
 @Table(name = "Filial")
 public class Filial implements Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="gen_filial") 
-    @SequenceGenerator(name="gen_filial", sequenceName = "filial", initialValue=1, allocationSize=1)
+    @SequenceGenerator(name="gen_filial", sequenceName = "seq_filial", initialValue=1, allocationSize=1)
 	@Column(name = "Codigo", nullable = false)
 	private Long codigo;
 
 	@NotEmpty
 	@Basic(optional = false)
-	@Column(name = "RazaoSocial", nullable = false, length = 100)
+	@Column(name = "RazaoSocial", nullable = false, length = 250)
 	private String razaoSocial;
 
 	@NotEmpty
-	@Column(name = "Fantasia", nullable = false, length = 100)
+	@Column(name = "Fantasia", nullable = false, length = 250)
 	private String fantasia;
 
-	@NotEmpty
-	@Column(name = "CpfCnpj", length = 18)
-	private String cpfCnpj;
+	@CNPJ
+	@Column(name = "Cnpj", length = 18)
+	private String cnpj;
+	
+	@CPF
+	@Column(name = "Cpf", length = 14)
+	private String cpf;
 
 	@NotEmpty
-	@Column(name = "IncricaoEstadual", length = 18)
+	@Column(name = "IncricaoEstadual", length =25)
 	private String incricaoEstadual;
 
-	@NotEmpty
-	@Column(name = "Endereco", nullable = true, length = 100)
+	@Column(name = "Endereco", nullable = true, length = 400)
 	private String endereco;
 
-	@NotEmpty
-	@Column(name = "Numero", nullable = true, length = 8)
+	@Column(name = "Numero", nullable = true, length = 20)
 	private String numero;
 
 	@Column(name = "Complemento", length = 50)
 	private String complemento;
 
-	@NotEmpty
 	@Column(name = "Bairro", nullable = true, length = 200)
 	private String bairro;
 
 	@Column(name = "CEP", nullable = true, length = 20)
 	private String cep;
 
-	@NotEmpty
 	@Column(name = "Telefone", length = 20)
 	private String telefone;
 
@@ -64,23 +69,30 @@ public class Filial implements Serializable {
 
 	@Column(name = "Email", length = 50)
 	private String email;
+	
+	@NotNull
+	@Column(name = "TipoEmpresa")
+	private TipoEmpresa tipoEmpresa;
 
 	@NotEmpty
 	@JoinColumn(name = "Empresa", referencedColumnName = "codigo")
 	@ManyToOne(optional = false)
 	private Empresa empresa;
-
-	@NotEmpty
+	
 	@JoinColumn(name = "Cidade", referencedColumnName = "codigo")
-	@ManyToOne(optional = false)
+	@ManyToOne(optional = true)
 	private Cidade cidade;
+	
+	@JoinColumn(name = "Estado", referencedColumnName = "codigo")
+	@ManyToOne(optional = true)
+	private Estado estado;
 
-	@JoinColumn(name = "CodigoUsuarioInclusao", referencedColumnName = "Codigo")
-	@ManyToOne(optional = true, fetch = FetchType.LAZY)
+	@JoinColumn(name = "CodigoUsuarioInclusao", referencedColumnName = "codigo")
+	@ManyToOne(optional = true, fetch = FetchType.EAGER)
 	private Usuario codigoUsuarioInclusao;
 
-	@JoinColumn(name = "CodigoUsuarioAlteracao", referencedColumnName = "Codigo")
-	@ManyToOne(optional = true, fetch = FetchType.LAZY)
+	@JoinColumn(name = "CodigoUsuarioAlteracao", referencedColumnName = "codigo")
+	@ManyToOne(optional = true, fetch = FetchType.EAGER)
 	private Usuario codigoUsuarioAlteracao;
 
 	public Long getCodigo() {
@@ -107,12 +119,20 @@ public class Filial implements Serializable {
 		this.fantasia = fantasia;
 	}
 
-	public String getCpfCnpj() {
-		return cpfCnpj;
+	public String getCnpj() {
+		return cnpj;
 	}
 
-	public void setCpfCnpj(String cpfCnpj) {
-		this.cpfCnpj = cpfCnpj;
+	public void setCnpj(String cnpj) {
+		this.cnpj = cnpj;
+	}
+
+	public String getCpf() {
+		return cpf;
+	}
+
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
 	}
 
 	public String getIncricaoEstadual() {
@@ -195,14 +215,6 @@ public class Filial implements Serializable {
 		this.email = email;
 	}
 
-	public Empresa getEmpresa() {
-		return empresa;
-	}
-
-	public void setEmpresa(Empresa empresa) {
-		this.empresa = empresa;
-	}
-
 	public Cidade getCidade() {
 		return cidade;
 	}
@@ -225,6 +237,33 @@ public class Filial implements Serializable {
 
 	public void setCodigoUsuarioAlteracao(Usuario codigoUsuarioAlteracao) {
 		this.codigoUsuarioAlteracao = codigoUsuarioAlteracao;
+	}
+
+		
+	public Empresa getEmpresa() {
+		return empresa;
+	}
+
+	public void setEmpresa(Empresa empresa) {
+		this.empresa = empresa;
+	}
+
+	public TipoEmpresa getTipoEmpresa() {
+		return tipoEmpresa;
+	}
+
+	public void setTipoEmpresa(TipoEmpresa tipoEmpresa) {
+		this.tipoEmpresa = tipoEmpresa;
+	}
+	
+	
+
+	public Estado getEstado() {
+		return estado;
+	}
+
+	public void setEstado(Estado estado) {
+		this.estado = estado;
 	}
 
 	@Override
@@ -251,7 +290,8 @@ public class Filial implements Serializable {
 			return false;
 		return true;
 	}
-	
-	
+
+
+
 
 }

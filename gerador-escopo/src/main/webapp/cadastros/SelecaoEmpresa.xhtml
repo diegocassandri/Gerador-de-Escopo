@@ -1,0 +1,42 @@
+<ui:composition template="/WEB-INF/template/Layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="titulo">Gerenciamento de Escopo</ui:define>
+
+	<ui:define name="corpo">
+		<h:form>
+			<div style="margin-top: 5px; margin-bottom: 20px">
+				<p:inputText id="nome" size="40" value="#{selecaoEmpresaBean.nome}"
+					placeholder="Nome da Empresa" />
+
+				<p:spacer width="10px" />
+
+				<p:commandButton value="Pesquisar"
+					action="#{selecaoEmpresaBean.pesquisar}" update="@form" />
+			</div>
+
+			<p:dataTable value="#{selecaoEmpresaBean.empresasFiltradas}"
+				var="empresa" emptyMessage="Nenhuma empresa encontrada." rows="10"
+				paginator="true" paginatorAlwaysVisible="false"
+				paginatorPosition="bottom">
+
+				<p:column headerText="Código"
+					style="text-align: center; width: 40px">
+					<h:outputText value="#{empresa.codigo}" />
+				</p:column>
+				<p:column headerText="Razão Social">
+					<h:outputText value="#{empresa.razaoSocial}" />
+				</p:column>
+				<p:column style="width: 30px; text-align: center">
+					<p:commandButton icon="ui-icon-check" title="Selecionar"
+						action="#{selecaoEmpresaBean.selecionar(empresa)}" process="@this" />
+				</p:column>
+
+			</p:dataTable>
+		</h:form>
+	</ui:define>
+</ui:composition>

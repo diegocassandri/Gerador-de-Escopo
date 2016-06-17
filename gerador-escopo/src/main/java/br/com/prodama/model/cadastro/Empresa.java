@@ -87,11 +87,11 @@ public class Empresa implements Serializable {
 	private Estado estado;
 
 	@JoinColumn(name = "CodigoUsuarioInclusao", referencedColumnName = "codigo")
-	@ManyToOne(optional = true, fetch = FetchType.LAZY)
+	@ManyToOne(optional = true, fetch = FetchType.EAGER)
 	private Usuario codigoUsuarioInclusao;
 
 	@JoinColumn(name = "CodigoUsuarioAlteracao", referencedColumnName = "codigo")
-	@ManyToOne(optional = true, fetch = FetchType.LAZY)
+	@ManyToOne(optional = true, fetch = FetchType.EAGER)
 	private Usuario codigoUsuarioAlteracao;
 
 	public Long getCodigo() {

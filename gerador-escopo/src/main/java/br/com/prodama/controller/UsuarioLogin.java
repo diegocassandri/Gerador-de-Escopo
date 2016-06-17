@@ -6,6 +6,8 @@ import java.util.Date;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 
+import br.com.prodama.model.cadastro.Empresa;
+import br.com.prodama.model.cadastro.Filial;
 import br.com.prodama.model.cadastro.Usuario;
 
 @Named
@@ -16,6 +18,8 @@ public class UsuarioLogin implements Serializable {
 
 	private String nome;
 	private Date dataLogin;
+	private Empresa empresaSelecionada;
+	private Filial filialSelecionada;
 	
 	private Usuario usuarioLogin = new Usuario();
 	
@@ -45,6 +49,22 @@ public class UsuarioLogin implements Serializable {
 
 	public void setUsuarioLogin(Usuario usuarioLogin) {
 		this.usuarioLogin = usuarioLogin;
+	}
+
+	public Empresa getEmpresaSelecionada() {
+		return empresaSelecionada;
+	}
+
+	public void setEmpresaSelecionada(Empresa empresaSelecionada) {
+		this.empresaSelecionada = empresaSelecionada;
+	}
+
+	public Filial getFilialSelecionada() {
+		return filialSelecionada;
+	}
+
+	public void setFilialSelecionada(Filial filialSelecionada) {
+		this.filialSelecionada = filialSelecionada;
 	}
 	
 	

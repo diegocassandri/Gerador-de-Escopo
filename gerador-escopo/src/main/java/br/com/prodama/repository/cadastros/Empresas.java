@@ -25,6 +25,11 @@ public class Empresas implements Serializable {
 		return manager.find(Empresa.class, id);
 	}
 
+	public Empresa atualizaEmpresa(Empresa empresa) {
+		manager.refresh(empresa);
+		return empresa;
+	}
+
 	public String pesquisaEmpresa(Empresa empresa) {
 		Query query = manager.createQuery("From Empresa where razaoSocial = :empresa or Cnpj = :cnpj or Cpf = :cpf",
 				Empresa.class);
@@ -34,15 +39,20 @@ public class Empresas implements Serializable {
 		List<?> resultList = query.getResultList();
 		if (!resultList.isEmpty()) {
 			if (empresa.getTipoEmpresa().equals(TipoEmpresa.FISICA)) {
-				return "Já existe uma empresa com os dados informados! \n Empresa: " + empresa.getRazaoSocial() + "\n" + "CPF: "
-						+ empresa.getCpf();
+				return "Já existe uma empresa com os dados informados! \n Empresa: " + empresa.getRazaoSocial() + "\n"
+						+ "CPF: " + empresa.getCpf();
 			} else {
-				return "Já existe uma empresa com os dados informados! \n Empresa: " + empresa.getRazaoSocial() + "\n" + "CNPJ: "
-						+ empresa.getCnpj();
-			}			
+				return "Já existe uma empresa com os dados informados! \n Empresa: " + empresa.getRazaoSocial() + "\n"
+						+ "CNPJ: " + empresa.getCnpj();
+			}
 		} else {
 			return "OK";
 		}
+	}
+
+	public List<Empresa> porNomeSemelhante(String nome) {
+		return manager.createQuery("from Empresa where razaoSocial like :nome", Empresa.class)
+				.setParameter("nome", "%" + nome + "%").getResultList();
 	}
 
 	public void excluir(Empresa empresa) {

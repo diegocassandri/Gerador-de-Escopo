@@ -1,0 +1,208 @@
+<ui:composition template="/WEB-INF/template/Layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui">
+
+	<f:metadata>
+		<f:viewAction action="#{cadastroFilialBean.consultar}" />
+	</f:metadata>
+
+	<ui:define name="titulo">Cadastro de Filial</ui:define>
+
+	<ui:define name="corpo">
+		<h1>Cadastro Filial</h1>
+		<h:form id="frmCadastro">
+
+			<p:messages id="msgs" />
+
+			<p:toolbar id="toolbar">
+				<f:facet name="left">
+					<p:commandButton value="Novo" icon="ui-icon-document"
+						action="#{cadastroFilialBean.prepararNovoCadastro}"
+						process="@this" update="filial-dialog"
+						oncomplete="PF('edicaoFilialDialog').show()">
+						<p:resetInput target="filial-dialog" />
+					</p:commandButton>
+
+					<span class="ui-separator"> <span
+						class="ui-icon ui-icon-grip-dotted-vertical" />
+					</span>
+
+					<p:commandButton icon="ui-icon-pencil" title="Editar"
+						process="@this" update="filial-dialog"
+						oncomplete="PF('edicaoFilialDialog').show()"
+						disabled="#{cadastroFilialBean.filialSelecionado == null}">
+						<p:resetInput target="filial-dialog" />
+
+						<f:setPropertyActionListener
+							value="#{cadastroFilialBean.filialSelecionado}"
+							target="#{cadastroFilialBean.filialEdicao}" />
+					</p:commandButton>
+
+					<p:commandButton icon="ui-icon-trash" title="Excluir"
+						process="@this" update="filial-table msgs toolbar"
+						action="#{cadastroFilialBean.excluir}"
+						disabled="#{cadastroFilialBean.filialSelecionado == null}">
+
+						<p:confirm icon="ui-icon-alert" header="Confirmação de exclusão"
+							message="Tem certeza que deseja excluir a filial?" />
+
+					</p:commandButton>
+				</f:facet>
+
+			</p:toolbar>
+
+			<p:dataTable value="#{cadastroFilialBean.todasFiliais}"
+				var="filial" emptyMessage="Nenhuma filial cadastrada." rows="10"
+				paginator="true" paginatorPosition="bottom" style="margin-top: 10px"
+				id="filial-table"
+				selection="#{cadastroFilialBean.filialSelecionado}"
+				selectionMode="single" rowKey="#{filial.codigo}"
+				widgetVar="tabelaFilial">
+
+				<p:ajax event="rowSelect" update=":frmCadastro:toolbar" />
+				<p:ajax event="rowUnselect" update=":frmCadastro:toolbar" />
+
+				<p:column headerText="Código" sortBy="#{filial.codigo}"
+					filterBy="#{filial.codigo}" filterMatchMode="contains">
+					<h:outputText value="#{filial.codigo}" />
+				</p:column>
+				<p:column headerText="Razão Social" sortBy="#{filial.razaoSocial}"
+					filterBy="#{filial.razaoSocial}" filterMatchMode="contains">
+					<h:outputText value="#{filial.razaoSocial}" />
+				</p:column>
+				
+				<p:column headerText="Fantasia" sortBy="#{filial.fantasia}"
+					filterBy="#{filial.fantasia}" filterMatchMode="contains">
+					<h:outputText value="#{filial.fantasia}" />
+				</p:column>
+				
+				<p:column headerText="Cidade" sortBy="#{filialcidade}"
+					filterBy="#{filial.cidade}" filterMatchMode="contains">
+					<h:outputText value="#{filial.cidade.nome} - #{filial.estado.sigla} " />
+				</p:column>
+			</p:dataTable>
+
+			<p:dialog header="Cadastro filial" widgetVar="edicaoFilialDialog"
+				id="filial-dialog" resizable="false" modal="true"
+				closeOnEscape="true">
+
+				<p:messages id="msgs-dialog" />
+
+				<p:defaultCommand target="salvar-button" scope="filial-dialog" />
+				<p:outputPanel id="pnlPessoa">
+					<h:panelGrid columns="2" id="painel-dialog">
+						<p:outputLabel value="Código" for="codigo" />
+						<p:inputText id="codigo" size="7" maxlength="10"
+							value="#{cadastroFilialBean.filialEdicao.codigo}"
+							readonly="true" />
+
+						<p:outputLabel value="Tipo de filial" for="tipo" />
+						<p:selectOneMenu id="tipo"
+							value="#{cadastroFilialBean.filialEdicao.tipoEmpresa}">
+							<f:selectItem itemLabel="Selecione" />
+							<f:selectItems value="#{cadastroFilialBean.tiposEmpresas}"
+								var="tipo" itemLabel="#{tipo.descricao}" itemValue="#{tipo}" />
+							<p:ajax event="change" update="pnlPessoa"  process="tipo" />
+						</p:selectOneMenu>
+
+						<p:outputLabel value="Razão Social" for="razaoSocial" />
+						<p:inputText id="razaoSocial" size="80" maxlength="250"
+							value="#{cadastroFilialBean.filialEdicao.razaoSocial}" />
+
+						<p:outputLabel value="Nome Fantasia" for="fantasia" />
+						<p:inputText id="fantasia" size="80" maxlength="250"
+							value="#{cadastroFilialBean.filialEdicao.fantasia}" />
+
+
+						<p:outputLabel value="CNPJ" for="cnpj"
+							rendered="#{cadastroFilialBean.filialEdicao.tipoEmpresa=='JURIDICA'}" />
+						<p:inputMask id="cnpj" size="18" maxlength="18"
+							rendered="#{cadastroFilialBean.filialEdicao.tipoEmpresa=='JURIDICA'}"
+							value="#{cadastroFilialBean.filialEdicao.cnpj}"
+							mask="99.999.999/9999-99" />
+
+						<p:outputLabel value="CPF" for="cpf"
+							rendered="#{cadastroFilialBean.filialEdicao.tipoEmpresa=='FISICA'}" />
+						<p:inputMask id="cpf" size="14" maxlength="18"
+							rendered="#{cadastroFilialBean.filialEdicao.tipoEmpresa=='FISICA'}"
+							value="#{cadastroFilialBean.filialEdicao.cpf}"
+							mask="999.999.999-99" />
+
+						<p:outputLabel value="Inscrição Estadual" for="inscricao" />
+						<p:inputText id="inscricao" size="25" maxlength="25"
+							value="#{cadastroFilialBean.filialEdicao.incricaoEstadual}" />
+							
+						<p:outputLabel value="CEP" for="cep" />
+						<p:inputMask id="cep" size="25" maxlength="20" mask="99999-999"
+							value="#{cadastroFilialBean.filialEdicao.cep}" />
+
+						<p:outputLabel value="Endereço" for="endereco" />
+						<p:inputText id="endereco" size="80" maxlength="400"
+							value="#{cadastroFilialBean.filialEdicao.endereco}" />
+
+						<p:outputLabel value="Número" for="numero" />
+						<p:inputText id="numero" size="20" maxlength="20"
+							value="#{cadastroFilialBean.filialEdicao.numero}" />
+
+						<p:outputLabel value="Bairro" for="bairro" />
+						<p:inputText id="bairro" size="25" maxlength="250"
+							value="#{cadastroFilialBean.filialEdicao.numero}" />
+							
+						<p:outputLabel value="Telefone" for="telefone" />
+						<p:inputMask id="telefone" size="25" maxlength="20"
+							value="#{cadastroFilialBean.filialEdicao.telefone}"
+							mask="(99) 9999-9999" />
+							
+						<p:outputLabel value="Celular" for="celular" />
+						<p:inputText id="celular" size="25" maxlength="20"
+							value="#{cadastroFilialBean.filialEdicao.celular}" />
+							
+						<p:outputLabel value="Complemento" for="complemento" />
+						<p:inputText id="complemento" size="25" maxlength="20"
+							value="#{cadastroFilialBean.filialEdicao.complemento}" />
+							
+						<p:outputLabel value="E - mail" for="email" />
+						<p:inputText id="email" size="50" maxlength="150"
+							value="#{cadastroFilialBean.filialEdicao.email}" />
+						
+						<p:outputLabel value="Fax" for="fax" />
+						<p:inputText id="fax" size="25" maxlength="20"
+							value="#{cadastroFilialBean.filialEdicao.fax}" />
+						
+						<p:outputLabel value="Estado" for="estado" />
+						<p:selectOneMenu filter="true"
+							value="#{cadastroFilialBean.filialEdicao.estado}"
+							converter="omnifaces.SelectItemsConverter" required="true" 
+							requiredMessage="O Campo Estado é obrigatório" id="estado">
+							<f:selectItem noSelectionOption="true"
+								itemLabel="Selecione um estado" />
+							<f:selectItems value="#{cadastroFilialBean.todosEstados}"
+								var="estado" itemValue="#{estado}"
+								itemLabel="#{estado.nome} - #{estado.sigla}" />
+							    <f:ajax event="change" render="cidade"  listener="#{cadastroFilialBean.listaCidades}"/> 
+						</p:selectOneMenu>
+
+						<p:outputLabel value="Cidade" for="cidade" />
+						<p:selectOneMenu filter="true"
+							value="#{cadastroFilialBean.filialEdicao.cidade}"
+							converter="omnifaces.SelectItemsConverter" required="true"
+							requiredMessage="O Campo cidade é obrigatório" id="cidade">
+							<f:selectItem noSelectionOption="true"
+								itemLabel="Selecione uma cidade" />
+							<f:selectItems value="#{cadastroFilialBean.todasCidades}"
+								var="cidade" itemValue="#{cidade}"
+								itemLabel="#{cidade.nome} - #{cidade.estado.sigla}" />
+						</p:selectOneMenu>
+						<p:commandButton value="Salvar" id="salvar-button"
+							action="#{cadastroFilialBean.salvar}" process="filial-dialog"
+							update="msgs-dialog painel-dialog"
+							oncomplete="if (!args.validationFailed) PF('edicaoFilialDialog').hide()" />
+					</h:panelGrid>
+				</p:outputPanel>
+			</p:dialog>
+		</h:form>
+	</ui:define>
+</ui:composition>
