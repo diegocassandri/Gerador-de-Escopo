@@ -35,6 +35,9 @@
 				<p:menubar styleClass="menu-sistema">
 					<p:submenu label="Olá #{usuarioLogin.nome}!">
 						<p:menuitem value="Alterar Senha" outcome="/AlteracaoSenha.xhtml" />
+						<p:menuitem value="Selecionar Empresa" action="#{selecaoEmpresaBean.abrirDialogo}" >
+						
+						</p:menuitem>
 						<p:menuitem value="Sair" action="#{loginBean.logout}"
 							icon="ui-icon-close" />
 					</p:submenu>

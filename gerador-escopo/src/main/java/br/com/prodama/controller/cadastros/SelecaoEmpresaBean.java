@@ -11,9 +11,10 @@ import javax.inject.Named;
 
 import org.primefaces.context.RequestContext;
 
+import br.com.prodama.controller.UsuarioLogin;
 import br.com.prodama.model.cadastro.Empresa;
 import br.com.prodama.repository.cadastros.Empresas;
-import br.com.prodama.util.FacesMessages;
+
 
 @Named
 @ViewScoped
@@ -21,11 +22,13 @@ public class SelecaoEmpresaBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
-	@Inject
-	private FacesMessages messages;
+
 	
 	@Inject
 	private Empresas empresas;
+	
+	@Inject
+	private UsuarioLogin usuarioLogin;
 	
     private String nome;
 	
@@ -39,16 +42,16 @@ public class SelecaoEmpresaBean implements Serializable {
 		Map<String, Object> opcoes = new HashMap<>();
 		opcoes.put("modal", true);
 		opcoes.put("resizable", false);
-		opcoes.put("contentHeight", 430);
-		opcoes.put("contentWidth", 430);
+		opcoes.put("contentHeight", 500);
+		opcoes.put("contentWidth", 480);
 		
-		RequestContext.getCurrentInstance().openDialog("/cadastros/SelecaoEmpresa.xhtml", opcoes, null);
-		RequestContext contexto = RequestContext.getCurrentInstance();
-		contexto.execute("PF('dialog').show()");
+		RequestContext.getCurrentInstance().openDialog("/cadastros/SelecaoEmpresa", opcoes, null);
+
 	}
 	
 	
 	public void selecionar(Empresa empresa) {
+		usuarioLogin.setEmpresaSelecionada(empresa);
 		RequestContext.getCurrentInstance().closeDialog(empresa);
 	}
 

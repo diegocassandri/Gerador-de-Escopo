@@ -13,37 +13,25 @@
 		<br />Seja bem-vindo!<br />
 		<br />
 		<br />
-			
-		<h:form id="frm">
-		<p:messages id="msgs" />
-			<p:panelGrid columns="2">
-				<p:outputLabel value="empresa" for="empresa" />
-				<h:panelGroup>
-					<p:inputText id="empresa"
-						value="#{UsuarioLogin.EmpresaSelecionada.razaoSocial}"
-						readonly="#{facesContext.currentPhaseId.name eq 'RENDER_RESPONSE'}" />
 
-					<p:commandButton icon="ui-icon-search" title="Pesquisa"
+		<h:form id="frm">
+			<p:messages id="msgs" />
+			<h:panelGrid columns="3">
+				<p:outputLabel value="Empresa: " for="empresa" />
+				<h:panelGroup>
+					<p:inputText id="empresa" size="100"
+						value="#{usuarioLogin.empresaSelecionada.razaoSocial}"
+						readonly="#{facesContext.currentPhaseId.name eq 'RENDER_RESPONSE'}" />
+					<p:commandButton icon="ui-icon-search" title="Selecionar Empresa"
 						action="#{selecaoEmpresaBean.abrirDialogo}" process="@this"
-						update="@none">
+						update="frm">
 						<p:ajax event="dialogReturn"
-							listener="#{UsuarioLogin.EmpresaSelecionada}" process="@this"
+							listener="#{usuarioLogin.SelecionarEmpresa}" process="@this"
 							update="empresa" />
 						<p:resetInput target="empresa" />
 					</p:commandButton>
-					
-					<p:commandButton icon="ui-icon-search" title="Pesquisa"
-						action="#{selecaoEmpresaBean.abrirDialogo}" value="Pesquisar"
-						process="@this" update="@none">
-						<p:ajax event="dialogReturn" listener="#{cadastroEstadoBean.estadoSelecionado}"
-							process="@this" update="@form" />
-						<p:resetInput target="frm" />
-					</p:commandButton>
-					
 				</h:panelGroup>
-			</p:panelGrid>
-			
-			<p:dialog id="dialog" widgetVar="dialog"> a </p:dialog>
+			</h:panelGrid>
 		</h:form>
 	</ui:define>
 

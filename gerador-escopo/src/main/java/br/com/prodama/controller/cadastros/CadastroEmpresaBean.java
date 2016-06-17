@@ -70,7 +70,7 @@ public class CadastroEmpresaBean implements Serializable {
 		if (empresaEdicao.getCep().replace("-", "").length() >= 8) {
 			buscarCep.Buscar(empresaEdicao.getCep().replace("-", ""));
 			empresaEdicao.setBairro(buscarCep.getXmlCep().getBairro());
-			empresaEdicao.setEndereco(buscarCep.getXmlCep().getLogradouro());
+			empresaEdicao.setEndereco(buscarCep.getXmlCep().getTipo_logradouro()+" " +  buscarCep.getXmlCep().getLogradouro());
 			Cidade cidade = cidades.pesquisaPorNome(buscarCep.getXmlCep());
 			empresaEdicao.setEstado(cidade.getEstado());
 			carregarCidades();

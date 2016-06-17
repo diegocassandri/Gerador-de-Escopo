@@ -74,7 +74,6 @@ public class Filial implements Serializable {
 	@Column(name = "TipoEmpresa")
 	private TipoEmpresa tipoEmpresa;
 
-	@NotEmpty
 	@JoinColumn(name = "Empresa", referencedColumnName = "codigo")
 	@ManyToOne(optional = false)
 	private Empresa empresa;

@@ -98,7 +98,7 @@
 						<p:inputText id="codigo" size="7" maxlength="10"
 							value="#{cadastroFilialBean.filialEdicao.codigo}"
 							readonly="true" />
-
+							
 						<p:outputLabel value="Tipo de filial" for="tipo" />
 						<p:selectOneMenu id="tipo"
 							value="#{cadastroFilialBean.filialEdicao.tipoEmpresa}">
@@ -106,6 +106,18 @@
 							<f:selectItems value="#{cadastroFilialBean.tiposEmpresas}"
 								var="tipo" itemLabel="#{tipo.descricao}" itemValue="#{tipo}" />
 							<p:ajax event="change" update="pnlPessoa"  process="tipo" />
+						</p:selectOneMenu>
+						
+						<p:outputLabel value="Empresa" for="empresa" />
+						<p:selectOneMenu filter="true" 
+							value="#{cadastroFilialBean.filialEdicao.empresa}"
+							converter="omnifaces.SelectItemsConverter" required="true"
+							requiredMessage="O Campo Empresa é obrigatório" id="empresa">
+							<f:selectItem noSelectionOption="true"
+								itemLabel="Selecione uma empresa" /> 
+							<f:selectItems value="#{cadastroFilialBean.todasEmpresas}"
+								var="empresa" itemValue="#{empresa}"
+								itemLabel="#{empresa.razaoSocial} " />
 						</p:selectOneMenu>
 
 						<p:outputLabel value="Razão Social" for="razaoSocial" />
@@ -136,8 +148,11 @@
 							value="#{cadastroFilialBean.filialEdicao.incricaoEstadual}" />
 							
 						<p:outputLabel value="CEP" for="cep" />
-						<p:inputMask id="cep" size="25" maxlength="20" mask="99999-999"
-							value="#{cadastroFilialBean.filialEdicao.cep}" />
+						<p:inputMask id="cep" size="25" maxlength="20" mask="99999-999" 
+							value="#{cadastroFilialBean.filialEdicao.cep}">
+							<p:ajax event="blur" listener="#{cadastroFilialBean.buscarCep}" 
+								process="cep" update="endereco bairro estado cidade" />
+						</p:inputMask>
 
 						<p:outputLabel value="Endereço" for="endereco" />
 						<p:inputText id="endereco" size="80" maxlength="400"
@@ -149,7 +164,7 @@
 
 						<p:outputLabel value="Bairro" for="bairro" />
 						<p:inputText id="bairro" size="25" maxlength="250"
-							value="#{cadastroFilialBean.filialEdicao.numero}" />
+							value="#{cadastroFilialBean.filialEdicao.bairro}" />
 							
 						<p:outputLabel value="Telefone" for="telefone" />
 						<p:inputMask id="telefone" size="25" maxlength="20"
