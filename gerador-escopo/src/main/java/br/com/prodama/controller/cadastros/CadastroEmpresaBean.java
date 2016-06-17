@@ -1,4 +1,3 @@
-
 package br.com.prodama.controller.cadastros;
 
 import java.io.Serializable;
@@ -20,13 +19,12 @@ import br.com.prodama.enun.TipoEmpresa;
 import br.com.prodama.model.cadastro.Cidade;
 import br.com.prodama.model.cadastro.Empresa;
 import br.com.prodama.model.cadastro.Estado;
-import br.com.prodama.model.cadastro.Filial;
 import br.com.prodama.repository.cadastros.Cidades;
 import br.com.prodama.repository.cadastros.Empresas;
 import br.com.prodama.repository.cadastros.Estados;
 import br.com.prodama.service.cadastro.CadastroEmpresa;
-import br.com.prodama.service.cadastro.CadastroFilial;
 import br.com.prodama.util.FacesMessages;
+import br.com.prodama.util.componentes.BuscaCEP;
 
 @Named
 @ViewScoped
@@ -38,9 +36,6 @@ public class CadastroEmpresaBean implements Serializable {
 
 	@Inject
 	private CadastroEmpresa cadastroEmpresa;
-
-	@Inject
-	private CadastroFilial cadastroFilial;
 
 	@Inject
 	private Empresas empresas;
@@ -57,8 +52,8 @@ public class CadastroEmpresaBean implements Serializable {
 	private TipoEmpresa tipoEmpresa;
 	private Empresa empresaEdicao = new Empresa();
 	private Empresa empresaSelecionado;
-	private Filial filialEdicao = new Filial();
 	private Estado estadoSelecionado;
+	private BuscaCEP buscarCep = new BuscaCEP();
 	private List<Empresa> todasEmpresas;
 	private List<Estado> todosEstados;
 	private List<Cidade> todasCidades;
@@ -67,47 +62,29 @@ public class CadastroEmpresaBean implements Serializable {
 	@PostConstruct
 	public void prepararNovoCadastro() {
 		empresaEdicao = new Empresa();
-		filialEdicao = new Filial();
 		todasCidades = cidades.todos();
 		todosEstados = estados.todos();
 	}
 
+	public void buscarCep() {
+		if (empresaEdicao.getCep().replace("-", "").length() >= 8) {
+			buscarCep.Buscar(empresaEdicao.getCep().replace("-", ""));
+			empresaEdicao.setBairro(buscarCep.getXmlCep().getBairro());
+			empresaEdicao.setEndereco(buscarCep.getXmlCep().getLogradouro());
+			Cidade cidade = cidades.pesquisaPorNome(buscarCep.getXmlCep());
+			empresaEdicao.setEstado(cidade.getEstado());
+			carregarCidades();
+			empresaEdicao.setCidade(cidade);
+		}
+	}
+
 	public void salvar() {
 		try {
-			if ((empresaEdicao.getCodigo() == null || empresaEdicao.getCodigo() == 0)) {
-				empresaEdicao.setCodigoUsuarioInclusao(usuarioLogin.getUsuarioLogin());
-			} else {
-				empresaEdicao.setCodigoUsuarioAlteracao(usuarioLogin.getUsuarioLogin());
-			}
+			empresaEdicao.setCodigoUsuarioInclusao(usuarioLogin.getUsuarioLogin());
+			empresaEdicao.setCodigoUsuarioAlteracao(usuarioLogin.getUsuarioLogin());
 			this.cadastroEmpresa.salvar(empresaEdicao);
 			consultar();
 			todosEstados = estados.todos();
-			if (empresaEdicao.getCodigoUsuarioAlteracao() == null) {
-				/*empresaEdicao = empresas.pesquisaPorId(empresaEdicao.getCodigo());*/
-				filialEdicao.setBairro(empresaEdicao.getBairro());
-				filialEdicao.setCelular(empresaEdicao.getCelular());
-				filialEdicao.setCep(empresaEdicao.getCep());
-				filialEdicao.setCidade(empresaEdicao.getCidade());
-				filialEdicao.setCnpj(empresaEdicao.getCpf());
-				filialEdicao.setCodigoUsuarioAlteracao(empresaEdicao.getCodigoUsuarioAlteracao());
-				filialEdicao.setCodigoUsuarioInclusao(empresaEdicao.getCodigoUsuarioInclusao());
-				filialEdicao.setComplemento(empresaEdicao.getComplemento());
-				filialEdicao.setCpf(empresaEdicao.getCpf());
-				filialEdicao.setEmail(empresaEdicao.getEmail());
-				System.out.println("-------" + empresaEdicao);
-				filialEdicao.setEmpresa(empresaEdicao);
-				filialEdicao.setEndereco(empresaEdicao.getEndereco());
-				filialEdicao.setEstado(empresaEdicao.getEstado());
-				filialEdicao.setFantasia(empresaEdicao.getFantasia());
-				filialEdicao.setFax(empresaEdicao.getFax());
-				filialEdicao.setIncricaoEstadual(empresaEdicao.getIncricaoEstadual());
-				filialEdicao.setNumero(empresaEdicao.getNumero());
-				filialEdicao.setRazaoSocial(empresaEdicao.getRazaoSocial());
-				filialEdicao.setTelefone(empresaEdicao.getTelefone());
-				filialEdicao.setTipoEmpresa(empresaEdicao.getTipoEmpresa());
-
-				this.cadastroFilial.salvar(filialEdicao);
-			}
 			messages.info("Empresa salva com sucesso!");
 			RequestContext.getCurrentInstance().update(Arrays.asList("frmCadastro:msgs", "frmCadastro:empresa-table"));
 
@@ -121,7 +98,7 @@ public class CadastroEmpresaBean implements Serializable {
 	}
 
 	public void listaCidades(AjaxBehaviorEvent event) {
-		todasCidades = cidades.CidadesPorEstado(this.empresaEdicao.getEstado());
+		carregarCidades();
 	}
 
 	public void excluir() {
@@ -138,6 +115,9 @@ public class CadastroEmpresaBean implements Serializable {
 
 	}
 
+	private void carregarCidades(){
+		todasCidades = cidades.CidadesPorEstado(this.empresaEdicao.getEstado());
+	}
 	public void consultar() {
 		todasEmpresas = empresas.todos();
 	}

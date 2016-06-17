@@ -9,15 +9,15 @@ import javax.xml.bind.Unmarshaller;
 
 public class BuscaCEP {
 
-	protected XmlCEP xmlCep;
+	protected Webservicecep xmlCep = new Webservicecep();
 	
-	public XmlCEP Buscar(String cep) {
+	public Webservicecep Buscar(String cep) {
         try {
-            JAXBContext jc = JAXBContext.newInstance(XmlCEP.class);
+            JAXBContext jc = JAXBContext.newInstance(Webservicecep.class);
 
             Unmarshaller u = jc.createUnmarshaller();
             URL url = new URL("http://cep.republicavirtual.com.br/web_cep.php?cep=" + cep.replace("-", "") + "&formato=xml");
-            xmlCep = (XmlCEP) u.unmarshal(url);
+            xmlCep = (Webservicecep) u.unmarshal(url);
             if (xmlCep.getCidade().trim().isEmpty()) {
                 return null;//Não encontrado
             }
@@ -30,7 +30,7 @@ public class BuscaCEP {
         return null;
     }
 
-	public XmlCEP getXmlCep() {
+	public Webservicecep getXmlCep() {
 		return xmlCep;
 	}
 	

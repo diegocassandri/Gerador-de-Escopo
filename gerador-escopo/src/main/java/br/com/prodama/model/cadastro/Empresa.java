@@ -175,6 +175,10 @@ public class Empresa implements Serializable {
 	}
 
 	public String getCep() {
+		if(cep==null)
+		{
+			return "";
+		}
 		return cep;
 	}
 

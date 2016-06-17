@@ -3,7 +3,7 @@ package br.com.prodama.util.componentes;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
-public class XmlCEP {
+public class Webservicecep {
 
 	private String resultado;
 	private String resultado_txt;

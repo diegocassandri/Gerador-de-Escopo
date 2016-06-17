@@ -9,7 +9,9 @@ import javax.persistence.Query;
 
 import br.com.prodama.model.cadastro.Cidade;
 import br.com.prodama.model.cadastro.Estado;
-
+import br.com.prodama.service.cadastro.CadastroCidade;
+import br.com.prodama.util.Transactional;
+import br.com.prodama.util.componentes.Webservicecep;
 
 public class Cidades implements Serializable {
 
@@ -17,6 +19,9 @@ public class Cidades implements Serializable {
 
 	@Inject
 	private EntityManager manager;
+
+	@Inject
+	private Estados estados;
 
 	public void adicionar(Cidade cidade) {
 		manager.merge(cidade);
@@ -35,6 +40,28 @@ public class Cidades implements Serializable {
 		} else {
 			return true;
 		}
+	}
+
+	@Transactional
+	public Cidade pesquisaPorNome(Webservicecep xmlCep) {
+		try {
+			Query query = manager.createQuery("From Cidade where Upper(nome) = :cidade", Cidade.class);
+			query.setParameter("cidade", xmlCep.getCidade().toUpperCase());
+			return (Cidade) query.getSingleResult();
+		} catch (Exception e) {
+			if (e.getMessage().equals("No entity found for query")) {
+				try {
+					Cidade cidade = new Cidade();
+					cidade.setNome(xmlCep.getCidade());
+					cidade.setEstado(estados.pesquisaPorUf(xmlCep.getUf()));
+					manager.merge(cidade);
+					return cidade;
+				} catch (Exception ex) {
+					return null;
+				}
+			}
+		}
+		return null;
 	}
 
 	public void excluir(Cidade cidade) {
