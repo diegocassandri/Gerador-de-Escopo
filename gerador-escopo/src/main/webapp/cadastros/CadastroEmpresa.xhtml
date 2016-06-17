@@ -76,7 +76,8 @@
 				</p:column>
 				<p:column headerText="Cidade" sortBy="#{empresa.cidade}"
 					filterBy="#{empresa.cidade}" filterMatchMode="contains">
-					<h:outputText value="#{empresa.cidade.nome} - #{empresa.estado.sigla} " />
+					<h:outputText
+						value="#{empresa.cidade.nome} - #{empresa.estado.sigla} " />
 				</p:column>
 			</p:dataTable>
 
@@ -102,16 +103,6 @@
 								var="tipo" itemLabel="#{tipo.descricao}" itemValue="#{tipo}" />
 							<p:ajax event="change" update="pnlPessoa" process="tipo" />
 						</p:selectOneMenu>
-
-						<p:outputLabel value="Razão Social" for="razaoSocial" />
-						<p:inputText id="razaoSocial" size="80" maxlength="250"
-							value="#{cadastroEmpresaBean.empresaEdicao.razaoSocial}" />
-
-						<p:outputLabel value="Nome Fantasia" for="fantasia" />
-						<p:inputText id="fantasia" size="80" maxlength="250"
-							value="#{cadastroEmpresaBean.empresaEdicao.fantasia}" />
-
-
 						<p:outputLabel value="CNPJ" for="cnpj"
 							rendered="#{cadastroEmpresaBean.empresaEdicao.tipoEmpresa=='JURIDICA'}" />
 						<p:inputMask id="cnpj" size="18" maxlength="18"
@@ -125,14 +116,26 @@
 							rendered="#{cadastroEmpresaBean.empresaEdicao.tipoEmpresa=='FISICA'}"
 							value="#{cadastroEmpresaBean.empresaEdicao.cpf}"
 							mask="999.999.999-99" />
+							
+						<p:outputLabel value="Razão Social" for="razaoSocial" />
+						<p:inputText id="razaoSocial" size="80" maxlength="250"
+							value="#{cadastroEmpresaBean.empresaEdicao.razaoSocial}" />
+
+						<p:outputLabel value="Nome Fantasia" for="fantasia" />
+						<p:inputText id="fantasia" size="80" maxlength="250"
+							value="#{cadastroEmpresaBean.empresaEdicao.fantasia}" />
 
 						<p:outputLabel value="Inscrição Estadual" for="inscricao" />
 						<p:inputText id="inscricao" size="25" maxlength="25"
 							value="#{cadastroEmpresaBean.empresaEdicao.incricaoEstadual}" />
-							
+
 						<p:outputLabel value="CEP" for="cep" />
 						<p:inputMask id="cep" size="25" maxlength="20" mask="99999-999"
-							value="#{cadastroEmpresaBean.empresaEdicao.cep}" />
+							value="#{cadastroEmpresaBean.empresaEdicao.cep}">
+							<p:ajax event="blur" listener="#{cadastroEmpresaBean.buscarCep}"
+								process="cep" update="endereco estado cidade" />
+						</p:inputMask>
+
 
 						<p:outputLabel value="Endereço" for="endereco" />
 						<p:inputText id="endereco" size="80" maxlength="400"
@@ -145,39 +148,40 @@
 						<p:outputLabel value="Bairro" for="bairro" />
 						<p:inputText id="bairro" size="25" maxlength="250"
 							value="#{cadastroEmpresaBean.empresaEdicao.numero}" />
-							
+
 						<p:outputLabel value="Telefone" for="telefone" />
 						<p:inputMask id="telefone" size="25" maxlength="20"
 							value="#{cadastroEmpresaBean.empresaEdicao.celular}"
 							mask="(99) 9999-9999" />
-							
+
 						<p:outputLabel value="Celular" for="celular" />
 						<p:inputText id="celular" size="25" maxlength="20"
 							value="#{cadastroEmpresaBean.empresaEdicao.celular}" />
-							
+
 						<p:outputLabel value="Complemento" for="complemento" />
 						<p:inputText id="complemento" size="25" maxlength="20"
 							value="#{cadastroEmpresaBean.empresaEdicao.complemento}" />
-							
+
 						<p:outputLabel value="E - mail" for="email" />
 						<p:inputText id="email" size="50" maxlength="150"
 							value="#{cadastroEmpresaBean.empresaEdicao.email}" />
-						
+
 						<p:outputLabel value="Fax" for="fax" />
 						<p:inputText id="fax" size="25" maxlength="20"
 							value="#{cadastroEmpresaBean.empresaEdicao.fax}" />
-						
+
 						<p:outputLabel value="Estado:" for="estado" />
 						<p:selectOneMenu filter="true"
 							value="#{cadastroEmpresaBean.empresaEdicao.estado}"
-							converter="omnifaces.SelectItemsConverter" required="true" 
+							converter="omnifaces.SelectItemsConverter" required="true"
 							requiredMessage="O Campo Estado é obrigatório" id="estado">
 							<f:selectItem noSelectionOption="true"
 								itemLabel="Selecione um estado" />
 							<f:selectItems value="#{cadastroEmpresaBean.todosEstados}"
 								var="estado" itemValue="#{estado}"
 								itemLabel="#{estado.nome} - #{estado.sigla}" />
-							    <f:ajax event="change" render="cidade"  listener="#{cadastroEmpresaBean.listaCidades}"/> 
+							<f:ajax event="change" render="cidade"
+								listener="#{cadastroEmpresaBean.listaCidades}" />
 						</p:selectOneMenu>
 
 						<p:outputLabel value="Cidade" for="cidade" />

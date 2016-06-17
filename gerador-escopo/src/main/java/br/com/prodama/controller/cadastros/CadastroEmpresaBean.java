@@ -25,7 +25,7 @@ import br.com.prodama.repository.cadastros.Empresas;
 import br.com.prodama.repository.cadastros.Estados;
 import br.com.prodama.service.cadastro.CadastroEmpresa;
 import br.com.prodama.util.FacesMessages;
-
+import br.com.prodama.util.componentes.BuscaCEP;
 
 @Named
 @ViewScoped
@@ -49,13 +49,12 @@ public class CadastroEmpresaBean implements Serializable {
 
 	@Inject
 	private UsuarioLogin usuarioLogin;
-	
-
 
 	private TipoEmpresa tipoEmpresa;
 	private Empresa empresaEdicao = new Empresa();
 	private Empresa empresaSelecionado;
 	private Estado estadoSelecionado;
+	private BuscaCEP buscarCep = new BuscaCEP();
 	private List<Empresa> todasEmpresas;
 	private List<Estado> todosEstados;
 	private List<Cidade> todasCidades;
@@ -66,6 +65,18 @@ public class CadastroEmpresaBean implements Serializable {
 		empresaEdicao = new Empresa();
 		todasCidades = cidades.todos();
 		todosEstados = estados.todos();
+	}
+
+	public void buscarCep() {
+		if (empresaEdicao.getCep().replace("-", "").length() >= 8) {
+			buscarCep.Buscar(empresaEdicao.getCep().replace("-", ""));
+			empresaEdicao.setBairro(buscarCep.getXmlCep().getBairro());
+			empresaEdicao.setEndereco(buscarCep.getXmlCep().getLogradouro());
+			Cidade cidade = cidades.pesquisaPorNome(buscarCep.getXmlCep());
+			empresaEdicao.setEstado(cidade.getEstado());
+			carregarCidades();
+			empresaEdicao.setCidade(cidade);
+		}
 	}
 
 	public void salvar() {
@@ -87,10 +98,8 @@ public class CadastroEmpresaBean implements Serializable {
 
 	}
 
-	
-
 	public void listaCidades(AjaxBehaviorEvent event) {
-		todasCidades = cidades.CidadesPorEstado(this.empresaEdicao.getEstado());
+		carregarCidades();
 	}
 
 	public void excluir() {
@@ -107,6 +116,9 @@ public class CadastroEmpresaBean implements Serializable {
 
 	}
 
+	private void carregarCidades(){
+		todasCidades = cidades.CidadesPorEstado(this.empresaEdicao.getEstado());
+	}
 	public void consultar() {
 		todasEmpresas = empresas.todos();
 	}
@@ -201,5 +213,4 @@ public class CadastroEmpresaBean implements Serializable {
 		this.estadoSelecionado = estadoSelecionado;
 	}
 
-	
 }

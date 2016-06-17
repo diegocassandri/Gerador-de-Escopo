@@ -36,6 +36,13 @@ public class Estados implements Serializable {
 		}
 	}
 	
+	public Estado pesquisaPorUf(String sigla) {
+		Query query = manager.createQuery("From Estado where sigla = :estado", Estado.class);
+		query.setParameter("estado", sigla);
+		return (Estado) query.getSingleResult();
+		
+	}
+	
 	public void excluir(Estado estado) {
 		estado = pesquisaPorId(estado.getCodigo());
 		manager.remove(estado);
