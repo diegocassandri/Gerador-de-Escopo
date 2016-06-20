@@ -74,6 +74,10 @@
 					filterBy="#{empresa.razaoSocial}" filterMatchMode="contains">
 					<h:outputText value="#{empresa.razaoSocial}" />
 				</p:column>
+				<p:column headerText="Fantasia" sortBy="#{empresa.fantasia}"
+					filterBy="#{empresa.fantasia}" filterMatchMode="contains">
+					<h:outputText value="#{empresa.fantasia}" />
+				</p:column>
 				<p:column headerText="Cidade" sortBy="#{empresa.cidade}"
 					filterBy="#{empresa.cidade}" filterMatchMode="contains">
 					<h:outputText
@@ -130,10 +134,10 @@
 							value="#{cadastroEmpresaBean.empresaEdicao.incricaoEstadual}" />
 
 						<p:outputLabel value="CEP" for="cep" />
-						<p:inputMask id="cep" size="25" maxlength="20" mask="99999-999"
+						<p:inputMask id="cep" size="25" maxlength="20" mask="99999-999" 
 							value="#{cadastroEmpresaBean.empresaEdicao.cep}">
-							<p:ajax event="blur" listener="#{cadastroEmpresaBean.buscarCep}"
-								process="cep" update="endereco estado cidade" />
+							<p:ajax event="blur" listener="#{cadastroEmpresaBean.buscarCep}" 
+								process="cep" update="endereco bairro estado cidade" />
 						</p:inputMask>
 
 
@@ -147,11 +151,11 @@
 
 						<p:outputLabel value="Bairro" for="bairro" />
 						<p:inputText id="bairro" size="25" maxlength="250"
-							value="#{cadastroEmpresaBean.empresaEdicao.numero}" />
+							value="#{cadastroEmpresaBean.empresaEdicao.bairro}" />
 
 						<p:outputLabel value="Telefone" for="telefone" />
 						<p:inputMask id="telefone" size="25" maxlength="20"
-							value="#{cadastroEmpresaBean.empresaEdicao.celular}"
+							value="#{cadastroEmpresaBean.empresaEdicao.telefone}"
 							mask="(99) 9999-9999" />
 
 						<p:outputLabel value="Celular" for="celular" />
@@ -193,7 +197,7 @@
 								itemLabel="Selecione uma cidade" />
 							<f:selectItems value="#{cadastroEmpresaBean.todasCidades}"
 								var="cidade" itemValue="#{cidade}"
-								itemLabel="#{cidade.nome} - #{cidade.estado.sigla}" />
+								itemLabel="#{cidade.nome}" />
 						</p:selectOneMenu>
 
 						<p:commandButton value="Salvar" id="salvar-button"

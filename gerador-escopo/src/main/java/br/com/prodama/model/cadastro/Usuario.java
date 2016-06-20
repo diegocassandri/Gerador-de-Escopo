@@ -15,6 +15,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.JoinColumn;
@@ -58,6 +59,14 @@ public class Usuario implements Serializable {
 	@ManyToMany(cascade=CascadeType.ALL,fetch=FetchType.EAGER)
 	@JoinTable(name = "usuario_grupo", joinColumns = @JoinColumn(name = "codigo_usuario"), inverseJoinColumns = @JoinColumn(name = "codigo_grupo"))
 	private List<Grupo> grupos = new LinkedList<Grupo>();
+	
+	@JoinColumn(name = "EmpresaSelecionada", referencedColumnName = "codigo")
+	@ManyToOne(optional = true)
+	private Empresa empresaSelecionada;
+	
+	@JoinColumn(name = "FilialSelecionada", referencedColumnName = "codigo")
+	@ManyToOne(optional = true)
+	private Empresa filialSelecionada;
 
 	public Long getCodigo() {
 		return codigo;
@@ -121,6 +130,24 @@ public class Usuario implements Serializable {
 
 	public void setNomeCompleto(String nomeCompleto) {
 		this.nomeCompleto = nomeCompleto;
+	}
+	
+	
+
+	public Empresa getEmpresaSelecionada() {
+		return empresaSelecionada;
+	}
+
+	public void setEmpresaSelecionada(Empresa empresaSelecionada) {
+		this.empresaSelecionada = empresaSelecionada;
+	}
+
+	public Empresa getFilialSelecionada() {
+		return filialSelecionada;
+	}
+
+	public void setFilialSelecionada(Empresa filialSelecionada) {
+		this.filialSelecionada = filialSelecionada;
 	}
 
 	@Override

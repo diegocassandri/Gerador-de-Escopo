@@ -1,14 +1,38 @@
 <ui:composition template="/WEB-INF/template/Layout.xhtml"
-    xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:h="http://java.sun.com/jsf/html"
-    xmlns:f="http://java.sun.com/jsf/core"
-    xmlns:ui="http://java.sun.com/jsf/facelets"
-    xmlns:p="http://primefaces.org/ui">
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
 
 	<ui:define name="titulo">Gerenciamento de Escopo</ui:define>
 
 	<ui:define name="corpo">
-		<br/><br/><br/>Seja bem-vindo!<br/><br/><br/>
+		<br />
+		<br />
+		<br />Seja bem-vindo!<br />
+		<br />
+		<br />
+
+		<h:form id="frm">
+			<p:messages id="msgs" />
+			<h:panelGrid columns="3">
+				<p:outputLabel value="Empresa: " for="empresa" />
+				<h:panelGroup>
+					<p:inputText id="empresa" size="100"
+						value="#{usuarioLogin.empresaSelecionada.razaoSocial}"
+						readonly="#{facesContext.currentPhaseId.name eq 'RENDER_RESPONSE'}" />
+					<p:commandButton icon="ui-icon-search" title="Selecionar Empresa"
+						action="#{selecaoEmpresaBean.abrirDialogo}" process="@this"
+						update="frm">
+						<p:ajax event="dialogReturn"
+							listener="#{usuarioLogin.SelecionarEmpresa}" process="@this"
+							update="empresa" />
+						<p:resetInput target="empresa" />
+					</p:commandButton>
+				</h:panelGroup>
+			</h:panelGrid>
+		</h:form>
 	</ui:define>
 
 </ui:composition>

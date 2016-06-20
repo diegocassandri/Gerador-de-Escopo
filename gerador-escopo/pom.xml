@@ -37,7 +37,7 @@
 		<dependency>
 			<groupId>org.primefaces</groupId>
 			<artifactId>primefaces</artifactId>
-			<version>5.2</version>
+			<version>5.3</version>
 			<scope>compile</scope>
 		</dependency>
 		<!-- Mojarra (Implementação JSF 2) -->
@@ -76,12 +76,6 @@
 			<scope>compile</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>org.glassfish</groupId>
-			<artifactId>javax.faces</artifactId>
-			<version>2.2.10</version>
-			<scope>compile</scope>
-		</dependency>
 
 		<dependency>
 			<groupId>javax.servlet</groupId>

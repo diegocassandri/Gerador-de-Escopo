@@ -12,6 +12,14 @@
 
 	<application>
 		<message-bundle>br.com.prodama.escopo.resources.Messages</message-bundle>
+		
+		<action-listener>org.primefaces.application.DialogActionListener</action-listener>
+        <navigation-handler>org.primefaces.application.DialogNavigationHandler</navigation-handler>
+        <view-handler>org.primefaces.application.DialogViewHandler</view-handler>
+        
+        <locale-config>
+			<default-locale>pt_BR</default-locale>
+		</locale-config>
 	</application>
 	
 	<navigation-rule>
@@ -24,3 +32,5 @@
 	</navigation-rule>
 	
 </faces-config>
+
+
