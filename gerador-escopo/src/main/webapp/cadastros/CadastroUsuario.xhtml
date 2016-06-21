@@ -9,6 +9,8 @@
 		<f:viewAction action="#{cadastroUsuarioBean.consultar}" />
 	</f:metadata>
 
+
+
 	<ui:define name="titulo">Cadastro de Usuário</ui:define>
 
 	<ui:define name="corpo">
@@ -59,6 +61,19 @@
 						oncomplete="PF('associaGruposDialog').show()"
 						icon="ui-icon-circle-plus">
 						<p:resetInput target="associaGrupos-Dialog" />
+						<f:setPropertyActionListener
+							value="#{cadastroUsuarioBean.usuarioSelecionado}"
+							target="#{cadastroUsuarioBean.usuarioEdicao}" />
+					</p:commandButton>
+				</f:facet>
+				<f:facet name="right">
+					<p:commandButton value="Abrangêcia"
+						disabled="#{cadastroUsuarioBean.usuarioSelecionado == null}"
+						process="@this" update="associaEmpresas-Dialog"
+						oncomplete="PF('associaEmpresasDialog').show()"
+						icon="ui-icon-circle-plus"
+						actionListener="#{cadastroUsuarioBean.carregarDadosEmpresas}">
+						<p:resetInput target="associaEmpresas-Dialog" />
 						<f:setPropertyActionListener
 							value="#{cadastroUsuarioBean.usuarioSelecionado}"
 							target="#{cadastroUsuarioBean.usuarioEdicao}" />
@@ -115,8 +130,8 @@
 						value="#{cadastroUsuarioBean.usuarioEdicao.usuario}" />
 
 					<p:outputLabel value="Senha" for="senha" />
-					<p:password id="senha" feedback="true" inline="true" redisplay="true"
-					promptLabel="Digite uma senha segura"
+					<p:password id="senha" feedback="true" inline="true"
+						redisplay="true" promptLabel="Digite uma senha segura"
 						goodLabel="Boa" weakLabel="Razoável" strongLabel="Excelente"
 						value="#{cadastroUsuarioBean.usuarioEdicao.senha}" />
 
@@ -165,6 +180,86 @@
 					action="#{cadastroUsuarioBean.salvaListaGrupos}"
 					process="associaGrupos-Dialog" update="msgs-associa"
 					oncomplete="if (!args.validationFailed) PF('associaGruposDialog').hide()" />
+			</p:dialog>
+
+			<p:dialog header="Abrangência Empresa e Filial"
+				widgetVar="associaEmpresasDialog" id="associaEmpresas-Dialog"
+				resizable="false" modal="true" closeOnEscape="true" maxWidth="10"
+				maxHeight="25">
+				<p:messages id="msgs-associaEmpresas" />
+				<h3 style="margin-top: 0">Abrangência para Usuário
+					#{cadastroUsuarioBean.usuarioSelecionado.nomeCompleto}</h3>
+
+				<script type="text/javascript">
+					function handleDrop(event, ui) {
+						var droppedEmpresaFilial = ui.draggable;
+
+						droppedEmpresaFilial.fadeOut('fast');
+					}
+				</script>
+
+				<!-- Seleção empresas e filiais  -->
+				<p:outputPanel id="abrangencia">
+					<p:fieldset id="abrangenciaField" legend="Empresas e Filiais">
+						<p:dataTable id="empresasFiliais" var="empFil"
+							value="#{cadastroUsuarioBean.abrangenciaEmpresasFiliais}"
+							emptyMessage="Nenhum registro encontrado" style="width:600px">
+							<p:column style="width:20px">
+								<h:outputText id="dragIcon" styleClass="ui-icon ui-icon-arrow-4" />
+								<p:draggable for="dragIcon" revert="true" helper="clone" />
+							</p:column>
+
+							<p:column headerText="Empresa" style="width:100px">
+								<h:outputText value="#{empFil.empresa}" />
+							</p:column>
+
+							<p:column headerText="Filial" style="width:100px">
+								<h:outputText value="#{empFil.filial}" />
+							</p:column>
+						</p:dataTable>
+					</p:fieldset>
+
+					<p:fieldset id="abrangenciaSelecionada"
+						legend="Selecão de Empresas e Filiais" style="margin-top:20px">
+						<p:outputPanel id="dropArea" style="width:600px">
+							<h:outputText value="Arraste aqui!!!"
+								rendered="#{empty cadastroUsuarioBean.abrangenciaEmpresasFiliaisSelecionadas}"
+								style="font-size:24px;" />
+							<p:dataTable id="abrangenciaEmpresaFilialTable" var="empFil"
+								value="#{cadastroUsuarioBean.abrangenciaEmpresasFiliaisSelecionadas}"
+								rendered="#{not empty cadastroUsuarioBean.abrangenciaEmpresasFiliaisSelecionadas}">
+								<p:column headerText="Empresa" style="width:100px">
+									<h:outputText value="#{empFil.empresa}" />
+								</p:column>
+
+								<p:column headerText="Filial" style="width:100px">
+									<h:outputText value="#{empFil.filial}" />
+								</p:column>
+								<p:column style="width:32px" headerText="Remover">
+									<p:commandButton update="frmCadastro:abrangenciaEmpresaFilialTable frmCadastro:dropArea frmCadastro:empresasFiliais"
+										actionListener="#{cadastroUsuarioBean.removerAbrangencia}" icon="ui-icon-trash" process="@this" id="excluirAbrangencia">
+										<f:setPropertyActionListener value="#{empFil}"
+											target="#{cadastroUsuarioBean.abrangenciaEmpresaFilial}"
+											for="excluirAbrangencia" />
+									</p:commandButton>
+								</p:column>
+							</p:dataTable>
+						</p:outputPanel>
+					</p:fieldset>
+
+					<p:droppable for="abrangenciaSelecionada" tolerance="touch"
+						activeStyleClass="ui-state-highlight" datasource="empresasFiliais"
+						onDrop="handleDrop">
+						<p:ajax listener="#{cadastroUsuarioBean.onAbrangeciaDrop}"
+							update="dropArea empresasFiliais" />
+					</p:droppable>
+					<!-- Fim seleção empresas e filiais -->
+					<p:commandButton value="Salvar" style="margin-top:10px"
+						action="#{cadastroUsuarioBean.salvaAbrangenciaUsuario}"
+						process="associaEmpresas-Dialog" update="msgs-associaEmpresas"
+						oncomplete="if (!args.validationFailed) PF('associaEmpresasDialog').hide()" />
+					
+				</p:outputPanel>
 			</p:dialog>
 		</h:form>
 	</ui:define>

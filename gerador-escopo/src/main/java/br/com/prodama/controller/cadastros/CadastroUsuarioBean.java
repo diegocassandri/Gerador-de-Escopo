@@ -3,6 +3,7 @@ package br.com.prodama.controller.cadastros;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
@@ -13,14 +14,20 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.DragDropEvent;
 import org.primefaces.model.DualListModel;
 
 import br.com.prodama.enun.Status;
+import br.com.prodama.model.cadastro.Empresa;
+import br.com.prodama.model.cadastro.Filial;
 import br.com.prodama.model.cadastro.Grupo;
 import br.com.prodama.model.cadastro.Usuario;
+import br.com.prodama.repository.cadastros.Empresas;
+import br.com.prodama.repository.cadastros.Filiais;
 import br.com.prodama.repository.cadastros.Usuarios;
 import br.com.prodama.service.cadastro.CadastroUsuario;
 import br.com.prodama.util.FacesMessages;
+import br.com.prodama.util.componentes.AbrangenciaEmpresaFilial;
 
 @Named
 @ViewScoped
@@ -36,15 +43,27 @@ public class CadastroUsuarioBean implements Serializable {
 	@Inject
 	private Usuarios usuarios;
 
+	@Inject
+	private Empresas empresas;
+	
+	@Inject
+	private Filiais filiais;
+	
 	private Usuario usuarioEdicao = new Usuario();
 	private Usuario usuarioSelecionado;
+	private AbrangenciaEmpresaFilial abrangenciaEmpresaFilial;
+	private List<AbrangenciaEmpresaFilial> abrangenciaEmpresasFiliais = new LinkedList<>();
+	private List<AbrangenciaEmpresaFilial> abrangenciaEmpresasFiliaisSelecionadas = new LinkedList<>();
 	private List<Usuario> todosUsuario;
 	private List<Usuario> filtroUsuarios;
 
+
+	
 	private DualListModel<Grupo> todosGrupos;
 
 	List<Grupo> gruposSource = new ArrayList<Grupo>();
 	List<Grupo> gruposTarget = new ArrayList<Grupo>();
+
 
 	@PostConstruct
 	public void prepararNovoCadastro() {
@@ -53,6 +72,43 @@ public class CadastroUsuarioBean implements Serializable {
 		todosGrupos = new DualListModel<Grupo>();
 	}
 
+	public void carregarDadosEmpresas() {
+		abrangenciaEmpresasFiliais.clear();
+		abrangenciaEmpresasFiliaisSelecionadas.clear();
+		List<Empresa> empresasCadastradas = empresas.empresasNaoAssociadas(usuarioSelecionado);
+		for (Empresa empresa : empresasCadastradas) {	
+			List<Filial> listaFiliais = filiais.filiaisNaoAssociadas(usuarioSelecionado,empresa);
+			for (Filial filial : listaFiliais) {
+				abrangenciaEmpresaFilial = new AbrangenciaEmpresaFilial(filial.getEmpresa(),filial);
+				abrangenciaEmpresasFiliais.add(abrangenciaEmpresaFilial);
+			}
+		}
+		List<Empresa> empresasAssociadas = empresas.empresasAssociadas(usuarioSelecionado);
+		for (Empresa empresa : empresasAssociadas) {	
+			List<Filial> listaFiliais = filiais.filiaisAssociadas(usuarioSelecionado,empresa);
+			for (Filial filial : listaFiliais) {
+				abrangenciaEmpresaFilial = new AbrangenciaEmpresaFilial(filial.getEmpresa(),filial);
+				abrangenciaEmpresasFiliaisSelecionadas.add(abrangenciaEmpresaFilial);
+			}
+		}
+	}
+
+	public void onAbrangeciaDrop(DragDropEvent ddEvent) {
+        AbrangenciaEmpresaFilial empresaFilial = ((AbrangenciaEmpresaFilial) ddEvent.getData());  
+        abrangenciaEmpresasFiliaisSelecionadas.add(empresaFilial);
+        abrangenciaEmpresasFiliais.remove(empresaFilial);
+    }
+	
+	public void removerAbrangencia(){
+		for (AbrangenciaEmpresaFilial abrangenciaExclusao : abrangenciaEmpresasFiliaisSelecionadas) {
+			if (abrangenciaExclusao.equals(abrangenciaEmpresaFilial)) {
+				abrangenciaEmpresasFiliaisSelecionadas.remove(abrangenciaExclusao);
+				abrangenciaEmpresasFiliais.add(abrangenciaExclusao);
+				break;
+			}
+		}
+	}
+	
 	public void salvar() {
 		try {
 			this.cadastrosUsuario.salvar(usuarioEdicao);
@@ -76,6 +132,21 @@ public class CadastroUsuarioBean implements Serializable {
 		usuarioEdicao.getGrupos().removeAll(todosGrupos.getSource());
 		usuarioEdicao.getGrupos().removeAll(todosGrupos.getTarget());
 		usuarioEdicao.getGrupos().addAll(todosGrupos.getTarget());
+		salvar();
+		
+	}
+	
+	public void salvaAbrangenciaUsuario() {
+		List<Empresa> empresas = new LinkedList<>();
+		List<Filial> filiais = new LinkedList<>();
+		for (AbrangenciaEmpresaFilial abrangenciaEmpresaFilial : abrangenciaEmpresasFiliaisSelecionadas) {
+			empresas.add(abrangenciaEmpresaFilial.getEmpresa());
+			filiais.add(abrangenciaEmpresaFilial.getFilial());
+		}
+		usuarioEdicao.getAbrangenciaEmpresas().clear();
+		usuarioEdicao.getAbrangenciaFiliais().clear();;
+		usuarioEdicao.getAbrangenciaEmpresas().addAll(empresas);
+		usuarioEdicao.getAbrangenciaFiliais().addAll(filiais);
 		salvar();
 		
 	}
@@ -108,7 +179,8 @@ public class CadastroUsuarioBean implements Serializable {
 		return todosUsuario;
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+
+    @SuppressWarnings({ "unchecked", "rawtypes" })
 	public boolean filterByPrice(Object value, Object filter, Locale locale) {
 		String filterText = (filter == null) ? null : filter.toString().trim();
 		if (filterText == null || filterText.equals("")) {
@@ -197,5 +269,29 @@ public class CadastroUsuarioBean implements Serializable {
 		this.todosGrupos = todosGrupos;
 	}
 
+	public AbrangenciaEmpresaFilial getAbrangenciaEmpresaFilial() {
+		return abrangenciaEmpresaFilial;
+	}
+
+	public void setAbrangenciaEmpresaFilial(AbrangenciaEmpresaFilial abrangenciaEmpresaFilial) {
+		this.abrangenciaEmpresaFilial = abrangenciaEmpresaFilial;
+	}
+
+	public List<AbrangenciaEmpresaFilial> getAbrangenciaEmpresasFiliais() {
+		return abrangenciaEmpresasFiliais;
+	}
+
+	public void setAbrangenciaEmpresasFiliais(List<AbrangenciaEmpresaFilial> abrangenciaEmpresasFiliais) {
+		this.abrangenciaEmpresasFiliais = abrangenciaEmpresasFiliais;
+	}
+
+	public List<AbrangenciaEmpresaFilial> getAbrangenciaEmpresasFiliaisSelecionadas() {
+		return abrangenciaEmpresasFiliaisSelecionadas;
+	}
+
+	public void setAbrangenciaEmpresasFiliaisSelecionadas(
+			List<AbrangenciaEmpresaFilial> abrangenciaEmpresasFiliaisSelecionadas) {
+		this.abrangenciaEmpresasFiliaisSelecionadas = abrangenciaEmpresasFiliaisSelecionadas;
+	}
 	
 }

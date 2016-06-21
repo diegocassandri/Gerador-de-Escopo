@@ -1,6 +1,7 @@
 package br.com.prodama.model.cadastro;
 
 import java.io.Serializable;
+import java.util.LinkedList;
 import java.util.List;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -94,6 +95,9 @@ public class Empresa implements Serializable {
 	@ManyToOne(optional = true, fetch = FetchType.EAGER)
 	private Usuario codigoUsuarioAlteracao;
 
+	@ManyToMany(mappedBy="abrangenciaEmpresas",cascade=CascadeType.REMOVE,fetch=FetchType.EAGER)
+	private List<Usuario> abrangenciaUsuarios = new LinkedList<Usuario>();
+	
 	public Long getCodigo() {
 		return codigo;
 	}
@@ -268,6 +272,19 @@ public class Empresa implements Serializable {
 
 	public void setEstado(Estado estado) {
 		this.estado = estado;
+	}
+	
+	public List<Usuario> getAbrangenciaUsuarios() {
+		return abrangenciaUsuarios;
+	}
+
+	public void setAbrangenciaUsuarios(List<Usuario> abrangenciaUsuarios) {
+		this.abrangenciaUsuarios = abrangenciaUsuarios;
+	}
+
+	@Override
+	public String toString() {
+		return codigo + " "+ razaoSocial;
 	}
 
 	@Override
