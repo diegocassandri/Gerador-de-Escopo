@@ -78,7 +78,6 @@ public class CadastroFilialBean implements Serializable {
 			} else {
 				filialEdicao.setCodigoUsuarioAlteracao(usuarioLogin.getUsuarioLogin());
 			}
-			System.out.println("------" + filialEdicao.getEmpresa().getRazaoSocial());
 			this.cadastroFilial.salvar(filialEdicao);
 			consultar();
 			todasEmpresas = empresas.todos();
