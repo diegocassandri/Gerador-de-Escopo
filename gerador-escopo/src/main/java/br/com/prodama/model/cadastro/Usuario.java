@@ -68,6 +68,14 @@ public class Usuario implements Serializable {
 	@ManyToOne(optional = true)
 	private Empresa filialSelecionada;
 
+	@ManyToMany(cascade=CascadeType.ALL,fetch=FetchType.EAGER)
+	@JoinTable(name = "abrangencia_usuario_empresa", joinColumns = @JoinColumn(name = "codigo_usuario"), inverseJoinColumns = @JoinColumn(name = "codigo_empresa"))
+	private List<Empresa> abrangenciaEmpresas = new LinkedList<Empresa>();
+	
+	@ManyToMany(cascade=CascadeType.ALL,fetch=FetchType.EAGER)
+	@JoinTable(name = "abrangencia_usuario_filial", joinColumns = @JoinColumn(name = "codigo_usuario"), inverseJoinColumns = @JoinColumn(name = "codigo_Filial"))
+	private List<Filial> abrangenciaFiliais = new LinkedList<Filial>();
+	
 	public Long getCodigo() {
 		return codigo;
 	}
@@ -148,6 +156,28 @@ public class Usuario implements Serializable {
 
 	public void setFilialSelecionada(Empresa filialSelecionada) {
 		this.filialSelecionada = filialSelecionada;
+	}
+
+	
+	public List<Empresa> getAbrangenciaEmpresas() {
+		return abrangenciaEmpresas;
+	}
+
+	public void setAbrangenciaEmpresas(List<Empresa> abrangenciaEmpresas) {
+		this.abrangenciaEmpresas = abrangenciaEmpresas;
+	}
+
+	public List<Filial> getAbrangenciaFiliais() {
+		return abrangenciaFiliais;
+	}
+
+	public void setAbrangenciaFiliais(List<Filial> abrangenciaFiliais) {
+		this.abrangenciaFiliais = abrangenciaFiliais;
+	}
+
+	@Override
+	public String toString() {
+		return  nomeCompleto;
 	}
 
 	@Override
