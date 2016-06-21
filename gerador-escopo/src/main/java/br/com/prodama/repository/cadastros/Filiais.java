@@ -11,6 +11,7 @@ import br.com.prodama.controller.UsuarioLogin;
 import br.com.prodama.enun.TipoEmpresa;
 import br.com.prodama.model.cadastro.Empresa;
 import br.com.prodama.model.cadastro.Filial;
+import br.com.prodama.model.cadastro.Usuario;
 
 public class Filiais implements Serializable {
 	
@@ -77,4 +78,22 @@ public class Filiais implements Serializable {
 		return manager.createQuery("from Filial where empresa = :empresa", Filial.class)
 				.setParameter("empresa", usuarioLogin.getEmpresaSelecionada()).getResultList();
 	}
+
+	@SuppressWarnings("unchecked")
+	public  List<Filial> filiaisNaoAssociadas(Usuario usuario,Empresa empresa) {
+		Query query = manager.createQuery("Select e From Filial e Where e.empresa = :empresa and not exists (Select u from e.abrangenciaUsuarios u Where u = :usuario)", Filial.class);
+		query.setParameter("usuario", usuario);
+		query.setParameter("empresa", empresa);
+		return query.getResultList();
+
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Filial> filiaisAssociadas(Usuario usuario, Empresa empresa) {
+		Query query = manager.createQuery("Select e From Filial e Where e.empresa = :empresa and exists (Select u from e.abrangenciaUsuarios u Where u = :usuario)", Filial.class);
+		query.setParameter("usuario", usuario);
+		query.setParameter("empresa", empresa);
+		return query.getResultList();
+	}
+
 }

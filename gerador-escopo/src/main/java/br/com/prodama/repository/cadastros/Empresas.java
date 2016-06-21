@@ -9,6 +9,8 @@ import javax.persistence.Query;
 
 import br.com.prodama.enun.TipoEmpresa;
 import br.com.prodama.model.cadastro.Empresa;
+import br.com.prodama.model.cadastro.Grupo;
+import br.com.prodama.model.cadastro.Usuario;
 
 public class Empresas implements Serializable {
 
@@ -55,6 +57,17 @@ public class Empresas implements Serializable {
 				.setParameter("nome", "%" + nome + "%").getResultList();
 	}
 
+
+	@SuppressWarnings("unchecked")
+	public  List<Empresa> empresasNaoAssociadas(Usuario usuario) {
+
+		Query query = manager.createQuery("Select e From Empresa e Where not exists (Select u from e.abrangenciaUsuarios u Where u = :usuario)", Empresa.class);
+		query.setParameter("usuario", usuario);
+		return query.getResultList();
+
+	}
+
+	
 	public void excluir(Empresa empresa) {
 		empresa = pesquisaPorId(empresa.getCodigo());
 		manager.remove(empresa);
@@ -62,7 +75,15 @@ public class Empresas implements Serializable {
 	}
 
 	public List<Empresa> todos() {
-		return manager.createQuery("from Empresa", Empresa.class).getResultList();
+		return manager.createQuery("from Empresa", Empresa.class)
+				                 .getResultList();
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Empresa> empresasAssociadas(Usuario usuario) {
+		Query query = manager.createQuery("Select e From Empresa e Where exists (Select u from e.abrangenciaUsuarios u Where u = :usuario)", Empresa.class);
+		query.setParameter("usuario", usuario);
+		return query.getResultList();
 	}
 
 }

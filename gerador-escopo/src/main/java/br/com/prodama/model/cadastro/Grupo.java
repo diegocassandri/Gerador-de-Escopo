@@ -82,6 +82,12 @@ public class Grupo implements Serializable {
 		this.telas = telas;
 	}
 
+	
+	@Override
+	public String toString() {
+		return  descricao;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
