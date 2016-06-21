@@ -11,7 +11,7 @@
 	<h:outputStylesheet library="prodama" name="estilo.css" />
 	<h:outputScript target="body" library="prodama" name="MaskMoney.js" />
 	<f:metadata>
-		<f:viewAction action="#{selecaoEmpresaBean.pesquisar}" />
+		<f:viewAction action="#{selecaoEmpresaBean.todos}" />
 	</f:metadata>
 </h:head>
 
@@ -39,8 +39,8 @@
 				<h:outputText value="#{empresa.razaoSocial}" />
 			</p:column>
 			<p:column style="width: 30px; text-align: center">
-				<p:commandButton icon="ui-icon-check" title="Selecionar"
-					action="#{selecaoEmpresaBean.selecionar(empresa)}" process="@this" />
+				<p:commandButton  icon="ui-icon-arrowthick-1-e" title="Selecionar"
+					action="#{selecaoEmpresaBean.selecionar(empresa)}" process="@this"  />
 			</p:column>
 
 		</p:dataTable>

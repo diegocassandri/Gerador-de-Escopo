@@ -24,7 +24,7 @@
 			<property name="hibernate.connection.password" value="geradorescopo" />
 			<property name="hibernate.hbm2ddl.auto" value="update" />
 			<property name="hibernate.show_sql" value="true" />
-			<property name="hibernate.dialect" value="org.hibernate.dialect.OracleDialect" />
+			<property name="hibernate.dialect" value="org.hibernate.dialect.Oracle10gDialect" />
 			<property name="hibernate.cache.provider_class" value="org.hibernate.cache.NoCacheProvider" />
 			<property name="hibernate.event.merge.entity_copy_observer"
 				value="allow" />

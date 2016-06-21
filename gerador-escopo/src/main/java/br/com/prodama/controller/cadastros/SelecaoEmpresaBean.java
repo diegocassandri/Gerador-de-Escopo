@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -34,8 +36,15 @@ public class SelecaoEmpresaBean implements Serializable {
 	
 	private List<Empresa> empresasFiltradas;
 	
+	
+	
 	public void pesquisar() {
 		empresasFiltradas = empresas.porNomeSemelhante(nome);
+	}
+	
+	@PostConstruct
+	public void todos(){
+		empresasFiltradas = empresas.todos();
 	}
 	
 	public void abrirDialogo() {

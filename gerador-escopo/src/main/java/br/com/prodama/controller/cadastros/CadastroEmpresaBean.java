@@ -19,11 +19,15 @@ import br.com.prodama.enun.TipoEmpresa;
 import br.com.prodama.model.cadastro.Cidade;
 import br.com.prodama.model.cadastro.Empresa;
 import br.com.prodama.model.cadastro.Estado;
+import br.com.prodama.model.cadastro.Filial;
 import br.com.prodama.repository.cadastros.Cidades;
 import br.com.prodama.repository.cadastros.Empresas;
 import br.com.prodama.repository.cadastros.Estados;
+import br.com.prodama.service.NegocioException;
 import br.com.prodama.service.cadastro.CadastroEmpresa;
+import br.com.prodama.service.cadastro.CadastroFilial;
 import br.com.prodama.util.FacesMessages;
+import br.com.prodama.util.Transactional;
 import br.com.prodama.util.componentes.BuscaCEP;
 
 @Named
@@ -48,9 +52,13 @@ public class CadastroEmpresaBean implements Serializable {
 
 	@Inject
 	private UsuarioLogin usuarioLogin;
+	
+	@Inject
+	private CadastroFilial cadastroFilial;
 
 	private TipoEmpresa tipoEmpresa;
 	private Empresa empresaEdicao = new Empresa();
+	private Filial filialEdicao = new Filial();
 	private Empresa empresaSelecionado;
 	private Estado estadoSelecionado;
 	private BuscaCEP buscarCep = new BuscaCEP();
@@ -80,8 +88,11 @@ public class CadastroEmpresaBean implements Serializable {
 
 	public void salvar() {
 		try {
-			empresaEdicao.setCodigoUsuarioInclusao(usuarioLogin.getUsuarioLogin());
-			empresaEdicao.setCodigoUsuarioAlteracao(usuarioLogin.getUsuarioLogin());
+			if ((empresaEdicao.getCodigo() == null || empresaEdicao.getCodigo() == 0)) {
+				empresaEdicao.setCodigoUsuarioInclusao(usuarioLogin.getUsuarioLogin());
+			} else {
+				empresaEdicao.setCodigoUsuarioAlteracao(usuarioLogin.getUsuarioLogin());
+			}
 			this.cadastroEmpresa.salvar(empresaEdicao);
 			consultar();
 			todosEstados = estados.todos();
@@ -99,6 +110,31 @@ public class CadastroEmpresaBean implements Serializable {
 
 	public void listaCidades(AjaxBehaviorEvent event) {
 		carregarCidades();
+	}
+	
+	public void salvarFilial() throws NegocioException{
+		empresaEdicao = empresas.pesquisaPorId(empresaEdicao.getCodigo());
+		filialEdicao.setBairro(empresaEdicao.getBairro());
+		filialEdicao.setCelular(empresaEdicao.getCelular());
+		filialEdicao.setCep(empresaEdicao.getCep());
+		filialEdicao.setCidade(empresaEdicao.getCidade());
+		filialEdicao.setCnpj(empresaEdicao.getCpf());
+		filialEdicao.setCodigoUsuarioAlteracao(empresaEdicao.getCodigoUsuarioAlteracao());
+		filialEdicao.setCodigoUsuarioInclusao(empresaEdicao.getCodigoUsuarioInclusao());
+		filialEdicao.setComplemento(empresaEdicao.getComplemento());
+		filialEdicao.setCpf(empresaEdicao.getCpf());
+		filialEdicao.setEmail(empresaEdicao.getEmail());
+		filialEdicao.setEmpresa(empresaEdicao);
+		filialEdicao.setEndereco(empresaEdicao.getEndereco());
+		filialEdicao.setEstado(empresaEdicao.getEstado());
+		filialEdicao.setFantasia(empresaEdicao.getFantasia());
+		filialEdicao.setFax(empresaEdicao.getFax());
+		filialEdicao.setIncricaoEstadual(empresaEdicao.getIncricaoEstadual());
+		filialEdicao.setNumero(empresaEdicao.getNumero());
+		filialEdicao.setRazaoSocial(empresaEdicao.getRazaoSocial());
+		filialEdicao.setTelefone(empresaEdicao.getTelefone());
+		filialEdicao.setTipoEmpresa(empresaEdicao.getTipoEmpresa());
+		this.cadastroFilial.salvar(filialEdicao);
 	}
 
 	public void excluir() {

@@ -14,25 +14,7 @@
 		<br />
 		<br />
 
-		<h:form id="frm">
-			<p:messages id="msgs" />
-			<h:panelGrid columns="3">
-				<p:outputLabel value="Empresa: " for="empresa" />
-				<h:panelGroup>
-					<p:inputText id="empresa" size="100"
-						value="#{usuarioLogin.empresaSelecionada.razaoSocial}"
-						readonly="#{facesContext.currentPhaseId.name eq 'RENDER_RESPONSE'}" />
-					<p:commandButton icon="ui-icon-search" title="Selecionar Empresa"
-						action="#{selecaoEmpresaBean.abrirDialogo}" process="@this"
-						update="frm">
-						<p:ajax event="dialogReturn"
-							listener="#{usuarioLogin.SelecionarEmpresa}" process="@this"
-							update="empresa" />
-						<p:resetInput target="empresa" />
-					</p:commandButton>
-				</h:panelGroup>
-			</h:panelGrid>
-		</h:form>
+		
 	</ui:define>
 
 </ui:composition>

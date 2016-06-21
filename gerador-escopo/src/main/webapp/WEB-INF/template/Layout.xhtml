@@ -30,13 +30,10 @@
 				library="prodama" name="logo.png" />
 		</a>
 		<div style="float: right; margin-right: 80px; margin-top: 2px">
-			<h:form style="display: inline-block">
+			<h:form style="display: inline-block" id="menu2">
 				<p:menubar styleClass="menu-sistema">
 					<p:submenu label="Olá #{usuarioLogin.nome}!">
 						<p:menuitem value="Alterar Senha" outcome="/AlteracaoSenha.xhtml" />
-						<p:menuitem value="Selecionar Empresa" action="#{selecaoEmpresaBean.abrirDialogo}" >
-						
-						</p:menuitem>
 						<p:menuitem value="Sair" action="#{loginBean.logout}"
 							icon="ui-icon-close" />
 					</p:submenu>
@@ -46,7 +43,7 @@
 
 
 		<div style="float: right; margin-right: 110px">
-			<h:form style="display: inline-block">
+			<h:form style="display: inline-block" id="menu">
 				<p:menubar styleClass="menu-sistema">
 					<p:submenu label="Cadastros">
 						<p:menuitem value="Estados"
@@ -85,8 +82,38 @@
 		<ui:insert name="corpo" />
 	</div>
 
-	<!-- <p:separator style="margin-top: 20px" /> -->
-	<footer> Sistema de Gerenciamento de Escopo - Prodama </footer>
+	<footer>
+		<h:form id="frm">
+			<p:outputPanel id="painel" columns="1" autoUpdate="true">
+				<p:outputLabel value="Sistema de Gerenciamento de Escopo - Prodama" />
+				<br />
+				<p:outputLabel value=" " />
+				<p:outputLabel value="Empresa: " />
+				<p:commandButton icon="ui-icon-search" title="Selecionar Empresa"
+					action="#{selecaoEmpresaBean.abrirDialogo}" process="@this"
+					update="frm">
+					<p:ajax event="dialogReturn"
+						listener="#{usuarioLogin.SelecionarEmpresa}" process="@this"
+						update="empresa" />
+					<p:resetInput target="empresa" />
+				</p:commandButton> 
+				<p:outputLabel id="empresa"
+					value="      #{usuarioLogin.empresaSelecionada.razaoSocial}    " />
+				<br />
+				<p:outputLabel value="Filial:  " />
+				<p:commandButton icon="ui-icon-search" title="Selecionar Empresa"
+					action="#{selecaoFilialBean.abrirDialogo}" process="@this"
+					update="frm">
+					<p:ajax event="dialogReturn"
+						listener="#{usuarioLogin.SelecionarFilial}" process="@this"
+						update="filial" />
+					<p:resetInput target="filial" />
+				</p:commandButton>
+				<p:outputLabel id="filial"
+					value="      #{usuarioLogin.filialSelecionada.razaoSocial}    " />
+			</p:outputPanel>
+		</h:form>
+	</footer>
 	<h:form>
 		<p:confirmDialog global="true">
 			<p:commandButton value="Não" type="button"

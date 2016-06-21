@@ -59,6 +59,8 @@ public class LoginBean {
 			this.usuario.setNome(this.nomeUsuario);
 			this.usuario.setDataLogin(new Date());
 			this.usuario.setUsuarioLogin(usuarios.retornaUsuarioPorNome(usuario.getNome()));
+			this.usuario.setEmpresaSelecionada(usuarios.retornaUsuarioPorNome(usuario.getNome()).getEmpresaSelecionada());
+			this.usuario.setFilialSelecionada(usuarios.retornaUsuarioPorNome(usuario.getNome()).getFilialSelecionada());
 			if(usuarios.verificaMudarSenha(this.nomeUsuario)){
 				mudarSenha = true;
 				RequestContext contexto = RequestContext.getCurrentInstance();
