@@ -152,7 +152,7 @@
 				closeOnEscape="true">
 				<p:messages id="msgs-associa" />
 				<h3 style="margin-top: 0">Associar Grupos ao Usuario
-					#{cadastroUsuarioBean.usuarioSelecionado}</h3>
+					#{cadastroUsuarioBean.usuarioSelecionado.usuario}</h3>
 				<p:pickList id="pickGrupos"
 					value="#{cadastroUsuarioBean.todosGrupos}" var="grupo"
 					iconOnly="true" itemLabel="#{grupo.nome}" itemValue="#{grupo}"

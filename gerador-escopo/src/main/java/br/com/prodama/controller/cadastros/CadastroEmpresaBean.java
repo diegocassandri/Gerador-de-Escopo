@@ -27,7 +27,6 @@ import br.com.prodama.service.NegocioException;
 import br.com.prodama.service.cadastro.CadastroEmpresa;
 import br.com.prodama.service.cadastro.CadastroFilial;
 import br.com.prodama.util.FacesMessages;
-import br.com.prodama.util.Transactional;
 import br.com.prodama.util.componentes.BuscaCEP;
 
 @Named
