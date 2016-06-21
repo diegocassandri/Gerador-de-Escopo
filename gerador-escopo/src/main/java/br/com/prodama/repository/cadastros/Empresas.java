@@ -75,7 +75,8 @@ public class Empresas implements Serializable {
 	}
 
 	public List<Empresa> todos() {
-		return manager.createQuery("from Empresa", Empresa.class).getResultList();
+		return manager.createQuery("from Empresa", Empresa.class)
+				                 .getResultList();
 	}
 
 	@SuppressWarnings("unchecked")
