@@ -78,7 +78,6 @@ public class Usuarios implements Serializable {
 		Query query = manager.createQuery("From Usuario where usuario = :usuario", Usuario.class);
 		query.setParameter("usuario", usuario);
 		List<?> resultList = query.getResultList();
-		System.out.println(" ---------> " + resultList.get(0));
 		return (Usuario) resultList.get(0);
 		
 	}

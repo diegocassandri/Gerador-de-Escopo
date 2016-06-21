@@ -89,7 +89,7 @@ public class CadastroFilialBean implements Serializable {
 		} catch (Exception e) {
 			FacesMessage mensagem = new FacesMessage(e.getMessage());
 			messages.error("Erro ao salvar Filial! \n Motivo:" + mensagem.getDetail());
-			RequestContext.getCurrentInstance().update(Arrays.asList("frmCadastro:msgs", "frmCadastro:empresa-table"));
+			RequestContext.getCurrentInstance().update(Arrays.asList("frmCadastro:msgs", "frmCadastro:filial-table"));
 
 		}
 
@@ -131,7 +131,7 @@ public class CadastroFilialBean implements Serializable {
 	}
 
 	public void consultar() {
-		todasFiliais = filiais.todos();
+		todasFiliais = filiais.todos(usuarioLogin.getEmpresaSelecionada());
 	}
 
 	public TipoEmpresa[] getTiposEmpresas() {

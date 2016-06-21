@@ -7,7 +7,9 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import br.com.prodama.controller.UsuarioLogin;
 import br.com.prodama.enun.TipoEmpresa;
+import br.com.prodama.model.cadastro.Empresa;
 import br.com.prodama.model.cadastro.Filial;
 
 public class Filiais implements Serializable {
@@ -16,6 +18,9 @@ public class Filiais implements Serializable {
 
 	@Inject
 	private EntityManager manager;
+	
+	@Inject
+	private UsuarioLogin usuarioLogin;
 	
 	public void adicionar(Filial filial){
 		manager.merge(filial);
@@ -35,6 +40,12 @@ public class Filiais implements Serializable {
 			return true;
 		}
 	}
+	
+	public List<Filial> porNomeSemelhante(String nome,Empresa empresa) {
+		return manager.createQuery("from Filial where razaoSocial like :nome and empresa = :empresa" , Filial.class)
+				.setParameter("nome", "%" + nome + "%").setParameter("empresa", usuarioLogin.getEmpresaSelecionada().getCodigo()).getResultList();
+	}
+	
 	
 	public String pesquisaFilial(Filial filial) {
 		Query query = manager.createQuery("From Filial where razaoSocial = :empresa or Cnpj = :cnpj or Cpf = :cpf",
@@ -62,9 +73,8 @@ public class Filiais implements Serializable {
 
 	}
 
-	public List<Filial> todos() {
-		return manager.createQuery("from Filial", Filial.class).getResultList();
+	public List<Filial> todos(Empresa empresa) {
+		return manager.createQuery("from Filial where empresa = :empresa", Filial.class)
+				.setParameter("empresa", usuarioLogin.getEmpresaSelecionada()).getResultList();
 	}
-	
-
 }

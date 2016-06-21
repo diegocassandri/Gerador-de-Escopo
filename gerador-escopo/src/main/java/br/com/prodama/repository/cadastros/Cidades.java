@@ -9,7 +9,6 @@ import javax.persistence.Query;
 
 import br.com.prodama.model.cadastro.Cidade;
 import br.com.prodama.model.cadastro.Estado;
-import br.com.prodama.service.cadastro.CadastroCidade;
 import br.com.prodama.util.Transactional;
 import br.com.prodama.util.componentes.Webservicecep;
 

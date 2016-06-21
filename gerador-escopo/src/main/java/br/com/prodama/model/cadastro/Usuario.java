@@ -66,7 +66,7 @@ public class Usuario implements Serializable {
 	
 	@JoinColumn(name = "FilialSelecionada", referencedColumnName = "codigo")
 	@ManyToOne(optional = true)
-	private Empresa filialSelecionada;
+	private Filial filialSelecionada;
 
 	public Long getCodigo() {
 		return codigo;
@@ -142,11 +142,11 @@ public class Usuario implements Serializable {
 		this.empresaSelecionada = empresaSelecionada;
 	}
 
-	public Empresa getFilialSelecionada() {
+	public Filial getFilialSelecionada() {
 		return filialSelecionada;
 	}
 
-	public void setFilialSelecionada(Empresa filialSelecionada) {
+	public void setFilialSelecionada(Filial filialSelecionada) {
 		this.filialSelecionada = filialSelecionada;
 	}
 
