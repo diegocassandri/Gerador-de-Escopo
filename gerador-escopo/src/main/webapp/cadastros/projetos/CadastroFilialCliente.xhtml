@@ -1,0 +1,149 @@
+<ui:composition template="/WEB-INF/template/Layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui">
+
+	<f:metadata>
+		<f:viewAction action="#{cadastroFilialClienteBean.consultar}" />
+	</f:metadata>
+
+	<ui:define name="titulo">Cadastro de Filial - Cliente</ui:define>
+
+	<ui:define name="corpo">
+		<h1>Cadastro Filial - Cliente</h1>
+		<h:form id="frmCadastro">
+
+			<p:messages id="msgs" closable="true"/>
+
+			<p:toolbar id="toolbar">
+				<f:facet name="left">
+					<p:commandButton value="Novo" icon="ui-icon-document"
+						action="#{cadastroFilialClienteBean.prepararNovoCadastro}"
+						process="@this" update="filial-dialog"
+						oncomplete="PF('edicaoFilialDialog').show()">
+						<p:resetInput target="filial-dialog" />
+					</p:commandButton>
+
+					<span class="ui-separator"> <span
+						class="ui-icon ui-icon-grip-dotted-vertical" />
+					</span>
+
+					<p:commandButton icon="ui-icon-pencil" title="Editar"
+						process="@this" update="filial-dialog"
+						oncomplete="PF('edicaoFilialDialog').show()"
+						disabled="#{cadastroFilialClienteBean.filialSelecionado == null}">
+						<p:resetInput target="filial-dialog" />
+
+						<f:setPropertyActionListener
+							value="#{cadastroFilialClienteBean.filialSelecionado}"
+							target="#{cadastroFilialClienteBean.filialEdicao}" />
+					</p:commandButton>
+
+					<p:commandButton icon="ui-icon-trash" title="Excluir"
+						process="@this" update="filial-table msgs toolbar"
+						action="#{cadastroFilialClienteBean.excluir}"
+						disabled="#{cadastroFilialClienteBean.filialSelecionado == null}">
+
+						<p:confirm icon="ui-icon-alert" header="Confirmação de exclusão"
+							message="Tem certeza que deseja excluir a filial?" />
+
+					</p:commandButton>
+				</f:facet>
+
+			</p:toolbar>
+
+			<p:dataTable value="#{cadastroFilialClienteBean.todasFiliais}"
+				var="filial" emptyMessage="Nenhuma filial cadastrada." rows="10"
+				paginator="true" paginatorPosition="bottom" style="margin-top: 10px"
+				id="filial-table"
+				selection="#{cadastroFilialClienteBean.filialSelecionado}"
+				selectionMode="single" rowKey="#{filial.codigo}"
+				widgetVar="tabelaFilial">
+
+				<p:ajax event="rowSelect" update=":frmCadastro:toolbar" />
+				<p:ajax event="rowUnselect" update=":frmCadastro:toolbar" />
+
+				<p:column headerText="Código" sortBy="#{filial.codigo}"
+					filterBy="#{filial.codigo}" filterMatchMode="contains">
+					<h:outputText value="#{filial.codigo}" />
+				</p:column>
+				<p:column headerText="Razão Social" sortBy="#{filial.razaoSocial}"
+					filterBy="#{filial.razaoSocial}" filterMatchMode="contains">
+					<h:outputText value="#{filial.razaoSocial}" />
+				</p:column>
+				
+				<p:column headerText="Fantasia" sortBy="#{filial.fantasia}"
+					filterBy="#{filial.fantasia}" filterMatchMode="contains">
+					<h:outputText value="#{filial.fantasia}" />
+				</p:column>
+			</p:dataTable>
+
+			<p:dialog header="Cadastro filial" widgetVar="edicaoFilialDialog"
+				id="filial-dialog" resizable="false" modal="true"
+				closeOnEscape="true">
+
+				<p:messages id="msgs-dialog" />
+
+				<p:defaultCommand target="salvar-button" scope="filial-dialog" />
+				<p:outputPanel id="pnlPessoa">
+					<h:panelGrid columns="2" id="painel-dialog">
+						<p:outputLabel value="Código" for="codigo" />
+						<p:inputText id="codigo" size="7" maxlength="10"
+							value="#{cadastroFilialClienteBean.filialEdicao.codigo}"
+							readonly="true" />
+							
+						<p:outputLabel value="Tipo de filial" for="tipo" />
+						<p:selectOneMenu id="tipo"
+							value="#{cadastroFilialClienteBean.filialEdicao.tipoEmpresa}">
+							<f:selectItem itemLabel="Selecione" />
+							<f:selectItems value="#{cadastroFilialClienteBean.tiposEmpresas}"
+								var="tipo" itemLabel="#{tipo.descricao}" itemValue="#{tipo}" />
+							<p:ajax event="change" update="pnlPessoa"  process="tipo" />
+						</p:selectOneMenu>
+						
+						<p:outputLabel value="CNPJ" for="cnpj"
+							rendered="#{cadastroFilialClienteBean.filialEdicao.tipoEmpresa=='JURIDICA'}" />
+						<p:inputMask id="cnpj" size="18" maxlength="18"
+							rendered="#{cadastroFilialClienteBean.filialEdicao.tipoEmpresa=='JURIDICA'}"
+							value="#{cadastroFilialClienteBean.filialEdicao.cnpj}"
+							mask="99.999.999/9999-99" />
+
+						<p:outputLabel value="CPF" for="cpf"
+							rendered="#{cadastroFilialClienteBean.filialEdicao.tipoEmpresa=='FISICA'}" />
+						<p:inputMask id="cpf" size="14" maxlength="18"
+							rendered="#{cadastroFilialClienteBean.filialEdicao.tipoEmpresa=='FISICA'}"
+							value="#{cadastroFilialClienteBean.filialEdicao.cpf}"
+							mask="999.999.999-99" />
+						
+						<p:outputLabel value="Empresa" for="empresa" />
+						<p:selectOneMenu filter="true" 
+							value="#{cadastroFilialClienteBean.filialEdicao.empresaCliente}"
+							converter="omnifaces.SelectItemsConverter" required="true"
+							requiredMessage="O Campo Empresa é obrigatório" id="empresa">
+							<f:selectItem noSelectionOption="true"
+								itemLabel="Selecione uma empresa" /> 
+							<f:selectItems value="#{cadastroFilialClienteBean.todasEmpresas}"
+								var="empresa" itemValue="#{empresa}"
+								itemLabel="#{empresa.razaoSocial} " />
+						</p:selectOneMenu>
+
+						<p:outputLabel value="Razão Social" for="razaoSocial" />
+						<p:inputText id="razaoSocial" size="80" maxlength="250"
+							value="#{cadastroFilialClienteBean.filialEdicao.razaoSocial}" />
+
+						<p:outputLabel value="Nome Fantasia" for="fantasia" />
+						<p:inputText id="fantasia" size="80" maxlength="250"
+							value="#{cadastroFilialClienteBean.filialEdicao.fantasia}" />
+							
+						<p:commandButton value="Salvar" id="salvar-button"
+							action="#{cadastroFilialClienteBean.salvar}" process="filial-dialog"
+							update="msgs-dialog painel-dialog"
+							oncomplete="if (!args.validationFailed) PF('edicaoFilialDialog').hide()" />
+					</h:panelGrid>
+				</p:outputPanel>
+			</p:dialog>
+		</h:form>
+	</ui:define>
+</ui:composition>

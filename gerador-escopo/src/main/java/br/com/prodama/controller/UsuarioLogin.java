@@ -3,6 +3,7 @@ package br.com.prodama.controller;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
@@ -29,6 +30,9 @@ public class UsuarioLogin implements Serializable {
 	private Date dataLogin;
 	private Empresa empresaSelecionada;
 	private Filial filialSelecionada;
+	
+	private List<Empresa> abrangeciaEmpresa;
+	private List<Filial> abrangenciaFilial;
 
 	private Usuario usuarioEdicao;
 	
@@ -65,9 +69,7 @@ public class UsuarioLogin implements Serializable {
 		usuarioEdicao = this.getUsuarioLogin();
 		usuarioEdicao = usuarios.pesquisaPorId(usuarioEdicao.getCodigo());
 		usuarioEdicao.setEmpresaSelecionada(this.empresaSelecionada);
-		usuarioEdicao.setFilialSelecionada(this.filialSelecionada);
-		System.out.println(usuarioEdicao.getEmpresaSelecionada().getCodigo());
-		
+		usuarioEdicao.setFilialSelecionada(this.filialSelecionada);		
 		this.cadastrosUsuario.salvar(usuarioEdicao);
 		
 	}
@@ -106,7 +108,7 @@ public class UsuarioLogin implements Serializable {
 
 	public void setEmpresaSelecionada(Empresa empresaSelecionada) {
 		RequestContext.getCurrentInstance().update(Arrays.asList("frm"));
-		filialSelecionada = null;
+		/*filialSelecionada = null;*/
 		this.empresaSelecionada = empresaSelecionada;
 	}
 
@@ -118,7 +120,20 @@ public class UsuarioLogin implements Serializable {
 		RequestContext.getCurrentInstance().update(Arrays.asList("frm"));
 		this.filialSelecionada = filialSelecionada;
 	}
-	
-	
 
+	public List<Empresa> getAbrangeciaEmpresa() {
+		return abrangeciaEmpresa;
+	}
+
+	public void setAbrangeciaEmpresa(List<Empresa> abrangeciaEmpresa) {
+		this.abrangeciaEmpresa = abrangeciaEmpresa;
+	}
+
+	public List<Filial> getAbrangenciaFilial() {
+		return abrangenciaFilial;
+	}
+
+	public void setAbrangenciaFilial(List<Filial> abrangenciaFilial) {
+		this.abrangenciaFilial = abrangenciaFilial;
+	}
 }

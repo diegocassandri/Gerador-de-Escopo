@@ -42,11 +42,7 @@ public class Filiais implements Serializable {
 		}
 	}
 	
-	public List<Filial> porNomeSemelhante(String nome,Empresa empresa) {
-		return manager.createQuery("from Filial where razaoSocial like :nome and empresa = :empresa" , Filial.class)
-				.setParameter("nome", "%" + nome + "%").setParameter("empresa", usuarioLogin.getEmpresaSelecionada().getCodigo()).getResultList();
-	}
-	
+
 	
 	public String pesquisaFilial(Filial filial) {
 		Query query = manager.createQuery("From Filial where razaoSocial = :empresa or Cnpj = :cnpj or Cpf = :cpf",
@@ -74,10 +70,28 @@ public class Filiais implements Serializable {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<Filial> todos(Empresa empresa) {
-		return manager.createQuery("from Filial where empresa = :empresa", Filial.class)
-				.setParameter("empresa", usuarioLogin.getEmpresaSelecionada()).getResultList();
+		/*return manager.createQuery("from Filial where empresa = :empresa", Filial.class)
+				.setParameter("empresa", usuarioLogin.getEmpresaSelecionada()).getResultList();*/
+		Query query = manager.createQuery("Select e From Filial e Where e.empresa = :empresa and exists (Select u from e.abrangenciaUsuarios u Where u = :usuario) and empresa = :empresa", Filial.class);
+		query.setParameter("usuario", usuarioLogin.getUsuarioLogin());
+		query.setParameter("empresa", empresa);
+		return query.getResultList();
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Filial> porNomeSemelhante(String nome,Empresa empresa) {
+		/*return manager.createQuery("from Filial where razaoSocial like :nome and empresa = :empresa" , Filial.class)
+				.setParameter("nome", "%" + nome + "%").setParameter("empresa", usuarioLogin.getEmpresaSelecionada().getCodigo()).getResultList();*/
+		Query query = manager.createQuery("Select e From Filial e Where e.empresa = :empresa and exists (Select u from e.abrangenciaUsuarios u Where u = :usuario) and empresa = :empresa and razaoSocial like :nome", Filial.class);
+		query.setParameter("usuario", usuarioLogin.getUsuarioLogin());
+		query.setParameter("empresa", empresa);
+		query.setParameter("nome", "%" + nome + "%");
+		return query.getResultList();
+	
+	}
+	
 
 	@SuppressWarnings("unchecked")
 	public  List<Filial> filiaisNaoAssociadas(Usuario usuario,Empresa empresa) {

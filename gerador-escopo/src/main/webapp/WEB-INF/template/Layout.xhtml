@@ -54,9 +54,13 @@
 							outcome="/cadastros/CadastroEmpresa.xhtml" />
 						<p:menuitem value="Filiais"
 							outcome="/cadastros/CadastroFilial.xhtml" />
-						<p:submenu label="Projetos">
+						<p:submenu label="Projetos" >
 							<p:menuitem value="Tipos de hora"
-								outcome="/cadastros/CadastroTipoDeHora.xhtml" />
+								outcome="/cadastros/projetos/CadastroTipoDeHora.xhtml" />
+							<p:menuitem value="Empresa Cliente"
+								outcome="/cadastros/projetos/CadastroEmpresaCliente.xhtml" />
+							<p:menuitem value="Filial Cliente"
+								outcome="/cadastros/projetos/CadastroFilialCliente.xhtml" />
 						</p:submenu>
 					</p:submenu>
 					<p:submenu label="Projetos">
@@ -78,7 +82,7 @@
 	</header>
 
 
-	<div id="conteudo">
+	<div id="conteudo" style="min-height:450px">
 		<ui:insert name="corpo" />
 	</div>
 
@@ -87,28 +91,29 @@
 			<p:outputPanel id="painel" columns="1" autoUpdate="true">
 				<p:outputLabel value="Sistema de Gerenciamento de Escopo - Prodama" />
 				<br />
-				<p:outputLabel value=" " />
-				<p:outputLabel value="Empresa: " />
-				<p:commandButton icon="ui-icon-search" title="Selecionar Empresa"
+				<p:commandButton icon="fa fa-globe" title="Selecionar Empresa"
 					action="#{selecaoEmpresaBean.abrirDialogo}" process="@this"
-					update="frm">
+					update="frm"  >
 					<p:ajax event="dialogReturn"
 						listener="#{usuarioLogin.SelecionarEmpresa}" process="@this"
 						update="empresa" />
 					<p:resetInput target="empresa" />
 				</p:commandButton> 
+				<p:outputLabel value=" " />
+				<p:outputLabel value="Empresa: " />
 				<p:outputLabel id="empresa"
 					value="      #{usuarioLogin.empresaSelecionada.razaoSocial}    " />
 				<br />
-				<p:outputLabel value="Filial:  " />
-				<p:commandButton icon="ui-icon-search" title="Selecionar Empresa"
+				<p:commandButton icon="fa fa-building" title="Selecionar Empresa"
 					action="#{selecaoFilialBean.abrirDialogo}" process="@this"
-					update="frm">
+					update="frm"  >
 					<p:ajax event="dialogReturn"
 						listener="#{usuarioLogin.SelecionarFilial}" process="@this"
 						update="filial" />
 					<p:resetInput target="filial" />
 				</p:commandButton>
+				<p:outputLabel value=" " />
+				<p:outputLabel value="Filial:  " />
 				<p:outputLabel id="filial"
 					value="      #{usuarioLogin.filialSelecionada.razaoSocial}    " />
 			</p:outputPanel>

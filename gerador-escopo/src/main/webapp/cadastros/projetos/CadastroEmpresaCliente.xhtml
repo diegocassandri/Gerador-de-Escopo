@@ -1,0 +1,196 @@
+<ui:composition template="/WEB-INF/template/Layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui">
+
+	<f:metadata>
+		<f:viewAction action="#{cadastroEmpresaClienteBean.consultar}" />
+	</f:metadata>
+
+	<ui:define name="titulo">Cadastro de Empresa - Cliente</ui:define>
+
+	<ui:define name="corpo">
+		<h1>Cadastro Empresa - Cliente</h1>
+		<h:form id="frmCadastro">
+
+			<p:messages id="msgs" closable="true"/>
+
+			<p:toolbar id="toolbar">
+				<f:facet name="left">
+					<p:commandButton value="Novo" icon="ui-icon-document"
+						action="#{cadastroEmpresaClienteBean.prepararNovoCadastro}"
+						process="@this" update="empresa-dialog"
+						oncomplete="PF('edicaoEmpresaDialog').show()">
+						<p:resetInput target="empresa-dialog" />
+					</p:commandButton>
+
+					<span class="ui-separator"> <span
+						class="ui-icon ui-icon-grip-dotted-vertical" />
+					</span>
+
+					<p:commandButton icon="ui-icon-pencil" title="Editar"
+						process="@this" update="empresa-dialog"
+						oncomplete="PF('edicaoEmpresaDialog').show()"
+						disabled="#{cadastroEmpresaClienteBean.empresaSelecionado == null}">
+						<p:resetInput target="empresa-dialog" />
+
+						<f:setPropertyActionListener
+							value="#{cadastroEmpresaClienteBean.empresaSelecionado}"
+							target="#{cadastroEmpresaClienteBean.empresaEdicao}" />
+					</p:commandButton>
+
+					<p:commandButton icon="ui-icon-trash" title="Excluir"
+						process="@this" update="empresa-table msgs toolbar"
+						action="#{cadastroEmpresaClienteBean.excluir}"
+						disabled="#{cadastroEmpresaClienteBean.empresaSelecionado == null}">
+
+						<p:confirm icon="ui-icon-alert" header="Confirmação de exclusão"
+							message="Tem certeza que deseja excluir a empresa?" />
+
+					</p:commandButton>
+				</f:facet>
+
+			</p:toolbar>
+
+			<p:dataTable value="#{cadastroEmpresaClienteBean.todasEmpresas}"
+				var="empresa" emptyMessage="Nenhuma empresa cadastrada." rows="10"
+				paginator="true" paginatorPosition="bottom" style="margin-top: 10px"
+				id="empresa-table"
+				selection="#{cadastroEmpresaClienteBean.empresaSelecionado}"
+				selectionMode="single" rowKey="#{empresa.codigo}"
+				filteredValue="#{cadastroEmpresaClienteBean.filtroEmpresas}"
+				widgetVar="tabelaEmpresa">
+
+				<p:ajax event="rowSelect" update=":frmCadastro:toolbar" />
+				<p:ajax event="rowUnselect" update=":frmCadastro:toolbar" />
+
+				<p:column headerText="Código" sortBy="#{empresa.codigo}"
+					filterBy="#{empresa.codigo}" filterMatchMode="contains">
+					<h:outputText value="#{empresa.codigo}" />
+				</p:column>
+				<p:column headerText="Razão Social" sortBy="#{empresa.razaoSocial}"
+					filterBy="#{empresa.razaoSocial}" filterMatchMode="contains">
+					<h:outputText value="#{empresa.razaoSocial}" />
+				</p:column>
+				<p:column headerText="Fantasia" sortBy="#{empresa.fantasia}"
+					filterBy="#{empresa.fantasia}" filterMatchMode="contains">
+					<h:outputText value="#{empresa.fantasia}" />
+				</p:column>
+				<p:column headerText="Cidade" sortBy="#{empresa.cidade}"
+					filterBy="#{empresa.cidade}" filterMatchMode="contains">
+					<h:outputText
+						value="#{empresa.cidade.nome} - #{empresa.estado.sigla} " />
+				</p:column>
+			</p:dataTable>
+
+			<p:dialog header="Cadastro empresa" widgetVar="edicaoEmpresaDialog"
+				id="empresa-dialog" resizable="false" modal="true"
+				closeOnEscape="true">
+
+				<p:messages id="msgs-dialog" />
+
+				<p:defaultCommand target="salvar-button" scope="empresa-dialog" />
+				<p:outputPanel id="pnlPessoa">
+					<h:panelGrid columns="2" id="painel-dialog">
+						<p:outputLabel value="Código" for="codigo" />
+						<p:inputText id="codigo" size="7" maxlength="10"
+							value="#{cadastroEmpresaClienteBean.empresaEdicao.codigo}"
+							readonly="true" />
+
+						<p:outputLabel value="Tipo de Empresa" for="tipo" />
+						<p:selectOneMenu id="tipo"
+							value="#{cadastroEmpresaClienteBean.empresaEdicao.tipoEmpresa}">
+							<f:selectItem itemLabel="Selecione" />
+							<f:selectItems
+								value="#{cadastroEmpresaClienteBean.tiposEmpresas}" var="tipo"
+								itemLabel="#{tipo.descricao}" itemValue="#{tipo}" />
+							<p:ajax event="change" update="pnlPessoa" process="tipo" />
+						</p:selectOneMenu>
+						<p:outputLabel value="CNPJ" for="cnpj"
+							rendered="#{cadastroEmpresaClienteBean.empresaEdicao.tipoEmpresa=='JURIDICA'}" />
+						<p:inputMask id="cnpj" size="18" maxlength="18"
+							rendered="#{cadastroEmpresaClienteBean.empresaEdicao.tipoEmpresa=='JURIDICA'}"
+							value="#{cadastroEmpresaClienteBean.empresaEdicao.cnpj}"
+							mask="99.999.999/9999-99" />
+
+						<p:outputLabel value="CPF" for="cpf"
+							rendered="#{cadastroEmpresaClienteBean.empresaEdicao.tipoEmpresa=='FISICA'}" />
+						<p:inputMask id="cpf" size="14" maxlength="18"
+							rendered="#{cadastroEmpresaClienteBean.empresaEdicao.tipoEmpresa=='FISICA'}"
+							value="#{cadastroEmpresaClienteBean.empresaEdicao.cpf}"
+							mask="999.999.999-99" />
+
+						<p:outputLabel value="Razão Social" for="razaoSocial" />
+						<p:inputText id="razaoSocial" size="80" maxlength="250"
+							value="#{cadastroEmpresaClienteBean.empresaEdicao.razaoSocial}" />
+
+						<p:outputLabel value="Nome Fantasia" for="fantasia" />
+						<p:inputText id="fantasia" size="80" maxlength="250"
+							value="#{cadastroEmpresaClienteBean.empresaEdicao.fantasia}" />
+
+						<p:outputLabel value="CEP" for="cep" />
+						<p:inputMask id="cep" size="25" maxlength="20" mask="99999-999"
+							value="#{cadastroEmpresaClienteBean.empresaEdicao.cep}">
+							<p:ajax event="blur"
+								listener="#{cadastroEmpresaClienteBean.buscarCep}" process="cep"
+								update="endereco bairro estado cidade" />
+						</p:inputMask>
+
+						<p:outputLabel value="Endereço" for="endereco" />
+						<p:inputText id="endereco" size="80" maxlength="400"
+							value="#{cadastroEmpresaClienteBean.empresaEdicao.endereco}" />
+
+						<p:outputLabel value="Número" for="numero" />
+						<p:inputText id="numero" size="20" maxlength="20"
+							value="#{cadastroEmpresaClienteBean.empresaEdicao.numero}" />
+
+						<p:outputLabel value="Bairro" for="bairro" />
+						<p:inputText id="bairro" size="25" maxlength="250"
+							value="#{cadastroEmpresaClienteBean.empresaEdicao.bairro}" />
+
+						<p:outputLabel value="Complemento" for="complemento" />
+						<p:inputText id="complemento" size="25" maxlength="20"
+							value="#{cadastroEmpresaClienteBean.empresaEdicao.complemento}" />
+
+						<p:outputLabel value="Observação" />
+						<p:inputTextarea rows="5" cols="40" 
+							maxlength="10" value="#{cadastroEmpresaClienteBean.empresaEdicao.observacao}"
+							autoResize="false" />
+
+						<p:outputLabel value="Estado:" for="estado" />
+						<p:selectOneMenu filter="true"
+							value="#{cadastroEmpresaClienteBean.empresaEdicao.estado}"
+							converter="omnifaces.SelectItemsConverter" required="true"
+							requiredMessage="O Campo Estado é obrigatório" id="estado">
+							<f:selectItem noSelectionOption="true"
+								itemLabel="Selecione um estado" />
+							<f:selectItems value="#{cadastroEmpresaClienteBean.todosEstados}"
+								var="estado" itemValue="#{estado}"
+								itemLabel="#{estado.nome} - #{estado.sigla}" />
+							<f:ajax event="change" render="cidade"
+								listener="#{cadastroEmpresaClienteBean.listaCidades}" />
+						</p:selectOneMenu>
+
+						<p:outputLabel value="Cidade" for="cidade" />
+						<p:selectOneMenu filter="true"
+							value="#{cadastroEmpresaClienteBean.empresaEdicao.cidade}"
+							converter="omnifaces.SelectItemsConverter" required="true"
+							requiredMessage="O Campo cidade é obrigatório" id="cidade">
+							<f:selectItem noSelectionOption="true"
+								itemLabel="Selecione uma cidade" />
+							<f:selectItems value="#{cadastroEmpresaClienteBean.todasCidades}"
+								var="cidade" itemValue="#{cidade}" itemLabel="#{cidade.nome}" />
+						</p:selectOneMenu>
+
+						<p:commandButton value="Salvar" id="salvar-button"
+							action="#{cadastroEmpresaClienteBean.salvar}"
+							process="empresa-dialog" update="msgs-dialog painel-dialog"
+							oncomplete="if (!args.validationFailed) PF('edicaoEmpresaDialog').hide()" />
+					</h:panelGrid>
+				</p:outputPanel>
+			</p:dialog>
+		</h:form>
+	</ui:define>
+</ui:composition>

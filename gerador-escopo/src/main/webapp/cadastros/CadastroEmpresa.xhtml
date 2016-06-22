@@ -15,7 +15,7 @@
 		<h1>Cadastro Empresa</h1>
 		<h:form id="frmCadastro">
 
-			<p:messages id="msgs" />
+			<p:messages id="msgs" closable="true"/>
 
 			<p:toolbar id="toolbar">
 				<f:facet name="left">
@@ -160,7 +160,8 @@
 
 						<p:outputLabel value="Celular" for="celular" />
 						<p:inputText id="celular" size="25" maxlength="20"
-							value="#{cadastroEmpresaBean.empresaEdicao.celular}" />
+							value="#{cadastroEmpresaBean.empresaEdicao.celular}" 
+							mask="(99) 9999-9999?9"/>
 
 						<p:outputLabel value="Complemento" for="complemento" />
 						<p:inputText id="complemento" size="25" maxlength="20"
