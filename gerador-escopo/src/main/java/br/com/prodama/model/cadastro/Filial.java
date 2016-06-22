@@ -82,11 +82,11 @@ public class Filial implements Serializable {
 	private Empresa empresa;
 	
 	@JoinColumn(name = "Cidade", referencedColumnName = "codigo")
-	@ManyToOne(optional = true)
+	@ManyToOne(optional = true,fetch=FetchType.LAZY)
 	private Cidade cidade;
 	
 	@JoinColumn(name = "Estado", referencedColumnName = "codigo")
-	@ManyToOne(optional = true)
+	@ManyToOne(optional = true,fetch=FetchType.LAZY)
 	private Estado estado;
 
 	@JoinColumn(name = "CodigoUsuarioInclusao", referencedColumnName = "codigo")

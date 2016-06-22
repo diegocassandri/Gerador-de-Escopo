@@ -22,7 +22,7 @@ import br.com.prodama.enun.TipoEmpresa;
 
 
 @Entity
-@Table(name = "Filial_Cliente")
+@Table(name = "FilialCliente")
 public class FilialCliente implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -48,14 +48,14 @@ public class FilialCliente implements Serializable {
 	
 	@CPF
 	@Column(name = "Cpf", length = 14)
-	private String cpf;
-	
+	private String cpf;	
 
 	@Column(name = "TipoEmpresa")
 	private TipoEmpresa tipoEmpresa;
 	
 	@JoinColumn(name = "EmpresaCliente", referencedColumnName = "codigo")
 	@ManyToOne(optional = false)
+	
 	private EmpresaCliente empresaCliente;
 
 	public Long getCodigo() {

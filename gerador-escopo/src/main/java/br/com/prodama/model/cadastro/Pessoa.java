@@ -1,8 +1,11 @@
 package br.com.prodama.model.cadastro;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 import javax.persistence.*;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -71,10 +74,46 @@ public class Pessoa implements Serializable {
 
 	@Column(name = "Referencias", length = 5000)
 	private String referencias;
-
+	
 	@NotEmpty
 	@Column(name = "Status", length = 7)
 	private Status status;
+
+	/* Utilizado pra rotina de custo por consultor X Unidade */
+	@NotNull 
+	@DecimalMin("0")
+	@Column(precision = 15, scale = 2, nullable = false)
+	private BigDecimal custoPorHora;
+	
+	/*Utilizado em casos de clientes com neçociação especifica, cliente atuais*/
+	@NotNull 
+	@DecimalMin("0")
+	@Column(precision = 15, scale = 2, nullable = false)
+	private BigDecimal valorHoraCliente;
+	
+	@JoinColumn(name = "Empresa", referencedColumnName = "codigo")
+	@ManyToOne(optional = true,fetch=FetchType.LAZY)
+	private Empresa empresa;
+	
+	@JoinColumn(name = "Filial", referencedColumnName = "codigo")
+	@ManyToOne(optional = true,fetch=FetchType.LAZY)
+	private Filial filial;
+	
+	@JoinColumn(name = "Cidade", referencedColumnName = "codigo")
+	@ManyToOne(optional = true,fetch=FetchType.LAZY)
+	private Cidade cidade;
+	
+	@JoinColumn(name = "Estado", referencedColumnName = "codigo")
+	@ManyToOne(optional = true,fetch=FetchType.LAZY)
+	private Estado estado;
+	
+	@JoinColumn(name = "Equipe", referencedColumnName = "codigo")
+	@ManyToOne(optional = true,fetch=FetchType.LAZY)
+	private Equipe equipe;
+	
+	@JoinColumn(name = "NivelEquipe", referencedColumnName = "codigo")
+	@ManyToOne(optional = true,fetch=FetchType.LAZY)
+	private NivelEquipe nivelEquipe;
 	
 	public Long getCodigo() {
 		return codigo;
@@ -210,6 +249,71 @@ public class Pessoa implements Serializable {
 
 	public void setStatus(Status status) {
 		this.status = status;
+	}
+
+	
+	public Cidade getCidade() {
+		return cidade;
+	}
+
+	public void setCidade(Cidade cidade) {
+		this.cidade = cidade;
+	}
+
+	public Estado getEstado() {
+		return estado;
+	}
+
+	public void setEstado(Estado estado) {
+		this.estado = estado;
+	}
+
+	public Equipe getEquipe() {
+		return equipe;
+	}
+
+	public void setEquipe(Equipe equipe) {
+		this.equipe = equipe;
+	}
+
+	public NivelEquipe getNivelEquipe() {
+		return nivelEquipe;
+	}
+
+	public void setNivelEquipe(NivelEquipe nivelEquipe) {
+		this.nivelEquipe = nivelEquipe;
+	}
+
+	public BigDecimal getCustoPorHora() {
+		return custoPorHora;
+	}
+
+	public void setCustoPorHora(BigDecimal custoPorHora) {
+		this.custoPorHora = custoPorHora;
+	}
+
+	public BigDecimal getValorHoraCliente() {
+		return valorHoraCliente;
+	}
+
+	public void setValorHoraCliente(BigDecimal valorHoraCliente) {
+		this.valorHoraCliente = valorHoraCliente;
+	}
+
+	public Empresa getEmpresa() {
+		return empresa;
+	}
+
+	public void setEmpresa(Empresa empresa) {
+		this.empresa = empresa;
+	}
+
+	public Filial getFilial() {
+		return filial;
+	}
+
+	public void setFilial(Filial filial) {
+		this.filial = filial;
 	}
 
 	@Override

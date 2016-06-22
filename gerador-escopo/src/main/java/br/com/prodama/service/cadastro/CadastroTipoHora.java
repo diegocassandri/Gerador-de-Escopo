@@ -4,20 +4,20 @@ import java.io.Serializable;
 
 import javax.inject.Inject;
 
-import br.com.prodama.model.cadastro.TipoDeHora;
-import br.com.prodama.repository.cadastros.TipoDeHoras;
+import br.com.prodama.model.cadastro.TipoHora;
+import br.com.prodama.repository.cadastros.TipoHoras;
 import br.com.prodama.service.NegocioException;
 import br.com.prodama.util.Transactional;
 
-public class CadastroTipoDeHora implements Serializable{
+public class CadastroTipoHora implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
 	@Inject
-	private TipoDeHoras tipoDeHoras;
+	private TipoHoras tipoDeHoras;
 	
 	@Transactional
-	public void salvar(TipoDeHora tipoDeHora) throws NegocioException {
+	public void salvar(TipoHora tipoDeHora) throws NegocioException {
 		if (tipoDeHoras.pesquisaPorNome(tipoDeHora) && (tipoDeHora.getCodigo() == null || tipoDeHora.getCodigo()==0)) {
 			throw new NegocioException(
 					"Já existe um Tipo de Hora com esta descrição: "+tipoDeHora.getDescricao());
@@ -27,7 +27,7 @@ public class CadastroTipoDeHora implements Serializable{
 	}
 
 	@Transactional
-	public void excluir(TipoDeHora tipoDeHora) {
+	public void excluir(TipoHora tipoDeHora) {
 		tipoDeHoras.excluir(tipoDeHora);
 		
 	}

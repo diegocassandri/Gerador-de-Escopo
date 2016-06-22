@@ -6,7 +6,7 @@
 	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui">
 
 	<f:metadata>
-		<f:viewAction action="#{cadastroTipoDeHoraBean.consultar}" />
+		<f:viewAction action="#{cadastroTipoHoraBean.consultar}" />
 		
 	</f:metadata>
 
@@ -21,7 +21,7 @@
 			<p:toolbar id="toolbar">
 				<f:facet name="left">
 					<p:commandButton value="Novo" icon="ui-icon-document"
-						action="#{cadastroTipoDeHoraBean.prepararNovoCadastro}"
+						action="#{cadastroTipoHoraBean.prepararNovoCadastro}"
 						process="@this" update="tipo-dialog"
 						oncomplete="PF('edicaoTipoDialog').show()">
 						<p:resetInput target="tipo-dialog" />
@@ -34,18 +34,18 @@
 					<p:commandButton icon="ui-icon-pencil" title="Editar"
 						process="@this" update="tipo-dialog"
 						oncomplete="PF('edicaoTipoDialog').show()"
-						disabled="#{cadastroTipoDeHoraBean.tipoDeHoraSelecionado == null}">
+						disabled="#{cadastroTipoHoraBean.tipoDeHoraSelecionado == null}">
 						<p:resetInput target="tipo-dialog" />
 
 						<f:setPropertyActionListener
-							value="#{cadastroTipoDeHoraBean.tipoDeHoraSelecionado}"
-							target="#{cadastroTipoDeHoraBean.tipoDeHoraEdicao}" />
+							value="#{cadastroTipoHoraBean.tipoDeHoraSelecionado}"
+							target="#{cadastroTipoHoraBean.tipoDeHoraEdicao}" />
 					</p:commandButton>
 
 					<p:commandButton icon="ui-icon-trash" title="Excluir"
 						process="@this" update="tipo-table msgs toolbar"
-						action="#{cadastroTipoDeHoraBean.excluir}"
-						disabled="#{cadastroTipoDeHoraBean.tipoDeHoraSelecionado == null}">
+						action="#{cadastroTipoHoraBean.excluir}"
+						disabled="#{cadastroTipoHoraBean.tipoDeHoraSelecionado == null}">
 
 						<p:confirm icon="ui-icon-alert" header="Confirmação de exclusão"
 							message="Tem certeza que deseja excluir o Tipo de Hora?" />
@@ -55,11 +55,11 @@
 
 			</p:toolbar>
 
-			<p:dataTable value="#{cadastroTipoDeHoraBean.todosTipoDeHora}"
+			<p:dataTable value="#{cadastroTipoHoraBean.todosTipoDeHora}"
 				var="tipo" emptyMessage="Nenhum Tipo de Hora cadastrado." rows="10"
 				paginator="true" paginatorPosition="bottom" style="margin-top: 10px"
 				id="tipo-table"
-				selection="#{cadastroTipoDeHoraBean.tipoDeHoraSelecionado}"
+				selection="#{cadastroTipoHoraBean.tipoDeHoraSelecionado}"
 				selectionMode="single" rowKey="#{tipo.codigo}"
 				widgetVar="tabelaTipo">
 
@@ -94,22 +94,22 @@
 				<h:panelGrid columns="2" id="painel-dialog">
 					<p:outputLabel value="Código" for="codigo" />
 					<p:inputText id="codigo" size="7" maxlength="10"
-						value="#{cadastroTipoDeHoraBean.tipoDeHoraEdicao.codigo}"
+						value="#{cadastroTipoHoraBean.tipoDeHoraEdicao.codigo}"
 						readonly="true" />
 
 					<p:outputLabel value="Descrição" for="descricao" />
 					<p:inputText id="descricao" size="20" maxlength="50"
-						value="#{cadastroTipoDeHoraBean.tipoDeHoraEdicao.descricao}" />
+						value="#{cadastroTipoHoraBean.tipoDeHoraEdicao.descricao}" />
 					
 					<p:outputLabel value="Valor Padrão" for="valor" />
 					<p:inputText id="valor"
-						value="#{cadastroTipoDeHoraBean.tipoDeHoraEdicao.valor}"
+						value="#{cadastroTipoHoraBean.tipoDeHoraEdicao.valor}"
 						onfocus="maskMoney(this)">
 						<f:convertNumber pattern="#,##0.00"/>
 					</p:inputText>
 
 					<p:commandButton value="Salvar" id="salvar-button"
-						action="#{cadastroTipoDeHoraBean.salvar}" process="tipo-dialog"
+						action="#{cadastroTipoHoraBean.salvar}" process="tipo-dialog"
 						update="msgs-dialog painel-dialog"
 						oncomplete="if (!args.validationFailed) PF('edicaoTipoDialog').hide()" />
 				</h:panelGrid>
