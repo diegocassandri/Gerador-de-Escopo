@@ -6,8 +6,10 @@
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
 		<class>br.com.prodama.model.cadastro.Cidade</class>
 		<class>br.com.prodama.model.cadastro.Empresa</class>
+		<class>br.com.prodama.model.cadastro.EmpresaCliente</class>
 		<class>br.com.prodama.model.cadastro.Estado</class>
 		<class>br.com.prodama.model.cadastro.Filial</class>
+		<class>br.com.prodama.model.cadastro.FilialCliente</class>
 		<class>br.com.prodama.model.cadastro.Grupo</class>
 		<class>br.com.prodama.model.cadastro.Pessoa</class>
 		<class>br.com.prodama.model.cadastro.Tela</class>

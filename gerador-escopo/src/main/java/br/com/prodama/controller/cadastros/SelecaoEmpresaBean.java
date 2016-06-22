@@ -1,7 +1,6 @@
 package br.com.prodama.controller.cadastros;
 
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,7 +43,7 @@ public class SelecaoEmpresaBean implements Serializable {
 	
 	@PostConstruct
 	public void todos(){
-		empresasFiltradas = empresas.todos();
+		empresasFiltradas = usuarioLogin.getAbrangeciaEmpresa();
 	}
 	
 	public void abrirDialogo() {

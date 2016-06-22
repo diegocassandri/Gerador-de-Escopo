@@ -17,6 +17,7 @@ import org.primefaces.context.RequestContext;
 import org.primefaces.event.DragDropEvent;
 import org.primefaces.model.DualListModel;
 
+import br.com.prodama.controller.UsuarioLogin;
 import br.com.prodama.enun.Status;
 import br.com.prodama.model.cadastro.Empresa;
 import br.com.prodama.model.cadastro.Filial;
@@ -48,6 +49,9 @@ public class CadastroUsuarioBean implements Serializable {
 	
 	@Inject
 	private Filiais filiais;
+	
+	@Inject
+	private UsuarioLogin usuarioLogin;
 	
 	private Usuario usuarioEdicao = new Usuario();
 	private Usuario usuarioSelecionado;
@@ -147,6 +151,8 @@ public class CadastroUsuarioBean implements Serializable {
 		usuarioEdicao.getAbrangenciaFiliais().clear();;
 		usuarioEdicao.getAbrangenciaEmpresas().addAll(empresas);
 		usuarioEdicao.getAbrangenciaFiliais().addAll(filiais);
+		usuarioLogin.setAbrangeciaEmpresa(empresas);
+		usuarioLogin.setAbrangenciaFilial(filiais);
 		salvar();
 		
 	}

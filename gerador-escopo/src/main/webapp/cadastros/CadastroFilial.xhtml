@@ -15,7 +15,7 @@
 		<h1>Cadastro Filial</h1>
 		<h:form id="frmCadastro">
 
-			<p:messages id="msgs" />
+			<p:messages id="msgs" closable="true" />
 
 			<p:toolbar id="toolbar">
 				<f:facet name="left">
@@ -169,11 +169,12 @@
 						<p:outputLabel value="Telefone" for="telefone" />
 						<p:inputMask id="telefone" size="25" maxlength="20"
 							value="#{cadastroFilialBean.filialEdicao.telefone}"
-							mask="(99) 9999-9999" />
+							mask="(99) 9999-9999"/>
 							
 						<p:outputLabel value="Celular" for="celular" />
 						<p:inputText id="celular" size="25" maxlength="20"
-							value="#{cadastroFilialBean.filialEdicao.celular}" />
+							value="#{cadastroFilialBean.filialEdicao.celular}" 
+							mask="(99) 9999-9999?9"/>
 							
 						<p:outputLabel value="Complemento" for="complemento" />
 						<p:inputText id="complemento" size="25" maxlength="20"

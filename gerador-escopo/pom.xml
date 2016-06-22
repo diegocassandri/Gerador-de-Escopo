@@ -40,6 +40,13 @@
 			<version>5.3</version>
 			<scope>compile</scope>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.primefaces.themes</groupId>
+			<artifactId>all-themes</artifactId>
+			<version>1.0.10</version>
+		</dependency>
+		
 		<!-- Mojarra (Implementação JSF 2) -->
 		<dependency>
 			<groupId>org.glassfish</groupId>

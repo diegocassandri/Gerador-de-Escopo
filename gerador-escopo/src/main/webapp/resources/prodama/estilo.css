@@ -109,8 +109,14 @@ h1 {
 }
 
 .menu-sistema .ui-menu-parent > a .ui-menuitem-text, .menu-sistema > .ui-menu-list > .ui-menuitem > a > .ui-menuitem-text {
-    color: #ffffff !important;
+   color: #ffffff !important;
+
 }
+
+.menu-sistema .ui-menu-parent > a .ui-menuitem-text, .menu-sistema > .ui-menu-list > .ui-menuitem > a > .ui-menuitem-text > .ui-menu-parent{
+	color: black !important;
+}
+
 
 .menu-sistema .ui-icon-triangle-1-s {
     background: url(#{resource['prodama:seta-para-baixo.png']}) no-repeat;

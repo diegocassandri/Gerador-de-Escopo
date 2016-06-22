@@ -59,8 +59,21 @@ public class LoginBean {
 			this.usuario.setNome(this.nomeUsuario);
 			this.usuario.setDataLogin(new Date());
 			this.usuario.setUsuarioLogin(usuarios.retornaUsuarioPorNome(usuario.getNome()));
+			this.usuario.setAbrangeciaEmpresa(usuarios.retornaUsuarioPorNome(usuario.getNome()).getAbrangenciaEmpresas());
+			this.usuario.setAbrangenciaFilial(usuarios.retornaUsuarioPorNome(usuario.getNome()).getAbrangenciaFiliais());
 			this.usuario.setEmpresaSelecionada(usuarios.retornaUsuarioPorNome(usuario.getNome()).getEmpresaSelecionada());
+			if(this.usuario.getEmpresaSelecionada() == null){
+				this.usuario.setEmpresaSelecionada(usuarios.retPriEmp(usuarios.retornaUsuarioPorNome(usuario.getNome())));
+			}
 			this.usuario.setFilialSelecionada(usuarios.retornaUsuarioPorNome(usuario.getNome()).getFilialSelecionada());
+			if(this.usuario.getFilialSelecionada() == null){
+				this.usuario.setFilialSelecionada(usuarios.retPriFil(usuarios.retornaUsuarioPorNome(usuario.getNome())));
+			}
+			try {
+				this.usuario.gravaSessaoUsuario();
+			} catch (NegocioException e) {
+				e.printStackTrace();
+			}
 			if(usuarios.verificaMudarSenha(this.nomeUsuario)){
 				mudarSenha = true;
 				RequestContext contexto = RequestContext.getCurrentInstance();

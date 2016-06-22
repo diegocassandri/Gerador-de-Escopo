@@ -7,9 +7,9 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import br.com.prodama.controller.UsuarioLogin;
 import br.com.prodama.enun.TipoEmpresa;
 import br.com.prodama.model.cadastro.Empresa;
-import br.com.prodama.model.cadastro.Grupo;
 import br.com.prodama.model.cadastro.Usuario;
 
 public class Empresas implements Serializable {
@@ -18,7 +18,10 @@ public class Empresas implements Serializable {
 
 	@Inject
 	private EntityManager manager;
-
+	
+	@Inject
+	private UsuarioLogin usuarioLogin;
+	
 	public void adicionar(Empresa empresa) {
 		manager.merge(empresa);
 	}
@@ -52,9 +55,14 @@ public class Empresas implements Serializable {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<Empresa> porNomeSemelhante(String nome) {
-		return manager.createQuery("from Empresa where razaoSocial like :nome", Empresa.class)
-				.setParameter("nome", "%" + nome + "%").getResultList();
+		/*return manager.createQuery("from Empresa where razaoSocial like :nome", Empresa.class)
+				.setParameter("nome", "%" + nome + "%").getResultList();*/
+		Query query = manager.createQuery("Select e From Empresa e Where exists (Select u from e.abrangenciaUsuarios u Where u = :usuario) and razaoSocial like :nome", Empresa.class);
+		query.setParameter("usuario", usuarioLogin.getUsuarioLogin());
+		query.setParameter("nome", "%" + nome + "%").getResultList();
+		return query.getResultList();
 	}
 
 

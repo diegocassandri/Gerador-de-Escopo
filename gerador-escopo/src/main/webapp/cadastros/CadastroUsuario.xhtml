@@ -17,7 +17,7 @@
 		<h1>Cadastro Usuário</h1>
 		<h:form id="frmCadastro">
 
-			<p:messages id="msgs" />
+			<p:messages id="msgs" closable="true"/>
 
 			<p:toolbar id="toolbar">
 				<f:facet name="left">
@@ -84,7 +84,7 @@
 			<p:dataTable value="#{cadastroUsuarioBean.todosUsuarios}"
 				var="usuario" emptyMessage="Nenhum usuário cadastrado." rows="10"
 				paginator="true" paginatorPosition="bottom" style="margin-top: 10px"
-				id="usuario-table"
+				id="usuario-table" reflow="true"
 				selection="#{cadastroUsuarioBean.usuarioSelecionado}"
 				selectionMode="single" rowKey="#{usuario.codigo}"
 				filteredValue="#{cadastroUsuarioBean.filtroUsuarios}"
@@ -167,7 +167,7 @@
 				closeOnEscape="true">
 				<p:messages id="msgs-associa" />
 				<h3 style="margin-top: 0">Associar Grupos ao Usuario
-					#{cadastroUsuarioBean.usuarioSelecionado}</h3>
+					#{cadastroUsuarioBean.usuarioSelecionado.usuario}</h3>
 				<p:pickList id="pickGrupos"
 					value="#{cadastroUsuarioBean.todosGrupos}" var="grupo"
 					iconOnly="true" itemLabel="#{grupo.nome}" itemValue="#{grupo}"
