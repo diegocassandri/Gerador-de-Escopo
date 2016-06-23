@@ -137,6 +137,14 @@
 						<p:inputText id="fantasia" size="80" maxlength="250"
 							value="#{cadastroFilialClienteBean.filialEdicao.fantasia}" />
 							
+						<p:outputLabel value="Regime de Tributação" for="regime" />
+						<p:selectOneMenu id="regime"
+							value="#{cadastroFilialClienteBean.filialEdicao.regimeTributacao}">
+							<f:selectItem itemLabel="Selecione" />
+							<f:selectItems value="#{cadastroFilialClienteBean.tiposEmpresas}"
+								var="tipo" itemLabel="#{tipo.descricao}" itemValue="#{tipo}" />
+						</p:selectOneMenu>
+							
 						<p:commandButton value="Salvar" id="salvar-button"
 							action="#{cadastroFilialClienteBean.salvar}" process="filial-dialog"
 							update="msgs-dialog painel-dialog"

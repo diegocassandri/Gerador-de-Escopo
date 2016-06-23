@@ -12,6 +12,7 @@ import javax.inject.Named;
 
 import org.primefaces.context.RequestContext;
 
+import br.com.prodama.enun.RegimeTributacao;
 import br.com.prodama.enun.TipoEmpresa;
 import br.com.prodama.model.cadastro.Cidade;
 import br.com.prodama.model.cadastro.EmpresaCliente;
@@ -49,6 +50,7 @@ public class CadastroFilialClienteBean implements Serializable {
 	private EmpresasCliente empresasCliente;
 		
 	private TipoEmpresa tipoEmpresa;
+	private RegimeTributacao tipoRegime;
 	private FilialCliente filialEdicao = new FilialCliente();
 	private FilialCliente filialSelecionado;
 	private List<Estado> todosEstados;
@@ -107,6 +109,10 @@ public class CadastroFilialClienteBean implements Serializable {
 	public TipoEmpresa[] getTiposEmpresas() {
 		return TipoEmpresa.values();
 	}
+	
+	public RegimeTributacao[] getTiposRegime() {
+		return RegimeTributacao.values();
+	}
 
 	public FilialCliente getFilialEdicao() {
 		return filialEdicao;
@@ -163,4 +169,14 @@ public class CadastroFilialClienteBean implements Serializable {
 	public void setTodasEmpresas(List<EmpresaCliente> todasEmpresas) {
 		this.todasEmpresas = todasEmpresas;
 	}
+
+	public RegimeTributacao getTipoRegime() {
+		return tipoRegime;
+	}
+
+	public void setTipoRegime(RegimeTributacao tipoRegime) {
+		this.tipoRegime = tipoRegime;
+	}
+	
+	
 }
