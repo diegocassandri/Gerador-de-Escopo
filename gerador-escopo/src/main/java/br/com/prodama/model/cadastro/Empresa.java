@@ -80,19 +80,19 @@ public class Empresa implements Serializable {
 	private List<Filial> listaFiliais;
 	
 	@JoinColumn(name = "Cidade", referencedColumnName = "codigo")
-	@ManyToOne(optional = true)
+	@ManyToOne(optional = true, fetch=FetchType.LAZY)
 	private Cidade cidade;
 	
 	@JoinColumn(name = "Estado", referencedColumnName = "codigo")
-	@ManyToOne(optional = true)
+	@ManyToOne(optional = true,fetch=FetchType.LAZY)
 	private Estado estado;
 
 	@JoinColumn(name = "CodigoUsuarioInclusao", referencedColumnName = "codigo")
-	@ManyToOne(optional = true, fetch = FetchType.EAGER)
+	@ManyToOne(optional = true, fetch = FetchType.LAZY)
 	private Usuario codigoUsuarioInclusao;
 
 	@JoinColumn(name = "CodigoUsuarioAlteracao", referencedColumnName = "codigo")
-	@ManyToOne(optional = true, fetch = FetchType.EAGER)
+	@ManyToOne(optional = true, fetch = FetchType.LAZY)
 	private Usuario codigoUsuarioAlteracao;
 
 	@ManyToMany(mappedBy="abrangenciaEmpresas",cascade=CascadeType.REMOVE,fetch=FetchType.EAGER)

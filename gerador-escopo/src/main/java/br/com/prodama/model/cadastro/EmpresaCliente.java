@@ -7,6 +7,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -24,7 +25,7 @@ import org.hibernate.validator.constraints.br.CPF;
 import br.com.prodama.enun.TipoEmpresa;
 
 @Entity
-@Table(name = "Empresa_Cliente")
+@Table(name = "EmpresaCliente")
 public class EmpresaCliente implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -77,12 +78,16 @@ public class EmpresaCliente implements Serializable {
 	private List<FilialCliente> listaFiliais;
 	
 	@JoinColumn(name = "Cidade", referencedColumnName = "codigo")
-	@ManyToOne(optional = true)
+	@ManyToOne(optional = true,fetch=FetchType.LAZY)
 	private Cidade cidade;
 	
 	@JoinColumn(name = "Estado", referencedColumnName = "codigo")
-	@ManyToOne(optional = true)
+	@ManyToOne(optional = true,fetch=FetchType.LAZY)
 	private Estado estado;
+	
+	@JoinColumn(name = "CodigoCliente", referencedColumnName = "codigo")
+	@ManyToOne(optional = true,fetch=FetchType.LAZY)
+	private Pessoa pessoa;
 
 	public Long getCodigo() {
 		return codigo;
@@ -202,6 +207,14 @@ public class EmpresaCliente implements Serializable {
 
 	public void setObservacao(String observacao) {
 		this.observacao = observacao;
+	}
+
+	public Pessoa getPessoa() {
+		return pessoa;
+	}
+
+	public void setPessoa(Pessoa pessoa) {
+		this.pessoa = pessoa;
 	}
 
 	@Override

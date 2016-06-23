@@ -2,22 +2,28 @@ package br.com.prodama.model.cadastro;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
-@Table(name = "tipo_hora")
-public class TipoDeHora implements Serializable{
+@Table(name = "tipoHora")
+public class TipoHora implements Serializable{
 
 
 	private static final long serialVersionUID = 1L;
@@ -33,9 +39,23 @@ public class TipoDeHora implements Serializable{
 	
 	@NotNull 
 	@DecimalMin("0")
-	@Column(precision = 10, scale = 2, nullable = false)
+	@Column(precision = 15, scale = 2, nullable = false)
 	private BigDecimal valor;
 
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date dataIniclusao;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date dataAlteracao;
+	
+	@JoinColumn(name = "CodigoUsuarioInclusao", referencedColumnName = "codigo")
+	@ManyToOne(optional = true, fetch = FetchType.LAZY)
+	private Usuario codigoUsuarioInclusao;
+
+	@JoinColumn(name = "CodigoUsuarioAlteracao", referencedColumnName = "codigo")
+	@ManyToOne(optional = true, fetch = FetchType.LAZY)
+	private Usuario codigoUsuarioAlteracao;
+	
 	public Long getCodigo() {
 		return codigo;
 	}
@@ -62,6 +82,38 @@ public class TipoDeHora implements Serializable{
 		this.valor = valor;
 	}
 
+	public Date getDataIniclusao() {
+		return dataIniclusao;
+	}
+
+	public void setDataIniclusao(Date dataIniclusao) {
+		this.dataIniclusao = dataIniclusao;
+	}
+
+	public Date getDataAlteracao() {
+		return dataAlteracao;
+	}
+
+	public void setDataAlteracao(Date dataAlteracao) {
+		this.dataAlteracao = dataAlteracao;
+	}
+
+	public Usuario getCodigoUsuarioInclusao() {
+		return codigoUsuarioInclusao;
+	}
+
+	public void setCodigoUsuarioInclusao(Usuario codigoUsuarioInclusao) {
+		this.codigoUsuarioInclusao = codigoUsuarioInclusao;
+	}
+
+	public Usuario getCodigoUsuarioAlteracao() {
+		return codigoUsuarioAlteracao;
+	}
+
+	public void setCodigoUsuarioAlteracao(Usuario codigoUsuarioAlteracao) {
+		this.codigoUsuarioAlteracao = codigoUsuarioAlteracao;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -78,7 +130,7 @@ public class TipoDeHora implements Serializable{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		TipoDeHora other = (TipoDeHora) obj;
+		TipoHora other = (TipoHora) obj;
 		if (codigo == null) {
 			if (other.codigo != null)
 				return false;

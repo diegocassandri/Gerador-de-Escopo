@@ -2,6 +2,7 @@ package br.com.prodama.controller.cadastros;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -12,14 +13,15 @@ import javax.inject.Named;
 
 import org.primefaces.context.RequestContext;
 
-import br.com.prodama.model.cadastro.TipoDeHora;
-import br.com.prodama.repository.cadastros.TipoDeHoras;
-import br.com.prodama.service.cadastro.CadastroTipoDeHora;
+import br.com.prodama.controller.UsuarioLogin;
+import br.com.prodama.model.cadastro.TipoHora;
+import br.com.prodama.repository.cadastros.TipoHoras;
+import br.com.prodama.service.cadastro.CadastroTipoHora;
 import br.com.prodama.util.FacesMessages;
 
 @Named
 @ViewScoped
-public class CadastroTipoDeHoraBean implements Serializable {
+public class CadastroTipoHoraBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -27,23 +29,34 @@ public class CadastroTipoDeHoraBean implements Serializable {
 	private FacesMessages messages;
 
 	@Inject
-	private CadastroTipoDeHora cadastroTipoDeHora;
+	private CadastroTipoHora cadastroTipoDeHora;
 	
 	@Inject
-	private TipoDeHoras tipoDeHoras;
+	private TipoHoras tipoDeHoras;
 	
-	private TipoDeHora tipoDeHoraEdicao = new TipoDeHora();
-	private TipoDeHora tipoDeHoraSelecionado;
-	private List<TipoDeHora> todosTipoDeHora;
+	@Inject
+	UsuarioLogin usuarioLogin;
+	
+	private TipoHora tipoDeHoraEdicao = new TipoHora();
+	private TipoHora tipoDeHoraSelecionado;
+	private List<TipoHora> todosTipoDeHora;
 	
 	
 	@PostConstruct
 	public void prepararNovoCadastro() {
-		tipoDeHoraEdicao = new TipoDeHora();
+		tipoDeHoraEdicao = new TipoHora();
+		tipoDeHoraEdicao.setCodigoUsuarioInclusao(usuarioLogin.getUsuarioLogin());
+		tipoDeHoraEdicao.setDataIniclusao(new Date());
+		tipoDeHoraEdicao.setCodigoUsuarioAlteracao(usuarioLogin.getUsuarioLogin());
+		tipoDeHoraEdicao.setDataAlteracao(new Date());
 	}
 	
 	public void salvar() {
 		try {
+			if (tipoDeHoraEdicao.getCodigo()!=null) {
+				tipoDeHoraEdicao.setCodigoUsuarioAlteracao(usuarioLogin.getUsuarioLogin());
+				tipoDeHoraEdicao.setDataAlteracao(new Date());
+			}
 			this.cadastroTipoDeHora.salvar(tipoDeHoraEdicao);
 			consultar();
 			messages.info("Tipo de Hora salvo com sucesso!");
@@ -77,27 +90,27 @@ public class CadastroTipoDeHoraBean implements Serializable {
 		todosTipoDeHora = tipoDeHoras.todos();
 	}
 
-	public TipoDeHora getTipoDeHoraEdicao() {
+	public TipoHora getTipoDeHoraEdicao() {
 		return tipoDeHoraEdicao;
 	}
 
-	public void setTipoDeHoraEdicao(TipoDeHora tipoDeHoraEdicao) {
+	public void setTipoDeHoraEdicao(TipoHora tipoDeHoraEdicao) {
 		this.tipoDeHoraEdicao = tipoDeHoraEdicao;
 	}
 
-	public TipoDeHora getTipoDeHoraSelecionado() {
+	public TipoHora getTipoDeHoraSelecionado() {
 		return tipoDeHoraSelecionado;
 	}
 
-	public void setTipoDeHoraSelecionado(TipoDeHora tipoDeHoraSelecionado) {
+	public void setTipoDeHoraSelecionado(TipoHora tipoDeHoraSelecionado) {
 		this.tipoDeHoraSelecionado = tipoDeHoraSelecionado;
 	}
 
-	public List<TipoDeHora> getTodosTipoDeHora() {
+	public List<TipoHora> getTodosTipoDeHora() {
 		return todosTipoDeHora;
 	}
 
-	public void setTodosTipoDeHora(List<TipoDeHora> todosTipoDeHora) {
+	public void setTodosTipoDeHora(List<TipoHora> todosTipoDeHora) {
 		this.todosTipoDeHora = todosTipoDeHora;
 	}
 	
