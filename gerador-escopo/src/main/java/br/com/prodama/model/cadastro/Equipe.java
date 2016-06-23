@@ -45,6 +45,9 @@ public class Equipe implements Serializable{
 		this.codigo = codigo;
 	}
 
+	
+	
+
 	public String getDescricao() {
 		return descricao;
 	}
@@ -52,7 +55,6 @@ public class Equipe implements Serializable{
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
-	
 
 	public String getObservacao() {
 		return observacao;

@@ -1,0 +1,125 @@
+<ui:composition template="/WEB-INF/template/Layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui">
+
+	<f:metadata>
+		<f:viewAction action="#{cadastroNivelEquipeBean.consultar}" />
+	</f:metadata>
+
+	<ui:define name="titulo">Cadastro de Nível de Equipe</ui:define>
+
+	<ui:define name="corpo">
+		<h1>Cadastro Nível Equipe</h1>
+		<h:form id="frmCadastro">
+
+			<p:messages id="msgs" closable="true" />
+
+			<p:toolbar id="toolbar">
+				<f:facet name="left">
+					<p:commandButton value="Novo" icon="ui-icon-document"
+						action="#{cadastroNivelEquipeBean.prepararNovoCadastro}"
+						process="@this" update="equipe-dialog"
+						oncomplete="PF('edicaoEquipeDialog').show()">
+						<p:resetInput target="equipe-dialog" />
+					</p:commandButton>
+
+					<span class="ui-separator"> <span
+						class="ui-icon ui-icon-grip-dotted-vertical" />
+					</span>
+
+					<p:commandButton icon="ui-icon-pencil" title="Editar"
+						process="@this" update="equipe-dialog"
+						oncomplete="PF('edicaoEquipeDialog').show()"
+						disabled="#{cadastroNivelEquipeBean.nivelEquipeSelecionado == null}">
+						<p:resetInput target="equipe-dialog" />
+
+						<f:setPropertyActionListener
+							value="#{cadastroNivelEquipeBean.nivelEquipeSelecionado}"
+							target="#{cadastroNivelEquipeBean.nivelEquipeEdicao}" />
+					</p:commandButton>
+
+					<p:commandButton icon="ui-icon-trash" title="Excluir"
+						process="@this" update="equipe-table msgs toolbar"
+						action="#{cadastroNivelEquipeBean.excluir}"
+						disabled="#{cadastroNivelEquipeBean.nivelEquipeSelecionado == null}">
+
+						<p:confirm icon="ui-icon-alert" header="Confirmação de exclusão"
+							message="Tem certeza que deseja excluir o nível de equipe?" />
+
+					</p:commandButton>
+				</f:facet>
+
+			</p:toolbar>
+
+			<p:dataTable value="#{cadastroNivelEquipeBean.todosNiveisEquipe}"
+				var="equipe" emptyMessage="Nenhum nível de  equipe cadastrada."
+				rows="10" paginator="true" paginatorPosition="bottom"
+				style="margin-top: 10px" id="equipe-table"
+				selection="#{cadastroNivelEquipeBean.nivelEquipeSelecionado}"
+				selectionMode="single" rowKey="#{equipe.codigo}"
+				filteredValue="#{cadastroNivelEquipeBean.filtroNiveisEquipe}"
+				widgetVar="tabelaEquipe">
+
+				<p:ajax event="rowSelect" update=":frmCadastro:toolbar" />
+				<p:ajax event="rowUnselect" update=":frmCadastro:toolbar" />
+
+				<p:column headerText="Código" sortBy="#{equipe.codigo}"
+					filterBy="#{equipe.codigo}" filterMatchMode="contains">
+					<h:outputText value="#{equipe.codigo}" />
+				</p:column>
+
+
+				<p:column headerText="Equipe" filterBy="#{equipe.equipe.descricao}"
+					sortBy="#{equipe.equipe.descricao}">
+					<h:outputText value="#{equipe.equipe.descricao}" />
+				</p:column>
+
+				<p:column headerText="Nome" sortBy="#{equipe.descricao}"
+					filterBy="#{equipe.descricao}" filterMatchMode="contains">
+					<h:outputText value="#{equipe.descricao}" />
+				</p:column>
+			</p:dataTable>
+
+			<p:dialog header="Novo nível equipe" widgetVar="edicaoEquipeDialog"
+				id="equipe-dialog" resizable="false" modal="true"
+				closeOnEscape="true">
+
+				<p:messages id="msgs-dialog" />
+
+				<p:defaultCommand target="salvar-button" scope="equipe-dialog" />
+
+				<h:panelGrid columns="2" id="painel-dialog">
+					<p:outputLabel value="Código" for="codigo" />
+					<p:inputText id="codigo" size="7" maxlength="10"
+						value="#{cadastroNivelEquipeBean.nivelEquipeEdicao.codigo}"
+						readonly="true" />
+
+					<p:outputLabel value="Descrição" for="descricao" />
+					<p:inputText id="descricao" size="20" maxlength="1000"
+						value="#{cadastroNivelEquipeBean.nivelEquipeEdicao.descricao}" />
+
+					<p:outputLabel value="Equipe:" for="equipe" />
+					<p:selectOneMenu filter="true"
+						value="#{cadastroNivelEquipeBean.nivelEquipeEdicao.equipe}"
+						converter="omnifaces.SelectItemsConverter" required="true"
+						requiredMessage="O Campo Equipe é obrigatório" id="equipe">
+						<f:selectItem noSelectionOption="true"
+							itemLabel="Selecione uma equipe" />
+						<f:selectItems value="#{cadastroNivelEquipeBean.todasEquipes}"
+							var="equipe" itemValue="#{equipe}"
+							itemLabel="#{equipe.descricao}" />
+					</p:selectOneMenu>
+
+					<p:commandButton value="Salvar" id="salvar-button"
+						action="#{cadastroNivelEquipeBean.salvar}" process="equipe-dialog"
+						update="msgs-dialog painel-dialog"
+						oncomplete="if (!args.validationFailed) PF('edicaoEquipeDialog').hide()" />
+				</h:panelGrid>
+			</p:dialog>
+
+		</h:form>
+	</ui:define>
+</ui:composition>

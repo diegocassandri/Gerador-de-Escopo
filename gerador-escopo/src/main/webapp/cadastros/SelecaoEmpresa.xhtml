@@ -27,12 +27,12 @@
 				action="#{selecaoEmpresaBean.pesquisar}" update="@form" />
 		</div>
 
-		<p:dataTable value="#{selecaoEmpresaBean.empresasFiltradas}"
+		<p:dataTable value="#{selecaoEmpresaBean.empresasFiltradas}" 
 			var="empresa" emptyMessage="Nenhuma empresa encontrada." rows="10"
 			paginator="true" paginatorAlwaysVisible="false"
 			paginatorPosition="bottom">
 
-			<p:column headerText="Código" style="text-align: center; width: 40px">
+			<p:column headerText="Código" style="text-align: center; width: 40px" sortBy="#{empresa.codigo}">
 				<h:outputText value="#{empresa.codigo}" />
 			</p:column>
 			<p:column headerText="Razão Social">

@@ -1,0 +1,118 @@
+<ui:composition template="/WEB-INF/template/Layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui">
+
+	<f:metadata>
+		<f:viewAction action="#{cadastroEquipeBean.consultar}" />
+	</f:metadata>
+
+	<ui:define name="titulo">Cadastro de Equipe</ui:define>
+
+	<ui:define name="corpo">
+		<h1>Cadastro Equipe</h1>
+		<h:form id="frmCadastro">
+
+			<p:messages id="msgs" closable="true" />
+
+			<p:toolbar id="toolbar">
+				<f:facet name="left">
+					<p:commandButton value="Novo" icon="ui-icon-document"
+						action="#{cadastroEquipeBean.prepararNovoCadastro}"
+						process="@this" update="equipe-dialog"
+						oncomplete="PF('edicaoEquipeDialog').show()">
+						<p:resetInput target="equipe-dialog" />
+					</p:commandButton>
+
+					<span class="ui-separator"> <span
+						class="ui-icon ui-icon-grip-dotted-vertical" />
+					</span>
+
+					<p:commandButton icon="ui-icon-pencil" title="Editar"
+						process="@this" update="equipe-dialog"
+						oncomplete="PF('edicaoEquipeDialog').show()"
+						disabled="#{cadastroEquipeBean.equipeSelecionado == null}">
+						<p:resetInput target="equipe-dialog" />
+
+						<f:setPropertyActionListener
+							value="#{cadastroEquipeBean.equipeSelecionado}"
+							target="#{cadastroEquipeBean.equipeEdicao}" />
+					</p:commandButton>
+
+					<p:commandButton icon="ui-icon-trash" title="Excluir"
+						process="@this" update="equipe-table msgs toolbar"
+						action="#{cadastroEquipeBean.excluir}"
+						disabled="#{cadastroEquipeBean.equipeSelecionado == null}">
+
+						<p:confirm icon="ui-icon-alert" header="Confirmação de exclusão"
+							message="Tem certeza que deseja excluir a equipe?" />
+
+					</p:commandButton>
+				</f:facet>
+
+			</p:toolbar>
+
+			<p:dataTable value="#{cadastroEquipeBean.todasEquipes}" var="equipe"
+				emptyMessage="Nenhuma equipe cadastrada." rows="10" paginator="true"
+				paginatorPosition="bottom" style="margin-top: 10px"
+				id="equipe-table"
+				selection="#{cadastroEquipeBean.equipeSelecionado}"
+				selectionMode="single" rowKey="#{equipe.codigo}"
+				filteredValue="#{cadastroEquipeBean.filtroEquipes}"
+				widgetVar="tabelaEquipe">
+
+				<p:ajax event="rowSelect" update=":frmCadastro:toolbar" />
+				<p:ajax event="rowUnselect" update=":frmCadastro:toolbar" />
+
+				<p:column headerText="Código" sortBy="#{equipe.codigo}"
+					filterBy="#{equipe.codigo}" filterMatchMode="contains">
+					<h:outputText value="#{equipe.codigo}" />
+				</p:column>
+				
+				<p:column headerText="Descrição" sortBy="#{equipe.descricao}"
+					filterBy="#{equipe.descricao}" filterMatchMode="contains">
+					<h:outputText value="#{equipe.descricao}" />
+				</p:column>
+
+				<p:column headerText="Observação" sortBy="#{equipe.observacao}"
+					filterBy="#{equipe.observacao}" filterMatchMode="contains">
+					<h:outputText value="#{equipe.observacao}" />
+				</p:column>
+			
+
+			</p:dataTable>
+
+			<p:dialog header="Nova equipe" widgetVar="edicaoEquipeDialog"
+				id="equipe-dialog" resizable="false" modal="true"
+				closeOnEscape="true">
+
+				<p:messages id="msgs-dialog" />
+
+				<p:defaultCommand target="salvar-button" scope="equipe-dialog" />
+
+				<h:panelGrid columns="2" id="painel-dialog">
+					<p:outputLabel value="Código" for="codigo" />
+					<p:inputText id="codigo" size="7" maxlength="10"
+						value="#{cadastroEquipeBean.equipeEdicao.codigo}" readonly="true" />
+
+			    	<p:outputLabel value="Descrição" for="descricao" />
+					<p:inputText id="descricao" size="20" maxlength="50"
+						value="#{cadastroEquipeBean.equipeEdicao.descricao}" />
+
+					<p:outputLabel value="Observação" />
+					<p:inputTextarea rows="5" cols="40" maxlength="1000"
+						value="#{cadastroEquipeBean.equipeEdicao.observacao}"
+						autoResize="false" />
+
+					<p:commandButton value="Salvar" id="salvar-button"
+						action="#{cadastroEquipeBean.salvar}" process="equipe-dialog"
+						update="msgs-dialog painel-dialog"
+						oncomplete="if (!args.validationFailed) PF('edicaoEquipeDialog').hide()" />
+				</h:panelGrid>
+			</p:dialog>
+
+		</h:form>
+	</ui:define>
+</ui:composition>

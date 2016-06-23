@@ -1,0 +1,28 @@
+insert into usuario (codigo, email, mudarSenha, nomeCompleto, senha, status, usuario) values(seq_usuario.nextval,'diego.cassandri@prodama.com.br','','Diego Cassandri','MTIz','ATIVO','diego');
+insert into grupo (codigo,descricao) values (seq_grupo.nextval,'Master');
+insert into tela (codigo,descricao,url) values (seq_tela.nextval,'Cadastro Grupo Usuário','/cadastros/CadastroGrupoUsuario.xhtml');
+insert into tela (codigo,descricao,url) values (seq_tela.nextval,'Cadastro Grupo Usuário','/cadastros/CadastroTela.xhtml');
+insert into tela (codigo,descricao,url) values (seq_tela.nextval,'Cadastros','/cadastros.xhtml');
+insert into tela (codigo,descricao,url) values (seq_tela.nextval,'Cadastro Estado','/cadastros/CadastroEstado.xhtml');
+insert into tela (codigo,descricao,url) values (seq_tela.nextval,'Cadastro Cidade','/cadastros/CadastroCidade.xhtml');
+insert into tela (codigo,descricao,url) values (seq_tela.nextval,'Cadastro Empresa','/cadastros/CadastroEmpresa.xhtml');
+insert into tela (codigo,descricao,url) values (seq_tela.nextval,'Cadastro Filial','/cadastros/CadastroFilial.xhtml');
+insert into tela (codigo,descricao,url) values (seq_tela.nextval,'Cadastros Projetos','/projetos.xhtml');
+insert into tela (codigo,descricao,url) values (seq_tela.nextval,'Cadastro Tipo de Hora','/cadastros/projetos/CadastroTipoDeHora.xhtml');
+insert into tela (codigo,descricao,url) values (seq_tela.nextval,'Cadastro Empresa Cliente','/cadastros/projetos/CadastroEmpresaCliente.xhtml');
+insert into tela (codigo,descricao,url) values (seq_tela.nextval,'Cadastro FilialCliente','/cadastros/projetos/CadastroFilialCliente.xhtml');
+insert into tela (codigo,descricao,url) values (seq_tela.nextval,'Cadastro Usuário','/cadastros/CadastroUsuario.xhtml');
+
+insert into usuario_grupo values (1,1);
+insert into grupo_tela values (1,1);
+insert into grupo_tela values (1,2);
+insert into grupo_tela values (1,3);
+insert into grupo_tela values (1,4);
+insert into grupo_tela values (1,5);
+insert into grupo_tela values (1,6);
+insert into grupo_tela values (1,7);
+insert into grupo_tela values (1,8);
+insert into grupo_tela values (1,9);
+insert into grupo_tela values (1,10);
+insert into grupo_tela values (1,11);
+insert into grupo_tela values (1,12);
