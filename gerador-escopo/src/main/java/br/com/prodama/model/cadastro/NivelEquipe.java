@@ -72,8 +72,6 @@ public class NivelEquipe implements Serializable{
 		this.equipe = equipe;
 	}
 
-
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;

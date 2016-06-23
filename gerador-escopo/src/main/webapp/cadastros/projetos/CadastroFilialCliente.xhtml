@@ -141,7 +141,7 @@
 						<p:selectOneMenu id="regime"
 							value="#{cadastroFilialClienteBean.filialEdicao.regimeTributacao}">
 							<f:selectItem itemLabel="Selecione" />
-							<f:selectItems value="#{cadastroFilialClienteBean.tiposEmpresas}"
+							<f:selectItems value="#{cadastroFilialClienteBean.tiposRegime}"
 								var="tipo" itemLabel="#{tipo.descricao}" itemValue="#{tipo}" />
 						</p:selectOneMenu>
 							

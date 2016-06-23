@@ -12,7 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.br.CNPJ;
@@ -54,7 +54,7 @@ public class FilialCliente implements Serializable {
 	@Column(name = "TipoEmpresa")
 	private TipoEmpresa tipoEmpresa;
 	
-	@NotEmpty
+	@NotNull
 	@Column(name = "RegimeTributacao")
 	private RegimeTributacao regimeTributacao;
 	
