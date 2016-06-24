@@ -1,0 +1,138 @@
+<ui:composition template="/WEB-INF/template/Layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui">
+
+	<f:metadata>
+		<f:viewAction action="#{cadastroFaixaColaboradorBean.consultar}" />
+	</f:metadata>
+
+	<ui:define name="titulo">Cadastro de Faixa de Colaborador</ui:define>
+
+	<ui:define name="corpo">
+		<h1>Cadastro Faixa Colaborador</h1>
+		<h:form id="frmCadastro">
+
+			<p:messages id="msgs" closable="true"/>
+
+			<p:toolbar id="toolbar">
+				<f:facet name="left">
+					<p:commandButton value="Novo" icon="ui-icon-document"
+						action="#{cadastroFaixaColaboradorBean.prepararNovoCadastro}"
+						process="@this" update="faixa-dialog"
+						oncomplete="PF('edicaoFaixaDialog').show()">
+						<p:resetInput target="faixa-dialog" />
+					</p:commandButton>
+
+					<span class="ui-separator"> <span
+						class="ui-icon ui-icon-grip-dotted-vertical" />
+					</span>
+
+					<p:commandButton icon="ui-icon-pencil" title="Editar"
+						process="@this" update="faixa-dialog"
+						oncomplete="PF('edicaoFaixaDialog').show()"
+						disabled="#{cadastroFaixaColaboradorBean.faixaSelecionada == null}">
+						<p:resetInput target="faixa-dialog" />
+
+						<f:setPropertyActionListener
+							value="#{cadastroFaixaColaboradorBean.faixaSelecionada}"
+							target="#{cadastroFaixaColaboradorBean.faixaEdicao}" />
+					</p:commandButton>
+
+					<p:commandButton icon="ui-icon-trash" title="Excluir"
+						process="@this" update="faixa-table msgs toolbar"
+						action="#{cadastroFaixaColaboradorBean.excluir}"
+						disabled="#{cadastroFaixaColaboradorBean.faixaSelecionada == null}">
+
+						<p:confirm icon="ui-icon-alert" header="Confirmação de exclusão"
+							message="Tem certeza que deseja excluir a faixa de colaborador?" />
+
+					</p:commandButton>
+				</f:facet>
+
+			</p:toolbar>
+
+			<p:dataTable value="#{cadastroFaixaColaboradorBean.todasFaixas}"
+				var="faixa" emptyMessage="Nenhum faixa cadastrada." rows="10"
+				paginator="true" paginatorPosition="bottom" style="margin-top: 10px"
+				id="faixa-table" 
+				selection="#{cadastroFaixaColaboradorBean.faixaSelecionada}"
+				selectionMode="single" rowKey="#{faixa.codigo}"
+				filteredValue="#{cadastroFaixaColaboradorBean.filtroFaixas}"
+				widgetVar="tabelaFaixa">
+
+				<p:ajax event="rowSelect" update=":frmCadastro:toolbar" />
+				<p:ajax event="rowUnselect" update=":frmCadastro:toolbar" />
+
+				<p:column headerText="Código" sortBy="#{faixa.codigo}"
+					filterBy="#{faixa.codigo}" filterMatchMode="contains">
+					<h:outputText value="#{faixa.codigo}" />
+				</p:column>	
+				<p:column headerText="Descrição" sortBy="#{faixa.descricao}"
+					filterBy="#{faixa.descricao}" filterMatchMode="contains">
+					<h:outputText value="#{faixa.descricao}" />
+				</p:column>
+
+				<p:column headerText="Indice" sortBy="#{faixa.indice}"
+					filterBy="#{faixa.indice}" filterMatchMode="contains">
+					<h:outputText value="#{faixa.indice}" />
+				</p:column>
+				
+				<p:column headerText="Faixa Inicial" sortBy="#{faixa.faixaInicial}"
+					filterBy="#{faixa.faixaInicial}" filterMatchMode="contains">
+					<h:outputText value="#{faixa.faixaInicial}" />
+				</p:column>
+				
+				<p:column headerText="Faixa Final" sortBy="#{faixa.faixaFinal}"
+					filterBy="#{faixa.faixaFinal}" filterMatchMode="contains">
+					<h:outputText value="#{faixa.faixaFinal}" />
+				</p:column>
+			</p:dataTable>
+
+			<p:dialog header="Nova faixa" widgetVar="edicaoFaixaDialog"
+				id="faixa-dialog" resizable="false" modal="true"
+				closeOnEscape="true">
+
+				<p:messages id="msgs-dialog" />
+
+				<p:defaultCommand target="salvar-button" scope="faixa-dialog" />
+
+				<h:panelGrid columns="2" id="painel-dialog">
+					<p:outputLabel value="Código" for="codigo" />
+					<p:inputText id="codigo" size="7" maxlength="10"
+						value="#{cadastroFaixaColaboradorBean.faixaEdicao.codigo}"
+						readonly="true" />
+
+					<p:outputLabel value="Descrição" for="descricao" />
+					<p:inputText id="descricao" size="20" maxlength="50"
+						value="#{cadastroFaixaColaboradorBean.faixaEdicao.descricao}" />
+						
+					<p:outputLabel value="Indice" for="indice" />
+					<p:inputText id="indice" size="7" maxlength="20"
+						value="#{cadastroFaixaColaboradorBean.faixaEdicao.indice}" />
+					
+					<p:outputLabel value="Faixa Inicial" for="faixaInicial" />
+					<p:inputText id="faixaInicial" size="7" maxlength="10"
+						value="#{cadastroFaixaColaboradorBean.faixaEdicao.faixaInicial}" />
+					
+					<p:outputLabel value="Faixa Final" for="faixaFinal" />
+					<p:inputText id="faixaFinal" size="7" maxlength="10"
+						value="#{cadastroFaixaColaboradorBean.faixaEdicao.faixaFinal}" />
+					
+					<p:outputLabel value="Observação" />
+					<p:inputTextarea rows="5" cols="40" maxlength="1000"
+						value="#{cadastroFaixaColaboradorBean.faixaEdicao.observacao}"
+						autoResize="false" />
+				
+					<p:commandButton value="Salvar" id="salvar-button"
+						action="#{cadastroFaixaColaboradorBean.salvar}" process="faixa-dialog"
+						update="msgs-dialog painel-dialog"
+						oncomplete="if (!args.validationFailed) PF('edicaoFaixaDialog').hide()" />
+				</h:panelGrid>
+			</p:dialog>
+
+		</h:form>
+	</ui:define>
+</ui:composition>
