@@ -1,7 +1,7 @@
 package br.com.prodama.util.componentes;
 
-import br.com.prodama.model.cadastro.Empresa;
-import br.com.prodama.model.cadastro.Filial;
+import br.com.prodama.model.cadastro.geral.Empresa;
+import br.com.prodama.model.cadastro.geral.Filial;
 
 public class AbrangenciaEmpresaFilial {
   

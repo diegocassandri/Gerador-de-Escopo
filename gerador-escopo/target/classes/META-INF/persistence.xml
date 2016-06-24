@@ -4,20 +4,26 @@
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
 	<persistence-unit name="escopoPU">
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
-		<class>br.com.prodama.model.cadastro.Cidade</class>
-		<class>br.com.prodama.model.cadastro.Empresa</class>
-		<class>br.com.prodama.model.cadastro.EmpresaCliente</class>
-		<class>br.com.prodama.model.cadastro.Equipe</class>
-		<class>br.com.prodama.model.cadastro.Estado</class>
 		<class>br.com.prodama.model.cadastro.FaixaColaborador</class>
-		<class>br.com.prodama.model.cadastro.Filial</class>
-		<class>br.com.prodama.model.cadastro.FilialCliente</class>
-		<class>br.com.prodama.model.cadastro.Grupo</class>
-		<class>br.com.prodama.model.cadastro.NivelEquipe</class>
-		<class>br.com.prodama.model.cadastro.Pessoa</class>
-		<class>br.com.prodama.model.cadastro.Tela</class>
-		<class>br.com.prodama.model.cadastro.TipoHora</class>
-		<class>br.com.prodama.model.cadastro.Usuario</class>
+		<class>br.com.prodama.model.cadastro.geral.Cidade</class>
+		<class>br.com.prodama.model.cadastro.geral.Empresa</class>
+		<class>br.com.prodama.model.cadastro.geral.EmpresaCliente</class>
+		<class>br.com.prodama.model.cadastro.geral.Equipe</class>
+		<class>br.com.prodama.model.cadastro.geral.Estado</class>
+		<class>br.com.prodama.model.cadastro.geral.FaixaColaborador</class>
+		<class>br.com.prodama.model.cadastro.geral.Filial</class>
+		<class>br.com.prodama.model.cadastro.geral.FilialCliente</class>
+		<class>br.com.prodama.model.cadastro.geral.Grupo</class>
+		<class>br.com.prodama.model.cadastro.geral.NivelEquipe</class>
+		<class>br.com.prodama.model.cadastro.geral.Pessoa</class>
+		<class>br.com.prodama.model.cadastro.geral.Tela</class>
+		<class>br.com.prodama.model.cadastro.geral.TipoHora</class>
+		<class>br.com.prodama.model.cadastro.geral.Usuario</class>
+		<class>br.com.prodama.model.cadastro.produto.GestaoModulo</class>
+		<class>br.com.prodama.model.cadastro.produto.Modulo</class>
+		<class>br.com.prodama.model.cadastro.produto.ProcessoGestao</class>
+		<class>br.com.prodama.model.cadastro.produto.Produto</class>
+		
 		
 
 

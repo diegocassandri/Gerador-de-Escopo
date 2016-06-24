@@ -7,7 +7,7 @@ import javax.faces.convert.FacesConverter;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
-import br.com.prodama.model.cadastro.Empresa;
+import br.com.prodama.model.cadastro.geral.Empresa;
 
 @FacesConverter(forClass = Empresa.class)
 public class EmpresaConverter implements Converter {
