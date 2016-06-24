@@ -15,9 +15,9 @@ import org.primefaces.event.SelectEvent;
 import br.com.prodama.model.cadastro.geral.Empresa;
 import br.com.prodama.model.cadastro.geral.Filial;
 import br.com.prodama.model.cadastro.geral.Usuario;
-import br.com.prodama.repository.cadastros.Usuarios;
+import br.com.prodama.repository.cadastro.geral.Usuarios;
 import br.com.prodama.service.NegocioException;
-import br.com.prodama.service.cadastro.CadastroUsuario;
+import br.com.prodama.service.cadastro.geral.CadastroUsuario;
 
 
 @Named

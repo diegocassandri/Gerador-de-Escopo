@@ -12,9 +12,9 @@ import javax.inject.Named;
 import org.primefaces.context.RequestContext;
 
 import br.com.prodama.model.cadastro.geral.Usuario;
-import br.com.prodama.repository.cadastros.Usuarios;
+import br.com.prodama.repository.cadastro.geral.Usuarios;
 import br.com.prodama.service.NegocioException;
-import br.com.prodama.service.cadastro.CadastroUsuario;
+import br.com.prodama.service.cadastro.geral.CadastroUsuario;
 import br.com.prodama.util.CriptografaSenha;
 import br.com.prodama.util.FacesMessages;
 
