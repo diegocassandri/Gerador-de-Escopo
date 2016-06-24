@@ -15,10 +15,10 @@ import org.primefaces.context.RequestContext;
 
 import br.com.prodama.controller.UsuarioLogin;
 import br.com.prodama.enun.TipoEmpresa;
-import br.com.prodama.model.cadastro.Cidade;
-import br.com.prodama.model.cadastro.Empresa;
-import br.com.prodama.model.cadastro.Estado;
-import br.com.prodama.model.cadastro.Filial;
+import br.com.prodama.model.cadastro.geral.Cidade;
+import br.com.prodama.model.cadastro.geral.Empresa;
+import br.com.prodama.model.cadastro.geral.Estado;
+import br.com.prodama.model.cadastro.geral.Filial;
 import br.com.prodama.repository.cadastros.Cidades;
 import br.com.prodama.repository.cadastros.Empresas;
 import br.com.prodama.repository.cadastros.Estados;

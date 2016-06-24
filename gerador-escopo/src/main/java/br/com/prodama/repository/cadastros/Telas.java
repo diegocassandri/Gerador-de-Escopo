@@ -7,7 +7,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
-import br.com.prodama.model.cadastro.Tela;
+import br.com.prodama.model.cadastro.geral.Tela;
 
 public class Telas implements Serializable{
 

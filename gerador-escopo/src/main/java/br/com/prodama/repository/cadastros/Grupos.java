@@ -7,8 +7,8 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
-import br.com.prodama.model.cadastro.Grupo;
-import br.com.prodama.model.cadastro.Usuario;
+import br.com.prodama.model.cadastro.geral.Grupo;
+import br.com.prodama.model.cadastro.geral.Usuario;
 
 public class Grupos implements Serializable {
 

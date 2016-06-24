@@ -1,4 +1,4 @@
-package br.com.prodama.model.cadastro;
+package br.com.prodama.model.cadastro.geral;
 
 import java.io.Serializable;
 import java.util.LinkedList;

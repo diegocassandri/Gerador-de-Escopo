@@ -17,9 +17,9 @@ import javax.inject.Named;
 import org.primefaces.context.RequestContext;
 
 import br.com.prodama.enun.TipoEmpresa;
-import br.com.prodama.model.cadastro.Cidade;
-import br.com.prodama.model.cadastro.EmpresaCliente;
-import br.com.prodama.model.cadastro.Estado;
+import br.com.prodama.model.cadastro.geral.Cidade;
+import br.com.prodama.model.cadastro.geral.EmpresaCliente;
+import br.com.prodama.model.cadastro.geral.Estado;
 import br.com.prodama.repository.cadastros.Cidades;
 import br.com.prodama.repository.cadastros.EmpresasCliente;
 import br.com.prodama.repository.cadastros.Estados;

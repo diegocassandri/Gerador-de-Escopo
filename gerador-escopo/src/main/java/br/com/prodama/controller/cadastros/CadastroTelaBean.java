@@ -12,7 +12,8 @@ import javax.inject.Named;
 
 import org.primefaces.context.RequestContext;
 import org.primefaces.model.TreeNode;
-import br.com.prodama.model.cadastro.Tela;
+
+import br.com.prodama.model.cadastro.geral.Tela;
 import br.com.prodama.repository.cadastros.Telas;
 import br.com.prodama.service.cadastro.CadastroTela;
 import br.com.prodama.util.FacesMessages;

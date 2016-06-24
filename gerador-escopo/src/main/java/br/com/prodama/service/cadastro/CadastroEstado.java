@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import javax.inject.Inject;
 
-import br.com.prodama.model.cadastro.Estado;
+import br.com.prodama.model.cadastro.geral.Estado;
 import br.com.prodama.repository.cadastros.Estados;
 import br.com.prodama.service.NegocioException;
 import br.com.prodama.util.Transactional;

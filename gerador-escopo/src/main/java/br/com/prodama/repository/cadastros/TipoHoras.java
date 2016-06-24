@@ -7,7 +7,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
-import br.com.prodama.model.cadastro.TipoHora;
+import br.com.prodama.model.cadastro.geral.TipoHora;
 
 public class TipoHoras implements Serializable{
 

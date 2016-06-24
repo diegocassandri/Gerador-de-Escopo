@@ -7,8 +7,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
-
-import br.com.prodama.model.cadastro.NivelEquipe;
+import br.com.prodama.model.cadastro.geral.NivelEquipe;
 
 public class NiveisEquipe implements Serializable {
 

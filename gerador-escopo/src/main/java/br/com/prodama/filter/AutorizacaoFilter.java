@@ -15,9 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import br.com.prodama.controller.UsuarioLogin;
-
-import br.com.prodama.model.cadastro.Grupo;
-import br.com.prodama.model.cadastro.Tela;
+import br.com.prodama.model.cadastro.geral.Grupo;
+import br.com.prodama.model.cadastro.geral.Tela;
 
 @WebFilter("*.xhtml")
 public class AutorizacaoFilter implements Filter {

@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import javax.inject.Inject;
 
-import br.com.prodama.model.cadastro.NivelEquipe;
+import br.com.prodama.model.cadastro.geral.NivelEquipe;
 import br.com.prodama.repository.cadastros.NiveisEquipe;
 import br.com.prodama.service.NegocioException;
 import br.com.prodama.util.Transactional;

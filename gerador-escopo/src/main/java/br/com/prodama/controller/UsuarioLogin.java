@@ -12,9 +12,9 @@ import javax.inject.Named;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 
-import br.com.prodama.model.cadastro.Empresa;
-import br.com.prodama.model.cadastro.Filial;
-import br.com.prodama.model.cadastro.Usuario;
+import br.com.prodama.model.cadastro.geral.Empresa;
+import br.com.prodama.model.cadastro.geral.Filial;
+import br.com.prodama.model.cadastro.geral.Usuario;
 import br.com.prodama.repository.cadastros.Usuarios;
 import br.com.prodama.service.NegocioException;
 import br.com.prodama.service.cadastro.CadastroUsuario;

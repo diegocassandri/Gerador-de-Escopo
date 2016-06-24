@@ -12,8 +12,8 @@ import javax.inject.Named;
 
 import org.primefaces.context.RequestContext;
 
-import br.com.prodama.model.cadastro.Equipe;
-import br.com.prodama.model.cadastro.NivelEquipe;
+import br.com.prodama.model.cadastro.geral.Equipe;
+import br.com.prodama.model.cadastro.geral.NivelEquipe;
 import br.com.prodama.repository.cadastros.Equipes;
 import br.com.prodama.repository.cadastros.NiveisEquipe;
 import br.com.prodama.service.cadastro.CadastroNivelEquipe;

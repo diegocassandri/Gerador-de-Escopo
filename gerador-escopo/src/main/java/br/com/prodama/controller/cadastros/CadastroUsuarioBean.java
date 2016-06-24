@@ -19,10 +19,10 @@ import org.primefaces.model.DualListModel;
 
 import br.com.prodama.controller.UsuarioLogin;
 import br.com.prodama.enun.Status;
-import br.com.prodama.model.cadastro.Empresa;
-import br.com.prodama.model.cadastro.Filial;
-import br.com.prodama.model.cadastro.Grupo;
-import br.com.prodama.model.cadastro.Usuario;
+import br.com.prodama.model.cadastro.geral.Empresa;
+import br.com.prodama.model.cadastro.geral.Filial;
+import br.com.prodama.model.cadastro.geral.Grupo;
+import br.com.prodama.model.cadastro.geral.Usuario;
 import br.com.prodama.repository.cadastros.Empresas;
 import br.com.prodama.repository.cadastros.Filiais;
 import br.com.prodama.repository.cadastros.Usuarios;

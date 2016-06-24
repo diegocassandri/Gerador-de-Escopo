@@ -16,9 +16,9 @@ import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.DualListModel;
 import org.primefaces.model.TreeNode;
 
-import br.com.prodama.model.cadastro.Grupo;
-import br.com.prodama.model.cadastro.Tela;
-import br.com.prodama.model.cadastro.Usuario;
+import br.com.prodama.model.cadastro.geral.Grupo;
+import br.com.prodama.model.cadastro.geral.Tela;
+import br.com.prodama.model.cadastro.geral.Usuario;
 import br.com.prodama.repository.cadastros.Grupos;
 import br.com.prodama.repository.cadastros.Telas;
 import br.com.prodama.repository.cadastros.Usuarios;

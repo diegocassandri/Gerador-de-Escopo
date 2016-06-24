@@ -8,7 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import br.com.prodama.enun.TipoEmpresa;
-import br.com.prodama.model.cadastro.EmpresaCliente;
+import br.com.prodama.model.cadastro.geral.EmpresaCliente;
 
 
 public class EmpresasCliente implements Serializable {

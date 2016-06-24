@@ -3,7 +3,8 @@ package br.com.prodama.service.cadastro;
 import java.io.Serializable;
 
 import javax.inject.Inject;
-import br.com.prodama.model.cadastro.Filial;
+
+import br.com.prodama.model.cadastro.geral.Filial;
 import br.com.prodama.repository.cadastros.Filiais;
 import br.com.prodama.service.NegocioException;
 import br.com.prodama.util.Transactional;

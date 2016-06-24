@@ -14,7 +14,7 @@ import javax.inject.Named;
 import org.primefaces.context.RequestContext;
 
 import br.com.prodama.controller.UsuarioLogin;
-import br.com.prodama.model.cadastro.TipoHora;
+import br.com.prodama.model.cadastro.geral.TipoHora;
 import br.com.prodama.repository.cadastros.TipoHoras;
 import br.com.prodama.service.cadastro.CadastroTipoHora;
 import br.com.prodama.util.FacesMessages;

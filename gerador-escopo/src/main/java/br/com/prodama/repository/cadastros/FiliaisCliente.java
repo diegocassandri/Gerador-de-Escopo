@@ -9,8 +9,8 @@ import javax.persistence.Query;
 
 import br.com.prodama.controller.UsuarioLogin;
 import br.com.prodama.enun.TipoEmpresa;
-import br.com.prodama.model.cadastro.EmpresaCliente;
-import br.com.prodama.model.cadastro.FilialCliente;
+import br.com.prodama.model.cadastro.geral.EmpresaCliente;
+import br.com.prodama.model.cadastro.geral.FilialCliente;
 
 
 public class FiliaisCliente implements Serializable {

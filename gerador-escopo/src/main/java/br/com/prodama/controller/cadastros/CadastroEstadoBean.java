@@ -13,7 +13,7 @@ import javax.inject.Named;
 
 import org.primefaces.context.RequestContext;
 
-import br.com.prodama.model.cadastro.Estado;
+import br.com.prodama.model.cadastro.geral.Estado;
 import br.com.prodama.repository.cadastros.Estados;
 import br.com.prodama.service.cadastro.CadastroEstado;
 

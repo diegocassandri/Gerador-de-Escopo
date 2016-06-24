@@ -13,7 +13,7 @@ import javax.inject.Named;
 import org.primefaces.context.RequestContext;
 
 import br.com.prodama.controller.UsuarioLogin;
-import br.com.prodama.model.cadastro.Empresa;
+import br.com.prodama.model.cadastro.geral.Empresa;
 import br.com.prodama.repository.cadastros.Empresas;
 
 
