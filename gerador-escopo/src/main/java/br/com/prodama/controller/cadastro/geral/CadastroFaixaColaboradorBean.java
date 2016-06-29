@@ -114,5 +114,7 @@ public class CadastroFaixaColaboradorBean implements Serializable {
 	public void setFiltroFaixas(List<FaixaColaborador> filtroFaixas) {
 		this.filtroFaixas = filtroFaixas;
 	}
+	
+	
 
 }

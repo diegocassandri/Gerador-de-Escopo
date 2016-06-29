@@ -1,0 +1,123 @@
+<ui:composition template="/WEB-INF/template/Layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui">
+
+	<f:metadata>
+		<f:viewAction action="#{cadastroProdutoBean.consultar}" />
+	</f:metadata>
+
+	<ui:define name="titulo">Cadastro de Produto</ui:define>
+
+	<ui:define name="corpo">
+		<h1>Cadastro Produto</h1>
+		<h:form id="frmCadastro">
+
+			<p:messages id="msgs" closable="true"/>
+
+			<p:toolbar id="toolbar">
+				<f:facet name="left">
+					<p:commandButton value="Novo" icon="ui-icon-document"
+						action="#{cadastroProdutoBean.prepararNovoCadastro}"
+						process="@this" update="produto-dialog"
+						oncomplete="PF('edicaoProdutoDialog').show()">
+						<p:resetInput target="produto-dialog" />
+					</p:commandButton>
+
+					<span class="ui-separator"> <span
+						class="ui-icon ui-icon-grip-dotted-vertical" />
+					</span>
+
+					<p:commandButton icon="ui-icon-pencil" title="Editar"
+						process="@this" update="produto-dialog"
+						oncomplete="PF('edicaoProdutoDialog').show()"
+						disabled="#{cadastroProdutoBean.produtoSelecionado == null}">
+						<p:resetInput target="produto-dialog" />
+
+						<f:setPropertyActionListener
+							value="#{cadastroProdutoBean.produtoSelecionado}"
+							target="#{cadastroProdutoBean.produtoEdicao}" />
+					</p:commandButton>
+
+					<p:commandButton icon="ui-icon-trash" title="Excluir"
+						process="@this" update="produto-table msgs toolbar"
+						action="#{cadastroProdutoBean.excluir}"
+						disabled="#{cadastroProdutoBean.produtoSelecionado == null}">
+
+						<p:confirm icon="ui-icon-alert" header="Confirmação de exclusão"
+							message="Tem certeza que deseja excluir o Produto?" />
+
+					</p:commandButton>
+				</f:facet>
+
+			</p:toolbar>
+
+			<p:dataTable value="#{cadastroProdutoBean.todosProdutos}"
+				var="produto" emptyMessage="Nenhum produto cadastrado." rows="10"
+				paginator="true" paginatorPosition="bottom" style="margin-top: 10px"
+				id="produto-table" 
+				selection="#{cadastroProdutoBean.produtoSelecionado}"
+				selectionMode="single" rowKey="#{produto.codigo}"
+				filteredValue="#{cadastroProdutoBean.filtroProdutos}"
+				widgetVar="tabelaProduto">
+
+				<p:ajax event="rowSelect" update=":frmCadastro:toolbar" />
+				<p:ajax event="rowUnselect" update=":frmCadastro:toolbar" />
+
+				<p:column headerText="Código" sortBy="#{produto.codigo}"
+					filterBy="#{produto.codigo}" filterMatchMode="contains">
+					<h:outputText value="#{produto.codigo}" />
+				</p:column>	
+				<p:column headerText="Descrição" sortBy="#{produto.descricao}"
+					filterBy="#{produto.descricao}" filterMatchMode="contains">
+					<h:outputText value="#{produto.descricao}" />
+				</p:column>
+				
+				<p:column headerText="Status" sortBy="#{produto.status}"
+					filterBy="#{produto.status}" filterMatchMode="contains">
+					<h:outputText value="#{produto.status}" />
+				</p:column>
+			
+			</p:dataTable>
+
+			<p:dialog header="Novo produto" widgetVar="edicaoProdutoDialog"
+				id="produto-dialog" resizable="false" modal="true"
+				closeOnEscape="true">
+
+				<p:messages id="msgs-dialog" />
+
+				<p:defaultCommand target="salvar-button" scope="produto-dialog" />
+
+				<h:panelGrid columns="2" id="painel-dialog">
+					<p:outputLabel value="Código" for="codigo" />
+					<p:inputText id="codigo" size="7" maxlength="10"
+						value="#{cadastroProdutoBean.produtoEdicao.codigo}"
+						readonly="true" />
+
+					<p:outputLabel value="Descrição" for="descricao" />
+					<p:inputText id="descricao" size="50" maxlength="50"
+						value="#{cadastroProdutoBean.produtoEdicao.descricao}" />
+						
+					<p:outputLabel value="Observação" />
+					<p:inputTextarea rows="5" cols="60" maxlength="1000"
+						value="#{cadastroProdutoBean.produtoEdicao.observacao}"
+						autoResize="false" />
+						
+					<p:outputLabel value="Status" for="status" />
+					<p:selectOneMenu id="status"
+						value="#{cadastroProdutoBean.produtoEdicao.status}"> 
+						<f:selectItems value="#{cadastroProdutoBean.statusList}" />
+					</p:selectOneMenu> 
+				
+					<p:commandButton value="Salvar" id="salvar-button"
+						action="#{cadastroProdutoBean.salvar}" process="produto-dialog"
+						update="msgs-dialog painel-dialog"
+						oncomplete="if (!args.validationFailed) PF('edicaoProdutoDialog').hide()" />
+				</h:panelGrid>
+			</p:dialog>
+
+		</h:form>
+	</ui:define>
+</ui:composition>

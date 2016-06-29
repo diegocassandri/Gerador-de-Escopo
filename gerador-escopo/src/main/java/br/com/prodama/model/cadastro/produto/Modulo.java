@@ -3,6 +3,7 @@ package br.com.prodama.model.cadastro.produto;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,6 +15,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.Cascade;
 import org.hibernate.validator.constraints.NotEmpty;
 import br.com.prodama.enun.Status;
 
@@ -32,21 +35,18 @@ public class Modulo implements Serializable {
 	@Column(nullable = false, length = 50)
 	private String descricao;
 	
-	@NotEmpty
-	@Column(nullable = false, length = 50)
-	private String codigoProprietaria;
-	
-	@Column(nullable = true, length = 5000)
+	@Column(nullable = true, length = 3000)
 	private String Observacao;
 
 	@Column(nullable = true)
-	private Status satus;
+	private Status status;
 	
 	@ManyToOne
 	@JoinColumn(name = "produto")
 	private Produto produto;
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "modulo")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "modulo",cascade=CascadeType.ALL )
+	@Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
 	private List<GestaoModulo> listaGestoesModulo;
 	
 	public Long getCodigo() {
@@ -73,15 +73,17 @@ public class Modulo implements Serializable {
 		Observacao = observacao;
 	}
 
-	public Status getSatus() {
-		return satus;
-	}
-
-	public void setSatus(Status satus) {
-		this.satus = satus;
-	}
+	
 
 	
+	public Status getStatus() {
+		return status;
+	}
+
+	public void setStatus(Status status) {
+		this.status = status;
+	}
+
 	public Produto getProduto() {
 		return produto;
 	}
@@ -97,6 +99,8 @@ public class Modulo implements Serializable {
 	public void setListaGestoesModulo(List<GestaoModulo> listaGestoesModulo) {
 		this.listaGestoesModulo = listaGestoesModulo;
 	}
+	
+
 
 	@Override
 	public int hashCode() {

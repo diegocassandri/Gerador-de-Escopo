@@ -68,7 +68,7 @@ public class EmpresaCliente implements Serializable {
 	@Column(name = "CEP", nullable = true, length = 20)
 	private String cep;
 
-	@Column(name = "Observacao",length = 5000)
+	@Column(name = "Observacao",length = 3000)
 	private String observacao;
 
 	@Column(name = "TipoEmpresa")

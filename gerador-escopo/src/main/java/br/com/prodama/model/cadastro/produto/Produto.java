@@ -30,11 +30,11 @@ public class Produto implements Serializable {
 	@Column(nullable = false, length = 50)
 	private String descricao;
 	
-	@Column(nullable = true, length = 5000)
+	@Column(nullable = true, length = 3000)
 	private String Observacao;
 
 	@Column(nullable = false)
-	private Status satus;
+	private Status status;
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "produto")
 	private List<Modulo> listaModulos;
@@ -63,15 +63,16 @@ public class Produto implements Serializable {
 		Observacao = observacao;
 	}
 
-	public Status getSatus() {
-		return satus;
-	}
-
-	public void setSatus(Status satus) {
-		this.satus = satus;
-	}
-
 	
+	
+	public Status getStatus() {
+		return status;
+	}
+
+	public void setStatus(Status status) {
+		this.status = status;
+	}
+
 	public List<Modulo> getListaModulo() {
 		return listaModulos;
 	}

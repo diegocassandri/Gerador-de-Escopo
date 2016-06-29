@@ -29,11 +29,15 @@ public class ProcessoGestao implements Serializable {
 	@Column(nullable = false, length = 50)
 	private String descricao;
 	
-	@Column(nullable = true, length = 5000)
+	@Column(nullable = true, length = 3000)
 	private String Observacao;
 
 	@Column(nullable = true)
 	private Status satus;
+	
+	@NotEmpty
+	@Column(nullable = false, length = 50)
+	private String codigoProprietaria;
 	
 	@ManyToOne
 	@JoinColumn(name = "gestaoModulo")
