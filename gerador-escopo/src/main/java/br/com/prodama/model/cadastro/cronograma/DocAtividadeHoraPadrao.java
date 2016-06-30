@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
@@ -20,17 +21,16 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import br.com.prodama.model.cadastro.produto.Produto;
 
 @Entity
-@Table(name="CronogramaPradrao")
-public class CronogramaPadrao implements Serializable{
+@Table(name="DocAtividadeHoraPadrao")
+public class DocAtividadeHoraPadrao implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="gen_cronogramaPradrao") 
-    @SequenceGenerator(name="gen_cronogramaPradrao", sequenceName = "seq_cronogramaPradrao", initialValue=1, allocationSize=1)
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="gen_docAtividadeHoraPadrao") 
+    @SequenceGenerator(name="gen_docAtividadeHoraPadrao", sequenceName = "seq_docAtividadeHoraPadrao", initialValue=1, allocationSize=1)
 	@Column(name = "Codigo", nullable = false)
 	private Long codigo;
 
@@ -39,17 +39,19 @@ public class CronogramaPadrao implements Serializable{
 	@Column(name = "Descricao", nullable = false, length = 250)
 	private String descricao;
 	
-	@Column(name = "TotalHoras", nullable = true)
-	private Long totalHoras;
+	@Lob 
+	@Basic(optional = true,fetch = FetchType.LAZY)
+	@Column(name="Observacao")
+	private String observacao;	
 	
 	@ManyToOne
-	@JoinColumn(name = "produto")
-	private Produto produto;
+	@JoinColumn(name = "codigoAtividadeHoraPadrao")
+	private AtividadeHoraPadrao atividadeHoraPadrao;
 	
 	@SuppressWarnings("deprecation")
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "cronogramaPadrao",cascade=CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "docAtividadeHoraPadrao",cascade=CascadeType.ALL)
 	@Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
-	private List<AtividadeHoraPadrao> listaAtividadesHorasPadroes;
+	private List<AnexoAtividadeHoraPadrao> listaAnexoAtividadesHorasPadroes;
 
 	public Long getCodigo() {
 		return codigo;
@@ -67,28 +69,28 @@ public class CronogramaPadrao implements Serializable{
 		this.descricao = descricao;
 	}
 
-	public Long getTotalHoras() {
-		return totalHoras;
+	public String getObservacao() {
+		return observacao;
 	}
 
-	public void setTotalHoras(Long totalHoras) {
-		this.totalHoras = totalHoras;
+	public void setObservacao(String observacao) {
+		this.observacao = observacao;
 	}
 
-	public Produto getProduto() {
-		return produto;
+	public AtividadeHoraPadrao getAtividadeHoraPadrao() {
+		return atividadeHoraPadrao;
 	}
 
-	public void setProduto(Produto produto) {
-		this.produto = produto;
+	public void setAtividadeHoraPadrao(AtividadeHoraPadrao atividadeHoraPadrao) {
+		this.atividadeHoraPadrao = atividadeHoraPadrao;
 	}
 
-	public List<AtividadeHoraPadrao> getListaAtividadesHorasPadroes() {
-		return listaAtividadesHorasPadroes;
+	public List<AnexoAtividadeHoraPadrao> getListaAnexoAtividadesHorasPadroes() {
+		return listaAnexoAtividadesHorasPadroes;
 	}
 
-	public void setListaAtividadesHorasPadroes(List<AtividadeHoraPadrao> listaAtividadesHorasPadroes) {
-		this.listaAtividadesHorasPadroes = listaAtividadesHorasPadroes;
+	public void setListaAnexoAtividadesHorasPadroes(List<AnexoAtividadeHoraPadrao> listaAnexoAtividadesHorasPadroes) {
+		this.listaAnexoAtividadesHorasPadroes = listaAnexoAtividadesHorasPadroes;
 	}
 
 	@Override
@@ -107,7 +109,7 @@ public class CronogramaPadrao implements Serializable{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		CronogramaPadrao other = (CronogramaPadrao) obj;
+		DocAtividadeHoraPadrao other = (DocAtividadeHoraPadrao) obj;
 		if (codigo == null) {
 			if (other.codigo != null)
 				return false;
@@ -118,10 +120,10 @@ public class CronogramaPadrao implements Serializable{
 
 	@Override
 	public String toString() {
-		return codigo +" "+ descricao;
+		return  descricao;
 	}
 	
 	
 	
-
+	
 }

@@ -1,36 +1,32 @@
 package br.com.prodama.model.cadastro.cronograma;
 
 import java.io.Serializable;
-import java.util.List;
 
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
-import org.hibernate.annotations.Cascade;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import br.com.prodama.model.cadastro.produto.Produto;
 
 @Entity
-@Table(name="CronogramaPradrao")
-public class CronogramaPadrao implements Serializable{
+@Table(name="AnexoAtividadeHoraPadrao")
+public class AnexoAtividadeHoraPadrao implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="gen_cronogramaPradrao") 
-    @SequenceGenerator(name="gen_cronogramaPradrao", sequenceName = "seq_cronogramaPradrao", initialValue=1, allocationSize=1)
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="gen_anexoAtividadeHoraPadrao") 
+    @SequenceGenerator(name="gen_anexoAtividadeHoraPadrao", sequenceName = "seq_anexoAtividadeHoraPadrao", initialValue=1, allocationSize=1)
 	@Column(name = "Codigo", nullable = false)
 	private Long codigo;
 
@@ -39,18 +35,15 @@ public class CronogramaPadrao implements Serializable{
 	@Column(name = "Descricao", nullable = false, length = 250)
 	private String descricao;
 	
-	@Column(name = "TotalHoras", nullable = true)
-	private Long totalHoras;
+	@NotNull
+	@Lob
+	@Column(nullable = false)
+	private byte[] arquivo;
 	
 	@ManyToOne
-	@JoinColumn(name = "produto")
-	private Produto produto;
+	@JoinColumn(name = "DocAtividadeHoraPadrao")
+	private DocAtividadeHoraPadrao docAtividadeHoraPadrao;
 	
-	@SuppressWarnings("deprecation")
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "cronogramaPadrao",cascade=CascadeType.ALL)
-	@Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
-	private List<AtividadeHoraPadrao> listaAtividadesHorasPadroes;
-
 	public Long getCodigo() {
 		return codigo;
 	}
@@ -67,28 +60,21 @@ public class CronogramaPadrao implements Serializable{
 		this.descricao = descricao;
 	}
 
-	public Long getTotalHoras() {
-		return totalHoras;
+   	public byte[] getArquivo() {
+		return arquivo;
 	}
 
-	public void setTotalHoras(Long totalHoras) {
-		this.totalHoras = totalHoras;
+	public void setArquivo(byte[] arquivo) {
+		this.arquivo = arquivo;
 	}
 
-	public Produto getProduto() {
-		return produto;
+	
+	public DocAtividadeHoraPadrao getDocAtividadeHoraPadrao() {
+		return docAtividadeHoraPadrao;
 	}
 
-	public void setProduto(Produto produto) {
-		this.produto = produto;
-	}
-
-	public List<AtividadeHoraPadrao> getListaAtividadesHorasPadroes() {
-		return listaAtividadesHorasPadroes;
-	}
-
-	public void setListaAtividadesHorasPadroes(List<AtividadeHoraPadrao> listaAtividadesHorasPadroes) {
-		this.listaAtividadesHorasPadroes = listaAtividadesHorasPadroes;
+	public void setDocAtividadeHoraPadrao(DocAtividadeHoraPadrao docAtividadeHoraPadrao) {
+		this.docAtividadeHoraPadrao = docAtividadeHoraPadrao;
 	}
 
 	@Override
@@ -107,7 +93,7 @@ public class CronogramaPadrao implements Serializable{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		CronogramaPadrao other = (CronogramaPadrao) obj;
+		AnexoAtividadeHoraPadrao other = (AnexoAtividadeHoraPadrao) obj;
 		if (codigo == null) {
 			if (other.codigo != null)
 				return false;
@@ -118,10 +104,10 @@ public class CronogramaPadrao implements Serializable{
 
 	@Override
 	public String toString() {
-		return codigo +" "+ descricao;
+		return  descricao;
 	}
 	
 	
 	
-
+	
 }
