@@ -14,6 +14,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+
 import org.hibernate.validator.constraints.NotEmpty;
 import br.com.prodama.enun.Status;
 
@@ -29,22 +31,23 @@ public class GestaoModulo implements Serializable {
 	private Long codigo;
 	
 	@NotEmpty
+	@NotNull
 	@Column(nullable = false, length = 50)
 	private String descricao;
 	
-	@Column(nullable = true, length = 5000)
+	@Column(nullable = true, length = 3000)
 	private String Observacao;
 
 	@Column(nullable = true)
-	private Status satus;
+	private Status status;
 	
 	@ManyToOne
-	@JoinColumn(name = "modulo")
+	@JoinColumn(name = "modulo",nullable = false)
 	private Modulo modulo;
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "gestaoModulo")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "gestaoModulo")
 	private List<ProcessoGestao> listaProcessosGestoes;
-	
+
 	public Long getCodigo() {
 		return codigo;
 	}
@@ -69,14 +72,13 @@ public class GestaoModulo implements Serializable {
 		Observacao = observacao;
 	}
 
-	public Status getSatus() {
-		return satus;
+	public Status getStatus() {
+		return status;
 	}
 
-	public void setSatus(Status satus) {
-		this.satus = satus;
+	public void setStatus(Status status) {
+		this.status = status;
 	}
-
 
 	public Modulo getModulo() {
 		return modulo;
@@ -86,7 +88,6 @@ public class GestaoModulo implements Serializable {
 		this.modulo = modulo;
 	}
 
-	
 	public List<ProcessoGestao> getListaProcessosGestoes() {
 		return listaProcessosGestoes;
 	}
@@ -119,4 +120,6 @@ public class GestaoModulo implements Serializable {
 			return false;
 		return true;
 	}
+	
+	
 }

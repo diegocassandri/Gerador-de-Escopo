@@ -51,11 +51,8 @@ public class LoginBean {
 	public String login() throws NoSuchAlgorithmException {
 		FacesContext context = FacesContext.getCurrentInstance();
 		
-		if ("admin".equals(this.nomeUsuario) && "123".equals(this.senha)) {
-			this.usuario.setNome(this.nomeUsuario);
-			this.usuario.setDataLogin(new Date());
-			return "/Home?faces-redirect=true";
-		} else if (usuarios.autenticaUsuario(this.nomeUsuario,CriptografaSenha.criptografa(this.senha))){
+
+		if (usuarios.autenticaUsuario(this.nomeUsuario,CriptografaSenha.criptografa(this.senha))){
 			this.usuario.setNome(this.nomeUsuario);
 			this.usuario.setDataLogin(new Date());
 			this.usuario.setUsuarioLogin(usuarios.retornaUsuarioPorNome(usuario.getNome()));

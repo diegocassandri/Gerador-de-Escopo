@@ -1,0 +1,138 @@
+<ui:composition template="/WEB-INF/template/Layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui">
+
+	<f:metadata>
+		<f:viewAction action="#{cadastroGestaoModuloBean.consultar}" />
+	</f:metadata>
+
+	<ui:define name="titulo">Cadastro do Gestão de Módulo</ui:define>
+
+	<ui:define name="corpo">
+		<h1>Cadastro Gestão do Módulo</h1>
+		<h:form id="frmCadastro">
+
+			<p:messages id="msgs" closable="true"/>
+
+			<p:toolbar id="toolbar">
+				<f:facet name="left">
+					<p:commandButton value="Novo" icon="ui-icon-document"
+						action="#{cadastroGestaoModuloBean.prepararNovoCadastro}"
+						process="@this" update="modulo-dialog"
+						oncomplete="PF('edicaoModuloDialog').show()">
+						<p:resetInput target="modulo-dialog" />
+					</p:commandButton>
+
+					<span class="ui-separator"> <span
+						class="ui-icon ui-icon-grip-dotted-vertical" />
+					</span>
+
+					<p:commandButton icon="ui-icon-pencil" title="Editar"
+						process="@this" update="modulo-dialog"
+						oncomplete="PF('edicaoModuloDialog').show()"
+						disabled="#{cadastroGestaoModuloBean.gestaoModuloSelecionado == null}">
+						<p:resetInput target="modulo-dialog" />
+
+						<f:setPropertyActionListener
+							value="#{cadastroGestaoModuloBean.gestaoModuloSelecionado}"
+							target="#{cadastroGestaoModuloBean.gestaoModuloEdicao}" />
+					</p:commandButton>
+
+					<p:commandButton icon="ui-icon-trash" title="Excluir"
+						process="@this" update="modulo-table msgs toolbar"
+						action="#{cadastroGestaoModuloBean.excluir}"
+						disabled="#{cadastroGestaoModuloBean.gestaoModuloSelecionado == null}">
+
+						<p:confirm icon="ui-icon-alert" header="Confirmação de exclusão"
+							message="Tem certeza que deseja excluir a Gestão de módulo?" />
+
+					</p:commandButton>
+				</f:facet>
+
+			</p:toolbar>
+
+			<p:dataTable value="#{cadastroGestaoModuloBean.todosGestaoModulos}"
+				var="gestaoModulo" emptyMessage="Nenhuma gestão de módulo cadastrada." rows="10"
+				paginator="true" paginatorPosition="bottom" style="margin-top: 10px"
+				id="modulo-table" 
+				selection="#{cadastroGestaoModuloBean.gestaoModuloSelecionado}"
+				selectionMode="single" rowKey="#{gestaoModulo.codigo}"
+				filteredValue="#{cadastroGestaoModuloBean.filtroModulos}"
+				widgetVar="tabelaModulo">
+
+				<p:ajax event="rowSelect" update=":frmCadastro:toolbar" />
+				<p:ajax event="rowUnselect" update=":frmCadastro:toolbar" />
+
+				<p:column headerText="Código" sortBy="#{gestaoModulo.codigo}"
+					filterBy="#{gestaoModulo.codigo}" filterMatchMode="contains">
+					<h:outputText value="#{gestaoModulo.codigo}" />
+				</p:column>	
+				<p:column headerText="Descrição" sortBy="#{gestaoModulo.descricao}"
+					filterBy="#{gestaoModulo.descricao}" filterMatchMode="contains">
+					<h:outputText value="#{gestaoModulo.descricao}" />
+				</p:column>
+				
+				<p:column headerText="Módulo" filterBy="#{gestaoModulo.modulo.descricao}"
+					sortBy="#{gestaoModulo.modulo.descricao}">
+					<h:outputText value="#{gestaoModulo.modulo.descricao}" />
+				</p:column>
+				
+				<p:column headerText="Status" sortBy="#{gestaoModulo.status}"
+					filterBy="#{gestaoModulo.status}" filterMatchMode="contains">
+					<h:outputText value="#{gestaoModulo.status}" />
+				</p:column>
+			
+			</p:dataTable>
+
+			<p:dialog header="Nova gestão do módulo" widgetVar="edicaoModuloDialog"
+				id="modulo-dialog" resizable="false" modal="true"
+				closeOnEscape="true">
+
+				<p:messages id="msgs-dialog" />
+
+				<p:defaultCommand target="salvar-button" scope="modulo-dialog" />
+
+				<h:panelGrid columns="2" id="painel-dialog">
+					<p:outputLabel value="Código" for="codigo" />
+					<p:inputText id="codigo" size="7" maxlength="10"
+						value="#{cadastroGestaoModuloBean.gestaoModuloEdicao.codigo}"
+						readonly="true" />
+
+					<p:outputLabel value="Descrição" for="descricao" />
+					<p:inputText id="descricao" size="30" maxlength="50"
+						value="#{cadastroGestaoModuloBean.gestaoModuloEdicao.descricao}" />
+						
+					<p:outputLabel value="Observação" />
+					<p:inputTextarea rows="5" cols="40" maxlength="1000"
+						value="#{cadastroGestaoModuloBean.gestaoModuloEdicao.observacao}"
+						autoResize="false" />
+		
+						
+					<p:outputLabel value=" Módulo" for="modulo" />
+					<p:selectOneMenu filter="true" value="#{cadastroGestaoModuloBean.gestaoModuloEdicao.modulo}" id="modulo">
+						<f:selectItem noSelectionOption="true"
+							itemLabel="Selecione um módulo" />
+						<f:selectItems value="#{cadastroGestaoModuloBean.todosModulos}" var="modulo" 
+							itemValue="#{modulo}"
+							itemLabel="#{modulo.descricao}" />
+					</p:selectOneMenu>
+						
+					<p:outputLabel value="Status" for="status" />
+					<p:selectOneMenu id="status"
+						value="#{cadastroGestaoModuloBean.gestaoModuloEdicao.status}">  
+						<f:selectItems value="#{cadastroGestaoModuloBean.statusList}" />
+					</p:selectOneMenu> 
+				
+					<p:commandButton value="Salvar" id="salvar-button"
+						action="#{cadastroGestaoModuloBean.salvar}" process="modulo-dialog"
+						update="msgs-dialog painel-dialog"
+						oncomplete="if (!args.validationFailed) PF('edicaoModuloDialog').hide()" />
+				</h:panelGrid>
+			</p:dialog>
+
+		</h:form>
+	</ui:define>
+</ui:composition>

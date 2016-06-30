@@ -49,7 +49,7 @@ public class Usuarios implements Serializable {
 
 	public boolean autenticaUsuario(String usuario, String senha) {
 		System.out.println(usuario + " " + senha);
-		Query query = manager.createQuery("From Usuario where usuario = :usuario And senha = :senha", Usuario.class);
+		Query query = manager.createQuery("From Usuario where usuario = :usuario And senha = :senha and status = 'ATIVO' ", Usuario.class);
 		query.setParameter("usuario", usuario);
 		query.setParameter("senha", senha);
 

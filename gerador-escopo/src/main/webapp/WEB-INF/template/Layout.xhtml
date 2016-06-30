@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
@@ -54,6 +55,14 @@
 							outcome="/cadastros/CadastroEmpresa.xhtml" />
 						<p:menuitem value="Filiais"
 							outcome="/cadastros/CadastroFilial.xhtml" />
+						<p:submenu label="Produtos" >
+							<p:menuitem value="Produtos"
+							outcome="/cadastros/produtos/CadastroProduto.xhtml" />
+							<p:menuitem value="Módulos"
+							outcome="/cadastros/produtos/CadastroModulo.xhtml" />
+							<p:menuitem value="Processos"
+							outcome="/cadastros/produtos/CadastroProcessoGestao.xhtml" />
+						</p:submenu>
 						<p:submenu label="Projetos" >
 							<p:menuitem value="Tipos de hora"
 								outcome="/cadastros/projetos/CadastroTipoDeHora.xhtml" />
@@ -65,6 +74,8 @@
 								outcome="/cadastros/projetos/CadastroEquipe.xhtml" />
 							<p:menuitem value="Nível de Equipe"
 								outcome="/cadastros/projetos/CadastroNivelEquipe.xhtml" />
+							<p:menuitem value="Faixa Colaborador"
+								outcome="/cadastros/projetos/CadastroFaixaColaborador.xhtml" />
 						</p:submenu>
 					</p:submenu>
 					<p:submenu label="Projetos">

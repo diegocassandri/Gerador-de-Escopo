@@ -136,7 +136,7 @@
 
 			<p:dialog header="Associar usuários"
 				widgetVar="associaUsuariosDialog" id="associaUsuarios-Dialog"
-				resizable="false" modal="true" closeOnEscape="true">
+				resizable="false" modal="true" closeOnEscape="true" dynamic="true" >
 				<p:messages id="msgs-associa" />
 				<h3 style="margin-top: 0">Associar Usuários ao Grupo
 					#{cadastroGrupoBean.grupoSelecionado.nome}</h3>
@@ -162,7 +162,7 @@
 				<h3 style="margin-top: 0">Permissões de Telas do Grupo
 					#{cadastroGrupoBean.grupoSelecionado.nome}</h3>
 				<p:tree value="#{cadastroGrupoBean.raiz}" selectionMode="checkbox"
-					var="no" expanded="true" expandAnim="FADE_IN"
+					var="no" expanded="true" expandAnim="FADE_IN" 
 					collapseAnim="FADE_OUT" animate="true" id="arvore"
 					selection="#{cadastroGrupoBean.checkboxSelectedNodes}"
 					propagateSelectionUp="true" propagateSelectionDown="true">

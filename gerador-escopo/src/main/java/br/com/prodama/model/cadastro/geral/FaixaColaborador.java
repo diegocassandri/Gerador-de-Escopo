@@ -34,12 +34,9 @@ public class FaixaColaborador implements Serializable{
 	@Column(nullable = false, length = 50)
 	private String descricao;
 	
-	@NotEmpty
-	private Integer indice;
-	
 	@NotNull
-	@Temporal(value=TemporalType.TIME)
-	private Date totalHoras;
+	private Integer indice;
+
 	
 	private Integer faixaInicial;
 
@@ -94,15 +91,7 @@ public class FaixaColaborador implements Serializable{
 	public void setIndice(Integer indice) {
 		this.indice = indice;
 	}
-
-	public Date getTotalHoras() {
-		return totalHoras;
-	}
-
-	public void setTotalHoras(Date totalHoras) {
-		this.totalHoras = totalHoras;
-	}
-
+	
 	public Integer getFaixaInicial() {
 		return faixaInicial;
 	}

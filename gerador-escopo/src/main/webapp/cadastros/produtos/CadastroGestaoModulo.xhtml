@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:o="http://omnifaces.org/ui">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title><ui:insert name="titulo">Cadastro Gestão do Módulo</ui:insert></title>
+	<h:outputStylesheet library="prodama" name="estilo.css" />
+	<h:outputScript target="body" library="prodama" name="MaskMoney.js" />
+	<f:metadata>
+		<o:viewParam name="id" value="#{cadastroGestaoModuloBean.gestaoModuloEdicao}" />
+	</f:metadata>
+	
+</h:head>
+
+<h:body>
+	<h:form id="frmCadastro">
+		<p:messages id="msgs" closable="true" />
+			<p:defaultCommand target="salvar-button" scope="frmCadastro" />
+
+			<h:panelGrid columns="2" id="painel-dialog">
+				<p:outputLabel value="Código" for="codigo" />
+				<p:inputText id="codigo" size="7" maxlength="10"
+					value="#{cadastroGestaoModuloBean.gestaoModuloEdicao.codigo}"
+					readonly="true" />
+
+				<p:outputLabel value="Descrição" for="descricao" />
+				<p:inputText id="descricao" size="30" maxlength="50"
+					value="#{cadastroGestaoModuloBean.gestaoModuloEdicao.descricao}" />
+
+				<p:outputLabel value="Observação" />
+				<p:inputTextarea rows="5" cols="40" maxlength="1000"
+					value="#{cadastroGestaoModuloBean.gestaoModuloEdicao.observacao}"
+					autoResize="false" />
+
+
+				<p:outputLabel value=" Módulo" for="modulo" />
+				<p:selectOneMenu filter="true"
+					value="#{cadastroGestaoModuloBean.gestaoModuloEdicao.modulo}"
+					id="modulo">
+					<f:selectItem noSelectionOption="true"
+						itemLabel="Selecione um módulo" />
+					<f:selectItems value="#{cadastroGestaoModuloBean.todosModulos}"
+						var="modulo" itemValue="#{modulo}" itemLabel="#{modulo.descricao}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Status" for="status" />
+				<p:selectOneMenu id="status"
+					value="#{cadastroGestaoModuloBean.gestaoModuloEdicao.status}">
+					<f:selectItems value="#{cadastroGestaoModuloBean.statusList}" />
+				</p:selectOneMenu>
+
+				<p:commandButton value="Salvar" id="salvar-button"
+					action="#{cadastroGestaoModuloBean.salvar}" process="frmCadastro"
+					update="msgs painel-dialog"/>
+			</h:panelGrid>
+
+	</h:form>
+</h:body>
+</html>

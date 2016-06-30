@@ -18,6 +18,11 @@
 		<class>br.com.prodama.model.cadastro.geral.Tela</class>
 		<class>br.com.prodama.model.cadastro.geral.TipoHora</class>
 		<class>br.com.prodama.model.cadastro.geral.Usuario</class>
+		<class>br.com.prodama.model.cadastro.produto.GestaoModulo</class>
+		<class>br.com.prodama.model.cadastro.produto.Modulo</class>
+		<class>br.com.prodama.model.cadastro.produto.ProcessoGestao</class>
+		<class>br.com.prodama.model.cadastro.produto.Produto</class>
+		
 		
 
 
