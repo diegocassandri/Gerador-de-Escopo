@@ -1,0 +1,259 @@
+<ui:composition template="/WEB-INF/template/Layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui">
+
+	<f:metadata>
+		<f:viewAction action="#{cadastroProcessoBean.consultar}" />
+	</f:metadata>
+
+	<ui:define name="titulo">Cadastro de Processo</ui:define>
+
+	<ui:define name="corpo">
+		<h1>Cadastro de Processo</h1>
+		<h:form id="frmCadastro">
+
+			<p:messages id="msgs" closable="true" />
+
+			<p:toolbar id="toolbar">
+				<f:facet name="left">
+					<p:commandButton value="Novo Processo" icon="ui-icon-document"
+						action="#{cadastroProcessoBean.prepararNovoCadastro}"
+						disabled="#{cadastroProcessoBean.gestaoSelecionado == null}"
+						process="@this" update="processo-dialog"
+						oncomplete="PF('edicaoProcessoDialog').show()">
+						<p:resetInput target="processo-dialog" />
+
+						<f:setPropertyActionListener
+							value="#{cadastroProcessoBean.gestaoSelecionado}"
+							target="#{cadastroProcessoBean.gestaoEdicao}" />
+
+					</p:commandButton>
+
+					<span class="ui-separator"> <span
+						class="ui-icon ui-icon-grip-dotted-vertical" />
+					</span>
+
+					<p:commandButton icon="ui-icon-search" title="Consultar Processos"
+						process="@this" update="consulta-dialog"
+						value="Consultar Processos"
+						action="#{cadastroProcessoBean.consultaProcessos}"
+						oncomplete="PF('consultaProcessoDialog').show()"
+						disabled="#{cadastroProcessoBean.gestaoSelecionado == null}">
+						<p:resetInput target="consulta-dialog" />
+
+						<f:setPropertyActionListener
+							value="#{cadastroProcessoBean.gestaoSelecionado}"
+							target="#{cadastroProcessoBean.gestaoEdicao}" />
+
+					</p:commandButton>
+				</f:facet>
+
+			</p:toolbar>
+
+			<p:dataTable value="#{cadastroProcessoBean.todosGestaoModulo}"
+				var="gestaoModulo"
+				emptyMessage="Nenhuma gestão de módulo cadastrada." rows="20"
+				paginator="true" paginatorPosition="bottom" style="margin-top: 10px"
+				id="gestao-table" rowsPerPageTemplate="10,20,50,100"
+				selection="#{cadastroProcessoBean.gestaoSelecionado}"
+				selectionMode="single" rowKey="#{gestaoModulo.codigo}"
+				filteredValue="#{cadastroProcessoBean.filtroGestao}"
+				widgetVar="tabelaGestao">
+				<f:facet name="header">
+					<p:outputLabel value="Listagem de Gestões" />
+				</f:facet>
+
+				<p:ajax event="rowSelect" update=":frmCadastro:toolbar" />
+				<p:ajax event="rowUnselect" update=":frmCadastro:toolbar" />
+
+				<p:column headerText="Produto"
+					sortBy="#{gestaoModulo.modulo.produto.descricao}"
+					filterBy="#{gestaoModulo.modulo.produto.descricao}"
+					filterMatchMode="contains">
+					<h:outputText value="#{gestaoModulo.modulo.produto.descricao}" />
+				</p:column>
+
+				<p:column headerText="Módulo"
+					sortBy="#{gestaoModulo.modulo.descricao}"
+					filterBy="#{gestaoModulo.modulo.descricao}"
+					filterMatchMode="contains">
+					<h:outputText value="#{gestaoModulo.modulo.descricao}" />
+				</p:column>
+
+				<p:column headerText="Gestão" filterBy="#{gestaoModulo.descricao}"
+					sortBy="#{gestaoModulo.descricao}">
+					<h:outputText value="#{gestaoModulo.descricao}" />
+				</p:column>
+
+				<p:column headerText="Status" sortBy="#{gestaoModulo.status}"
+					filterBy="#{gestaoModulo.status}" filterMatchMode="contains">
+					<h:outputText value="#{gestaoModulo.status}" />
+				</p:column>
+
+			</p:dataTable>
+
+			<p:dialog header="Cadastro Processo" widgetVar="edicaoProcessoDialog"
+				id="processo-dialog" resizable="false" modal="true"
+				closeOnEscape="true">
+
+				<p:messages id="msgs-dialog" />
+
+				<p:defaultCommand target="salvar-button" scope="processo-dialog" />
+
+				<h:panelGrid columns="2" id="painel-dialog">
+					<p:outputLabel value="Código" for="codigo" />
+					<p:inputText id="codigo" size="7" maxlength="10"
+						value="#{cadastroProcessoBean.processoEdicao.codigo}"
+						readonly="true" />
+
+					<p:outputLabel value="Descrição" for="descricao" />
+					<p:inputText id="descricao" size="30" maxlength="50"
+						value="#{cadastroProcessoBean.processoEdicao.descricao}" />
+
+
+					<p:outputLabel value="Código da Proprietária" for="prop" />
+					<p:inputText id="prop" size="15" maxlength="50"
+						value="#{cadastroProcessoBean.processoEdicao.codigoProprietaria}" />
+
+					<p:outputLabel value="Observação" />
+					<p:inputTextarea rows="5" cols="40" maxlength="1000"
+						value="#{cadastroProcessoBean.processoEdicao.observacao}"
+						autoResize="false" />
+
+
+					<p:outputLabel value="Gestão" for="gestao" />
+					<p:selectOneMenu filter="true"
+						value="#{cadastroProcessoBean.gestaoEdicao}" id="gestao"
+						disabled="true">
+						<f:selectItem noSelectionOption="true"
+							itemLabel="Selecione uma gestão" />
+						<f:selectItems value="#{cadastroProcessoBean.todosGestaoModulo}"
+							var="gestao" itemValue="#{gestao}"
+							itemLabel="#{gestao.descricao}" />
+					</p:selectOneMenu>
+
+					<p:outputLabel value="Status" for="status" />
+					<p:selectOneMenu id="status"
+						value="#{cadastroProcessoBean.processoEdicao.status}">
+						<f:selectItems value="#{cadastroProcessoBean.statusList}" />
+					</p:selectOneMenu>
+
+					<p:commandButton value="Salvar" id="salvar-button"
+						action="#{cadastroProcessoBean.salvar}" process="processo-dialog"
+						update="msgs-dialog painel-dialog"
+						oncomplete="if (!args.validationFailed) PF('edicaoProcessoDialog').hide()" />
+				</h:panelGrid>
+			</p:dialog>
+		</h:form>
+
+		<p:dialog header="Consulta de Processos"
+			widgetVar="consultaProcessoDialog" id="consulta-dialog"
+			resizable="false" modal="true" closeOnEscape="true">
+			<h:form id="frmProcesso">
+
+
+				<p:messages id="msgs-consulta" closable="true"/>
+
+				<p:dataTable value="#{cadastroProcessoBean.todosProcessos}"
+					var="processo" emptyMessage="Nenhum processo para essa gestão."
+					rows="50" paginator="true" paginatorPosition="bottom"
+					style="margin-top: 10px;max-width:800px" id="processo-table"
+					rowsPerPageTemplate="10,20,50,100" rowKey="#{processo.codigo}"
+					filteredValue="#{cadastroProcessoBean.filtroProcesso}"
+					widgetVar="tabelaProcesso" editable="true">
+
+					<f:facet name="header">
+							<div align="right">
+								<p:commandButton value="Adicionar Processo"
+									icon="ui-icon-circle-plus"
+									action="#{cadastroProcessoBean.novoProcesso}"
+									process="@this" update="processo-table"> 
+									<p:resetInput target="processo-table" />
+								</p:commandButton>
+							</div>
+						</f:facet>
+			
+					<p:ajax event="rowEdit" listener="#{cadastroProcessoBean.onRowEdit}" update=":frmProcesso:msgs-consulta" />
+					 <p:ajax event="rowEditCancel" listener="#{cadastroProcessoBean.onRowCancel}" update=":frmProcesso:msgs-consulta" />
+					<p:column headerText="Código Proprietária"
+						sortBy="#{processo.codigoProprietaria}"
+						filterBy="#{processo.codigoProprietaria}"
+						filterMatchMode="contains">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{processo.codigoProprietaria}"/>
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText id="prop" maxlength="50" style="width:93%"
+									value="#{processo.codigoProprietaria}" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column headerText="Descrição" sortBy="#{processo.descricao}"
+						filterBy="#{processo.descricao}" filterMatchMode="contains">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{processo.descricao}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText id="descrica" maxlength="50" style="width:93%"
+									value="#{processo.descricao}" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column headerText="Status" sortBy="#{processo.status}"
+						filterBy="#{processo.status}" filterMatchMode="contains">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{processo.status}" />
+							</f:facet>
+							<f:facet name="input">
+								<h:selectOneMenu id="status" style="width:100%"
+									value="#{processo.status}">
+									<f:selectItems value="#{cadastroProcessoBean.statusList}" />
+								</h:selectOneMenu>
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column headerText="Observação" sortBy="#{processo.observacao}"
+						filterBy="#{processo.observacao}" filterMatchMode="contains">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{processo.observacao}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText id="descricao" maxlength="1000" style="width:93%"
+									value="#{processo.observacao}" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column width="40">
+						<p:rowEditor />
+					</p:column>
+					<p:column width="30">
+						<p:commandButton icon="ui-icon-trash" title="Excluir"
+							process="@this" update="frmProcesso:processo-table"
+							action="#{cadastroProcessoBean.excluir}">
+
+							<f:setPropertyActionListener value="#{processo}"
+								target="#{cadastroProcessoBean.processoEdicao}" />
+							<p:confirm icon="ui-icon-alert" header="Confirmação de exclusão"
+								message="Tem certeza que deseja excluir o Processo de Gestão?" />
+
+						</p:commandButton>
+					</p:column>
+
+
+				</p:dataTable>
+			</h:form>
+		</p:dialog>
+
+	</ui:define>
+</ui:composition>

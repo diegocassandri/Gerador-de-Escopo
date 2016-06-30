@@ -45,7 +45,7 @@ public class GestaoModulo implements Serializable {
 	@JoinColumn(name = "modulo",nullable = false)
 	private Modulo modulo;
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "gestaoModulo")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "gestaoModulo")
 	private List<ProcessoGestao> listaProcessosGestoes;
 
 	public Long getCodigo() {

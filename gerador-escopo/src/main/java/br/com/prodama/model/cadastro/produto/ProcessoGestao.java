@@ -33,7 +33,7 @@ public class ProcessoGestao implements Serializable {
 	private String Observacao;
 
 	@Column(nullable = true)
-	private Status satus;
+	private Status status;
 	
 	@NotEmpty
 	@Column(nullable = false, length = 50)
@@ -67,12 +67,15 @@ public class ProcessoGestao implements Serializable {
 		Observacao = observacao;
 	}
 
-	public Status getSatus() {
-		return satus;
+
+	
+	
+	public Status getStatus() {
+		return status;
 	}
 
-	public void setSatus(Status satus) {
-		this.satus = satus;
+	public void setStatus(Status status) {
+		this.status = status;
 	}
 
 	public GestaoModulo getGestaoModulo() {
@@ -81,6 +84,16 @@ public class ProcessoGestao implements Serializable {
 
 	public void setGestaoModulo(GestaoModulo gestaoModulo) {
 		this.gestaoModulo = gestaoModulo;
+	}
+	
+	
+
+	public String getCodigoProprietaria() {
+		return codigoProprietaria;
+	}
+
+	public void setCodigoProprietaria(String codigoProprietaria) {
+		this.codigoProprietaria = codigoProprietaria;
 	}
 
 	@Override
