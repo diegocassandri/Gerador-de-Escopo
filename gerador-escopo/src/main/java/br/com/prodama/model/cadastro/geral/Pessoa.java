@@ -8,8 +8,11 @@ import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.br.CNPJ;
+import org.hibernate.validator.constraints.br.CPF;
 
 import br.com.prodama.enun.Status;
+import br.com.prodama.enun.TipoEmpresa;
 import br.com.prodama.enun.TipoPessoa;
 
 @Entity
@@ -28,6 +31,10 @@ public class Pessoa implements Serializable {
 	@NotEmpty
 	@Column(name = "TipoPessoa", nullable = false, length = 10)
 	private TipoPessoa tipoPessoa;
+	
+	@NotNull
+	@Column(name = "TipoEmpresa")
+	private TipoEmpresa tipoEmpresa;
 
 	@NotEmpty
 	@Column(name = "NomeRazaoSocial", nullable = false, length = 250)
@@ -37,9 +44,13 @@ public class Pessoa implements Serializable {
 	@Column(name = "ApelidoFantasia", length = 250)
 	private String apelidoFantasia;
 
-	@NotEmpty
-	@Column(name = "CpfCnpj", length = 18)
-	private String cpfCnpj;
+	@CNPJ
+	@Column(name = "Cnpj", length = 18)
+	private String cnpj;
+	
+	@CPF
+	@Column(name = "Cpf", length = 14)
+	private String cpf;
 
 	@NotEmpty
 	@Column(name = "RgIe", length = 18)
@@ -147,12 +158,22 @@ public class Pessoa implements Serializable {
 		this.apelidoFantasia = apelidoFantasia;
 	}
 
-	public String getCpfCnpj() {
-		return cpfCnpj;
+	
+
+	public String getCnpj() {
+		return cnpj;
 	}
 
-	public void setCpfCnpj(String cpfCnpj) {
-		this.cpfCnpj = cpfCnpj;
+	public void setCnpj(String cnpj) {
+		this.cnpj = cnpj;
+	}
+
+	public String getCpf() {
+		return cpf;
+	}
+
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
 	}
 
 	public String getRgIe() {
@@ -314,6 +335,14 @@ public class Pessoa implements Serializable {
 
 	public void setFilial(Filial filial) {
 		this.filial = filial;
+	}
+
+	public TipoEmpresa getTipoEmpresa() {
+		return tipoEmpresa;
+	}
+
+	public void setTipoEmpresa(TipoEmpresa tipoEmpresa) {
+		this.tipoEmpresa = tipoEmpresa;
 	}
 
 	@Override

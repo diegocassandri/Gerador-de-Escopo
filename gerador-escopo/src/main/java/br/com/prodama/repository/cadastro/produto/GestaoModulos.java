@@ -7,8 +7,6 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
-import br.com.prodama.model.cadastro.geral.Grupo;
-import br.com.prodama.model.cadastro.geral.Usuario;
 import br.com.prodama.model.cadastro.produto.GestaoModulo;
 import br.com.prodama.model.cadastro.produto.Modulo;
 
@@ -44,7 +42,7 @@ public class GestaoModulos implements Serializable {
 	@SuppressWarnings("unchecked")
 	public List<GestaoModulo> gestaoAssociadas(Modulo modulo) {
 		
-		Query query = manager.createQuery("Select u From Usuario u Where  exists (Select g from u.grupos g Where g = :grupo)", Modulo.class);
+		Query query = manager.createQuery("Select u From GestaoModulo u Where  exists (Select g from u.modulo g Where g = :modulo)", GestaoModulo.class);
 		query.setParameter("modulo", modulo);
 		return query.getResultList();
 	}

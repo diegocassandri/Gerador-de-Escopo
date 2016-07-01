@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<title>Prodama - Gerador de Escopo - Login</title>
+	<h:outputStylesheet library="prodama" name="estilo.css" />
+	<link rel="shortcut icon" type="image/x-ico"  href="resources/prodama/favicon.ico" />
+</h:head>
+
+<h:body>
+
+	<div id="login-dialog">
+		<h1> Gerador de Escopo</h1>
+
+		<h:form id="frm">
+			<p:messages autoUpdate="false" closable="true"/>
+
+			<h:panelGrid columns="2" styleClass="grid-login">
+				<p:outputLabel value="Usuário" for="usuario" />
+				<p:inputText id="usuario" size="20" value="#{loginBean.nomeUsuario}" />
+
+				<p:outputLabel value="Senha" for="senha" />
+				<p:password id="senha" size="20" value="#{loginBean.senha}" />
+
+				<p:outputLabel />
+				<p:commandButton value="Acessar" action="#{loginBean.login}" />
+			</h:panelGrid>
+		</h:form>
+
+		<p:dialog id="senhaDialog" style="margin-top:10px" modal="true" closable="false"
+		         widgetVar="senha-dialog" resizable="false">
+			<p:panel header="Alterar Senha">
+				<h:form id="frmsenha">
+					<p:messages id="msgs-dialog" />
+
+					<p:defaultCommand target="salvar-button" />
+
+					<h:panelGrid columns="2" id="painel-dialog">
+						<p:outputLabel value="Senha" for="senh" />
+						<p:password id="senh" feedback="true" inline="true"
+							redisplay="true" promptLabel="Digite uma senha segura"
+							required="true" goodLabel="Boa" weakLabel="Razoável"
+							strongLabel="Excelente" value="#{loginBean.senha}" />
+
+						<p:outputLabel value="Confirmar Senha" for="senha2" />
+						<p:password id="senha2" inline="true" redisplay="true"
+							promptLabel="Digite uma senha segura" required="true"
+							value="#{loginBean.senha2}" />
+
+						<p:commandButton value="Salvar" id="salvar-button"
+							update="msgs-dialog" process="@form" action="#{loginBean.alterarSenha}"  />
+					</h:panelGrid>
+				</h:form>
+			</p:panel>
+		</p:dialog>
+	</div>
+</h:body>
+
+</html>

@@ -1,62 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
 	xmlns:p="http://primefaces.org/ui">
-
 <h:head>
-	<title>Prodama - Gerador de Escopo - Login</title>
-	<h:outputStylesheet library="prodama" name="estilo.css" />
-	<link rel="shortcut icon" type="image/x-ico"  href="resources/prodama/favicon.ico" />
+
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Prodama - Gerador de Escopo</title>
+	<!-- Serve para o javaScript FUNCIONAR! -->
+	<h:outputScript>$ = jQuery;</h:outputScript>
+
+	<!-- CSS -->
+	<link rel="stylesheet"
+		href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500" />
+	<h:outputStylesheet library="assets"
+		name="bootstrap/css/bootstrap.min.css" />
+	<h:outputStylesheet library="assets"
+		name="font-awesome/css/font-awesome.min.css" />
+	<h:outputStylesheet library="assets" name="css/form-elements.css" />
+	<h:outputStylesheet library="assets" name="css/style.css" />
+	<link rel="shortcut icon" type="image/x-ico"
+		href="resources/prodama/favicon.ico" />
+
+	<link rel="apple-touch-icon-precomposed" sizes="144x144"
+		href="assets/ico/apple-touch-icon-144-precomposed.png" />
+	<link rel="apple-touch-icon-precomposed" sizes="114x114"
+		href="assets/ico/apple-touch-icon-114-precomposed.png" />
+	<link rel="apple-touch-icon-precomposed" sizes="72x72"
+		href="assets/ico/apple-touch-icon-72-precomposed.png" />
+	<link rel="apple-touch-icon-precomposed"
+		href="assets/ico/apple-touch-icon-57-precomposed.png" />
+
+
 </h:head>
 
 <h:body>
 
-	<div id="login-dialog">
-		<h1> Gerador de Escopo</h1>
+	<!-- Top content -->
+	<div class="top-content">
 
-		<h:form id="frm">
-			<p:messages autoUpdate="true" closable="true"/>
+		<div class="inner-bg">
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-4 col-sm-offset-4 form-box">
+						<div class="form-top">
+							<div class="form-top-left">
+								<h3>Gerador de Escopo - Prodama</h3>
+								<p>Realize a autenticação:</p>
+							</div>
+							<div class="form-top-right">
+								<i class="fa fa-lock"></i>
+							</div>
+						</div>
+						<div class="form-bottom">
+							<h:form id="frm" role="form" class="login-form">
+								<p:messages closable="true" autoUpdate="true"/>
+								<div class="form-group">
+									<label class="sr-only" for="form-username">Usuário</label>
+									<p:inputText label="Usuário"
+										styleClass="form-username form-control"
+										placeholder="Usuário..." id="usuario"
+										value="#{loginBean.nomeUsuario}" />
+								</div>
+								<div class="form-group">
+									<label class="sr-only" for="form-password">senha</label>
+									<p:password placeholder="Senha..." label="Entrar!"
+										styleClass="form-password form-control" id="senha"
+										value="#{loginBean.senha}" />
+								</div>
+								<p:commandButton value="Entrar!" styleClass="btn"
+									action="#{loginBean.login}" />
+							</h:form>
+						</div>
+					</div>
+				</div>
+			</div>
+			<p:dialog id="senhaDialog" style="margin-top:10px" modal="true"
+				closable="false" widgetVar="senha-dialog" resizable="false">
+				<p:panel header="Alterar Senha">
+					<h:form id="frmsenha">
+						<p:messages id="msgs-dialog" autoUpdate="true"/>
 
-			<h:panelGrid columns="2" styleClass="grid-login">
-				<p:outputLabel value="Usuário" for="usuario" />
-				<p:inputText id="usuario" size="20" value="#{loginBean.nomeUsuario}" />
+						<p:defaultCommand target="salvar-button" />
 
-				<p:outputLabel value="Senha" for="senha" />
-				<p:password id="senha" size="20" value="#{loginBean.senha}" />
+						<h:panelGrid columns="2" id="painel-dialog">
+							<p:outputLabel value="Senha" for="senh" />
+							<p:password id="senh" feedback="true" inline="true"
+								redisplay="true" promptLabel="Digite uma senha segura"
+								required="true" goodLabel="Boa" weakLabel="Razoável"
+								strongLabel="Excelente" value="#{loginBean.senha}"
+								styleClass="form-password form-control" />
 
-				<p:outputLabel />
-				<p:commandButton value="Acessar" action="#{loginBean.login}" />
-			</h:panelGrid>
-		</h:form>
+							<p:outputLabel value="Confirmar Senha" for="senha2" />
+							<p:password id="senha2" inline="true" redisplay="true"
+								promptLabel="Digite uma senha segura" required="true"
+								value="#{loginBean.senha2}"
+								styleClass="form-password form-control" />
 
-		<p:dialog id="senhaDialog" style="margin-top:10px" modal="true" closable="false"
-		         widgetVar="senha-dialog" resizable="false">
-			<p:panel header="Alterar Senha">
-				<h:form id="frmsenha">
-					<p:messages id="msgs-dialog" />
+							<p:commandButton value="Salvar" id="salvar-button"
+								update="msgs-dialog" process="@form"
+								action="#{loginBean.alterarSenha}" />
+						</h:panelGrid>
+					</h:form>
+				</p:panel>
+			</p:dialog>
+		</div>
 
-					<p:defaultCommand target="salvar-button" />
-
-					<h:panelGrid columns="2" id="painel-dialog">
-						<p:outputLabel value="Senha" for="senh" />
-						<p:password id="senh" feedback="true" inline="true"
-							redisplay="true" promptLabel="Digite uma senha segura"
-							required="true" goodLabel="Boa" weakLabel="Razoável"
-							strongLabel="Excelente" value="#{loginBean.senha}" />
-
-						<p:outputLabel value="Confirmar Senha" for="senha2" />
-						<p:password id="senha2" inline="true" redisplay="true"
-							promptLabel="Digite uma senha segura" required="true"
-							value="#{loginBean.senha2}" />
-
-						<p:commandButton value="Salvar" id="salvar-button"
-							action="#{loginBean.alterarSenha}" process="@form"
-							update="msgs-dialog painel-dialog" onsuccess="/Home.xhtml" />
-					</h:panelGrid>
-				</h:form>
-			</p:panel>
-		</p:dialog>
 	</div>
+
 </h:body>
 
 </html>

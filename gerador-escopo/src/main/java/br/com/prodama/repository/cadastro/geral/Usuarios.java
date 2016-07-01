@@ -108,21 +108,6 @@ public class Usuarios implements Serializable {
 		}
 	}
 
-	/*public Filial retPriFilEmp(Usuario usuario) {
-		Filial filialEncontrada = null;
-		if (!usuario.getAbrangenciaFiliais().isEmpty()) {
-			for (Filial filial : usuario.getAbrangenciaFiliais()) {
-				System.out.println("!!!!!!!!!!!!!!!!!!!!!!!! " + filial.getRazaoSocial());
-				if (filial.getEmpresa() == usuario.getEmpresaSelecionada()) {
-					filialEncontrada = filial;
-					break;
-				}
-			}
-			return filialEncontrada;
-		} else {
-			return null;
-		}
-	}*/
 
 	@SuppressWarnings("unchecked")
 	public List<Grupo> gruposNaoAssociados(Usuario usuario) {

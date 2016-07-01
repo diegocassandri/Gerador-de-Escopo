@@ -106,7 +106,6 @@ public class CadastroProcessoBean implements Serializable {
 	}
 
 	public void onRowCancel(RowEditEvent event) {
-		/*processoEdicao = (ProcessoGestao) event.getObject();*/
 		if(processoEdicao.getCodigo() == null) {
 			todosProcessos.remove(processoEdicao);
 			RequestContext.getCurrentInstance().update(Arrays.asList("frmProcesso:msgs-consulta", "frmProcesso:processo-table"));
@@ -121,11 +120,6 @@ public class CadastroProcessoBean implements Serializable {
 			processoSelecionado = null;
 			consultar();
 			todosGestaoModulo = gestaoModulos.todos();
-			/*
-			 * gestaoEdicao =
-			 * gestaoModulos.pesquisaPorId(gestaoEdicao.getCodigo());
-			 * todosProcessos = gestaoEdicao.getListaProcessosGestoes();
-			 */
 			messages.info("Processo excluído com sucesso!");
 			RequestContext.getCurrentInstance()
 					.update(Arrays.asList("frmProcesso:msgs-consulta", "frmProcesso:processo-table"));

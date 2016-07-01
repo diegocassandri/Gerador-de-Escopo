@@ -177,7 +177,8 @@
 						</f:facet>
 			
 					<p:ajax event="rowEdit" listener="#{cadastroProcessoBean.onRowEdit}" update=":frmProcesso:msgs-consulta" />
-					 <p:ajax event="rowEditCancel" listener="#{cadastroProcessoBean.onRowCancel}" update=":frmProcesso:msgs-consulta" />
+					<p:ajax event="rowEditCancel" listener="#{cadastroProcessoBean.onRowCancel}" update=":frmProcesso:msgs-consulta" />
+					
 					<p:column headerText="Código Proprietária"
 						sortBy="#{processo.codigoProprietaria}"
 						filterBy="#{processo.codigoProprietaria}"

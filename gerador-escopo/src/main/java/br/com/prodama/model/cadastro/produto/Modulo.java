@@ -45,6 +45,7 @@ public class Modulo implements Serializable {
 	@JoinColumn(name = "produto")
 	private Produto produto;
 	
+	@SuppressWarnings("deprecation")
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "modulo",cascade=CascadeType.ALL )
 	@Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
 	private List<GestaoModulo> listaGestoesModulo;

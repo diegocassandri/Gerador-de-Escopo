@@ -77,12 +77,10 @@ public class CadastroModuloBean implements Serializable {
 			todosProdutos = produtos.todos();
 			todosModulos = modulos.todos();
 			if ((moduloEdicao.getCodigo() != null) && (moduloEdicao.getCodigo() != 0)) {
-				todosGestaoModulo = gestaoModulos.todos();
 				this.moduloEdicao = modulos.pesquisaPorId(moduloEdicao.getCodigo());
-				todosGestaoModulo = moduloEdicao.getListaGestoesModulo();
+				todosGestaoModulo =  gestaoModulos.gestaoAssociadas(moduloEdicao);
 			}
 			messages.info("Modulo salvo com sucesso!");
-			//*RequestContext.getCurrentInstance().update(Arrays.asList("frmCadastro:msgs", "frmCadastro:modulo-table"));*/
 			moduloEdicao = modulos.pesquisaPorNomeCodigo(moduloEdicao);
 			RequestContext.getCurrentInstance().update(Arrays.asList("frmCadastro:modulo-table"));
 			
@@ -102,9 +100,8 @@ public class CadastroModuloBean implements Serializable {
 			moduloEdicao.getListaGestoesModulo().add(gestaoModuloEdicao);
 			this.cadastroModulo.salvar(moduloEdicao);
 			todosModulos = modulos.todos();
-			todosGestaoModulo = gestaoModulos.todos();
 			this.moduloEdicao = modulos.pesquisaModulo(moduloEdicao);
-			todosGestaoModulo = moduloEdicao.getListaGestoesModulo();
+			todosGestaoModulo =  gestaoModulos.gestaoAssociadas(moduloEdicao);
 			RequestContext.getCurrentInstance().update(Arrays.asList("frmCadastro:msgs", "frmCadastro:painel-dialog"));
 		} catch (Exception e) {
 			FacesMessage mensagem = new FacesMessage(e.getMessage());
@@ -120,9 +117,8 @@ public class CadastroModuloBean implements Serializable {
 			gestaoModuloSelecionado = null;
 			this.cadastroModulo.salvar(moduloEdicao);
 			todosModulos = modulos.todos();
-			todosGestaoModulo = gestaoModulos.todos();
 			moduloEdicao = modulos.pesquisaPorId(moduloEdicao.getCodigo());
-			todosGestaoModulo = moduloEdicao.getListaGestoesModulo();
+			todosGestaoModulo =  gestaoModulos.gestaoAssociadas(moduloEdicao);
 			RequestContext.getCurrentInstance().update(Arrays.asList("frmCadastro:msgs", "frmCadastro:painel-dialog"));
 		} catch (Exception e) {
 			FacesMessage mensagem = new FacesMessage(e.getMessage());
@@ -161,7 +157,7 @@ public class CadastroModuloBean implements Serializable {
 	public void setModuloEdicao(Modulo moduloEdicao) {
 		if ((moduloEdicao.getCodigo() != null) && (moduloEdicao.getCodigo() != 0)) {
 			moduloEdicao = modulos.pesquisaPorId(moduloEdicao.getCodigo());
-			todosGestaoModulo = moduloEdicao.getListaGestoesModulo();
+			todosGestaoModulo =  gestaoModulos.gestaoAssociadas(moduloEdicao);
 		}
 
 		this.moduloEdicao = moduloEdicao;
