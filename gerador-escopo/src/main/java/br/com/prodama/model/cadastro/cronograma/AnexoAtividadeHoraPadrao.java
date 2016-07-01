@@ -1,49 +1,48 @@
-package br.com.prodama.model.cadastro.geral;
+package br.com.prodama.model.cadastro.cronograma;
 
 import java.io.Serializable;
-import java.util.List;
 
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
-import br.com.prodama.model.cadastro.cronograma.AtividadeHoraPadrao;
 
 @Entity
-@Table(name = "nivelEquipe")
-public class NivelEquipe implements Serializable{
-
-
+@Table(name="AnexoAtividadeHoraPadrao")
+public class AnexoAtividadeHoraPadrao implements Serializable{
+	
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="gen_nivel_equipe") 
-    @SequenceGenerator(name="gen_nivel_equipe", sequenceName = "seq_nivel_equipe", initialValue=1, allocationSize=1)
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="gen_anexoAtividadeHoraPadrao") 
+    @SequenceGenerator(name="gen_anexoAtividadeHoraPadrao", sequenceName = "seq_anexoAtividadeHoraPadrao", initialValue=1, allocationSize=1)
+	@Column(name = "Codigo", nullable = false)
 	private Long codigo;
-	
+
 	@NotEmpty
-	@Column(nullable = false, length = 50)
+	@Basic(optional = false)
+	@Column(name = "Descricao", nullable = false, length = 250)
 	private String descricao;
 	
-	@Column(nullable=true,length=1000)
-	private String observacao;
-
-	@ManyToOne
-	@JoinColumn(name = "equipe")
-	private Equipe equipe;
+	@NotNull
+	@Lob
+	@Column(nullable = false)
+	private byte[] arquivo;
 	
-	@OneToMany(fetch = FetchType.LAZY,mappedBy = "nivelEquipe")
-	private List<AtividadeHoraPadrao> listaAtidadeHoraPadrao;
+	@ManyToOne
+	@JoinColumn(name = "DocAtividadeHoraPadrao")
+	private DocAtividadeHoraPadrao docAtividadeHoraPadrao;
 	
 	public Long getCodigo() {
 		return codigo;
@@ -60,23 +59,22 @@ public class NivelEquipe implements Serializable{
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
+
+   	public byte[] getArquivo() {
+		return arquivo;
+	}
+
+	public void setArquivo(byte[] arquivo) {
+		this.arquivo = arquivo;
+	}
+
 	
-
-	public String getObservacao() {
-		return observacao;
+	public DocAtividadeHoraPadrao getDocAtividadeHoraPadrao() {
+		return docAtividadeHoraPadrao;
 	}
 
-	public void setObservacao(String observacao) {
-		this.observacao = observacao;
-	}
-
-	
-	public Equipe getEquipe() {
-		return equipe;
-	}
-
-	public void setEquipe(Equipe equipe) {
-		this.equipe = equipe;
+	public void setDocAtividadeHoraPadrao(DocAtividadeHoraPadrao docAtividadeHoraPadrao) {
+		this.docAtividadeHoraPadrao = docAtividadeHoraPadrao;
 	}
 
 	@Override
@@ -95,7 +93,7 @@ public class NivelEquipe implements Serializable{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		NivelEquipe other = (NivelEquipe) obj;
+		AnexoAtividadeHoraPadrao other = (AnexoAtividadeHoraPadrao) obj;
 		if (codigo == null) {
 			if (other.codigo != null)
 				return false;
@@ -103,6 +101,13 @@ public class NivelEquipe implements Serializable{
 			return false;
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		return  descricao;
+	}
+	
+	
 	
 	
 }

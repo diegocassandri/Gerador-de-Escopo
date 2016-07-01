@@ -15,6 +15,8 @@ import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
+import br.com.prodama.model.cadastro.cronograma.AtividadeHoraPadrao;
+
 @Entity
 @Table(name = "equipe")
 public class Equipe implements Serializable{
@@ -37,6 +39,9 @@ public class Equipe implements Serializable{
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "equipe")
 	private List<NivelEquipe> listaNiveisEquipe;
 	
+	@OneToMany(fetch = FetchType.LAZY,mappedBy = "equipe")
+	private List<AtividadeHoraPadrao> listaAtidadeHoraPadrao;
+	
 	public Long getCodigo() {
 		return codigo;
 	}
@@ -44,9 +49,6 @@ public class Equipe implements Serializable{
 	public void setCodigo(Long codigo) {
 		this.codigo = codigo;
 	}
-
-	
-	
 
 	public String getDescricao() {
 		return descricao;
@@ -70,6 +72,15 @@ public class Equipe implements Serializable{
 
 	public void setListaNiveisEquipe(List<NivelEquipe> listaNiveisEquipe) {
 		this.listaNiveisEquipe = listaNiveisEquipe;
+	}
+
+	
+	public List<AtividadeHoraPadrao> getListaAtidadeHoraPadrao() {
+		return listaAtidadeHoraPadrao;
+	}
+
+	public void setListaAtidadeHoraPadrao(List<AtividadeHoraPadrao> listaAtidadeHoraPadrao) {
+		this.listaAtidadeHoraPadrao = listaAtidadeHoraPadrao;
 	}
 
 	@Override

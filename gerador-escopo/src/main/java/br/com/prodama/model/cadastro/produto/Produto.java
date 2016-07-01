@@ -14,9 +14,10 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import org.hibernate.validator.constraints.NotEmpty;
 import br.com.prodama.enun.Status;
+import br.com.prodama.model.cadastro.cronograma.CronogramaPadrao;
 
 @Entity
-@Table(name = "produto")
+@Table(name = "Produto")
 public class Produto implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -38,6 +39,9 @@ public class Produto implements Serializable {
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "produto")
 	private List<Modulo> listaModulos;
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "produto")
+	private List<CronogramaPadrao> listaCronoramasPadroes;
 	
 	public Long getCodigo() {
 		return codigo;
@@ -79,6 +83,22 @@ public class Produto implements Serializable {
 
 	public void setListaModulo(List<Modulo> listaModulo) {
 		this.listaModulos = listaModulo;
+	}
+
+	public List<Modulo> getListaModulos() {
+		return listaModulos;
+	}
+
+	public void setListaModulos(List<Modulo> listaModulos) {
+		this.listaModulos = listaModulos;
+	}
+
+	public List<CronogramaPadrao> getListaCronoramasPadroes() {
+		return listaCronoramasPadroes;
+	}
+
+	public void setListaCronoramasPadroes(List<CronogramaPadrao> listaCronoramasPadroes) {
+		this.listaCronoramasPadroes = listaCronoramasPadroes;
 	}
 
 	@Override
