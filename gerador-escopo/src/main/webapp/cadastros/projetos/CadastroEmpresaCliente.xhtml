@@ -15,7 +15,7 @@
 		<h1>Cadastro Empresa - Cliente</h1>
 		<h:form id="frmCadastro">
 
-			<p:messages id="msgs" closable="true"/>
+			<p:messages id="msgs" closable="true" autoUpdate="true"/>
 
 			<p:toolbar id="toolbar">
 				<f:facet name="left">
@@ -62,24 +62,37 @@
 				selectionMode="single" rowKey="#{empresa.codigo}"
 				filteredValue="#{cadastroEmpresaClienteBean.filtroEmpresas}"
 				widgetVar="tabelaEmpresa">
+				
+				<f:facet name="header">
+					<div align="left">
+						<p:outputPanel>
+							<h:outputText value="Filtro:" />
+							<p:inputText id="globalFilter"
+								onkeyup="PF('tabelaEmpresa').filter()" style="width:150px" />
+						</p:outputPanel>
+					</div>
+				</f:facet>
 
 				<p:ajax event="rowSelect" update=":frmCadastro:toolbar" />
 				<p:ajax event="rowUnselect" update=":frmCadastro:toolbar" />
 
 				<p:column headerText="Código" sortBy="#{empresa.codigo}"
-					filterBy="#{empresa.codigo}" filterMatchMode="contains">
+					filterBy="#{empresa.codigo}" filterMatchMode="contains" filterable="false">
 					<h:outputText value="#{empresa.codigo}" />
 				</p:column>
+				
 				<p:column headerText="Razão Social" sortBy="#{empresa.razaoSocial}"
-					filterBy="#{empresa.razaoSocial}" filterMatchMode="contains">
+					filterBy="#{empresa.razaoSocial}" filterMatchMode="contains" filterable="false">
 					<h:outputText value="#{empresa.razaoSocial}" />
 				</p:column>
+				
 				<p:column headerText="Fantasia" sortBy="#{empresa.fantasia}"
-					filterBy="#{empresa.fantasia}" filterMatchMode="contains">
+					filterBy="#{empresa.fantasia}" filterMatchMode="contains" filterable="false">
 					<h:outputText value="#{empresa.fantasia}" />
 				</p:column>
+				
 				<p:column headerText="Cidade" sortBy="#{empresa.cidade}"
-					filterBy="#{empresa.cidade}" filterMatchMode="contains">
+					filterBy="#{empresa.cidade}" filterMatchMode="contains" filterable="false">
 					<h:outputText
 						value="#{empresa.cidade.nome} - #{empresa.estado.sigla} " />
 				</p:column>
@@ -89,7 +102,7 @@
 				id="empresa-dialog" resizable="false" modal="true"
 				closeOnEscape="true">
 
-				<p:messages id="msgs-dialog" />
+				<p:messages id="msgs-dialog" autoUpdate="true" closable="true"/>
 
 				<p:defaultCommand target="salvar-button" scope="empresa-dialog" />
 				<p:outputPanel id="pnlPessoa">
@@ -186,8 +199,7 @@
 
 						<p:commandButton value="Salvar" id="salvar-button"
 							action="#{cadastroEmpresaClienteBean.salvar}"
-							process="empresa-dialog" update="msgs-dialog painel-dialog"
-							oncomplete="if (!args.validationFailed) PF('edicaoEmpresaDialog').hide()" />
+							process="empresa-dialog" update="msgs-dialog painel-dialog" />
 					</h:panelGrid>
 				</p:outputPanel>
 			</p:dialog>

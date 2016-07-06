@@ -10,7 +10,7 @@
 	<meta charset="utf-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	<title>Prodama - Gerador de Escopo</title>
+	<title>Prodama - Gerador de Proposta</title>
 	<!-- Serve para o javaScript FUNCIONAR! -->
 	<h:outputScript>$ = jQuery;</h:outputScript>
 
@@ -46,10 +46,13 @@
 		<div class="inner-bg">
 			<div class="container">
 				<div class="row">
+				
 					<div class="col-sm-4 col-sm-offset-4 form-box">
+					
 						<div class="form-top">
+							<h:graphicImage library="prodama" name="logoProdama.png" />
 							<div class="form-top-left">
-								<h3>Gerador de Escopo - Prodama</h3>
+								<h3>Gerador de Proposta</h3>
 								<p>Realize a autenticação:</p>
 							</div>
 							<div class="form-top-right">
@@ -72,7 +75,7 @@
 										styleClass="form-password form-control" id="senha"
 										value="#{loginBean.senha}" />
 								</div>
-								<p:commandButton value="Entrar!" styleClass="btn"
+								<p:commandButton value="Entrar" styleClass="btn"
 									action="#{loginBean.login}" />
 							</h:form>
 						</div>

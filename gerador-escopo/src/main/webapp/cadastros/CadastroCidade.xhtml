@@ -15,7 +15,7 @@
 		<h1>Cadastro Cidade</h1>
 		<h:form id="frmCadastro">
 
-			<p:messages id="msgs"  closable="true"/>
+			<p:messages id="msgs" closable="true" autoUpdate="true"/>
 
 			<p:toolbar id="toolbar">
 				<f:facet name="left">
@@ -61,22 +61,31 @@
 				selection="#{cadastroCidadeBean.cidadeSelecionado}"
 				selectionMode="single" rowKey="#{cidade.codigo}"
 				filteredValue="#{cadastroCidadeBean.filtroCidades}"
-				widgetVar="tabelacidade">
+				widgetVar="tabelacidade" reflow="true">
+
+				<f:facet name="header">
+					<div align="left">
+						<p:outputPanel>
+							<h:outputText value="Filtro:" />
+							<p:inputText id="globalFilter"
+								onkeyup="PF('tabelacidade').filter()" style="width:150px" />
+						</p:outputPanel>
+					</div>
+				</f:facet>
+
+
 
 				<p:ajax event="rowSelect" update=":frmCadastro:toolbar" />
 				<p:ajax event="rowUnselect" update=":frmCadastro:toolbar" />
 
-				<p:column headerText="Código" sortBy="#{cidade.codigo}"
-					filterBy="#{cidade.codigo}" filterMatchMode="contains">
+				<p:column headerText="Código" sortBy="#{cidade.codigo}" filterMatchMode="contains" filterBy="#{cidade.codigo}" filterable="false">
 					<h:outputText value="#{cidade.codigo}" />
 				</p:column>
-				<p:column headerText="Nome" sortBy="#{cidade.nome}"
-					filterBy="#{cidade.nome}" filterMatchMode="contains">
+				<p:column headerText="Nome" sortBy="#{cidade.nome}" filterMatchMode="contains" filterBy="#{cidade.nome}" filterable="false">
 					<h:outputText value="#{cidade.nome}" />
 				</p:column>
 
-				<p:column headerText="Estado" filterBy="#{cidade.estado.nome}"
-					sortBy="#{cidade.estado.nome}">
+				<p:column headerText="Estado" sortBy="#{cidade.estado.nome}" filterMatchMode="contains" filterBy="#{cidade.estado.nome}" filterable="false">
 					<h:outputText value="#{cidade.estado.nome}" />
 					<h:outputText value=" - " />
 					<h:outputText value="#{cidade.estado.sigla}" />
@@ -87,7 +96,7 @@
 				id="cidade-dialog" resizable="false" modal="true"
 				closeOnEscape="true">
 
-				<p:messages id="msgs-dialog" />
+				<p:messages id="msgs-dialog" autoUpdate="true"/>
 
 				<p:defaultCommand target="salvar-button" scope="cidade-dialog" />
 
@@ -101,20 +110,20 @@
 						value="#{cadastroCidadeBean.cidadeEdicao.nome}" />
 
 					<p:outputLabel value="Estado:" for="estado" />
-					<p:selectOneMenu filter="true" value="#{cadastroCidadeBean.cidadeEdicao.estado}"
+					<p:selectOneMenu filter="true"
+						value="#{cadastroCidadeBean.cidadeEdicao.estado}"
 						converter="omnifaces.SelectItemsConverter" required="true"
 						requiredMessage="O Campo Estado é obrigatório" id="estado">
 						<f:selectItem noSelectionOption="true"
 							itemLabel="Selecione um estado" />
-						<f:selectItems value="#{cadastroCidadeBean.todosEstados}" var="estado"
-							itemValue="#{estado}"
+						<f:selectItems value="#{cadastroCidadeBean.todosEstados}"
+							var="estado" itemValue="#{estado}"
 							itemLabel="#{estado.nome} - #{estado.sigla}" />
 					</p:selectOneMenu>
 
 					<p:commandButton value="Salvar" id="salvar-button"
-						action="#{cadastroCidadeBean.salvar}" 
-						update="msgs-dialog painel-dialog"
-						oncomplete="if (!args.validationFailed) PF('edicaoCidadeDialog').hide()" />
+						action="#{cadastroCidadeBean.salvar}"
+						update="msgs-dialog painel-dialog" />
 				</h:panelGrid>
 			</p:dialog>
 

@@ -62,27 +62,37 @@
 				selectionMode="single" rowKey="#{modulo.codigo}"
 				filteredValue="#{cadastroModuloBean.filtroModulos}"
 				widgetVar="tabelaModulo">
+				
+				<f:facet name="header">
+					<div align="left">
+						<p:outputPanel>
+							<h:outputText value="Filtro:" />
+							<p:inputText id="globalFilter"
+								onkeyup="PF('tabelaModulo').filter()" style="width:150px" />
+						</p:outputPanel>
+					</div>
+				</f:facet>
 
 				<p:ajax event="rowSelect" update=":frmCadastro:toolbar" />
 				<p:ajax event="rowUnselect" update=":frmCadastro:toolbar" />
 
 				<p:column headerText="Código" sortBy="#{modulo.codigo}"
-					filterBy="#{modulo.codigo}" filterMatchMode="contains">
+					filterBy="#{modulo.codigo}" filterMatchMode="contains" filterable="false">
 					<h:outputText value="#{modulo.codigo}" />
 				</p:column>
 				<p:column headerText="Descrição" sortBy="#{modulo.descricao}"
-					filterBy="#{modulo.descricao}" filterMatchMode="contains">
+					filterBy="#{modulo.descricao}" filterMatchMode="contains" filterable="false">
 					<h:outputText value="#{modulo.descricao}" />
 				</p:column>
 
 				<p:column headerText="Produto"
 					filterBy="#{modulo.produto.descricao}"
-					sortBy="#{modulo.produto.descricao}">
+					sortBy="#{modulo.produto.descricao}" filterable="false">
 					<h:outputText value="#{modulo.produto.descricao}" />
 				</p:column>
 
 				<p:column headerText="Status" sortBy="#{modulo.status}"
-					filterBy="#{modulo.status}" filterMatchMode="contains">
+					filterBy="#{modulo.status}" filterMatchMode="contains" filterable="false">
 					<h:outputText value="#{modulo.status}" />
 				</p:column>
 
@@ -201,7 +211,7 @@
 		<p:dialog id="gestao-dialog" widgetVar="edicaoGestaoDialog"
 			modal="true" resizable="false" header="Cadastro da Gestão">
 			<h:form id="frmCadastroGestao">
-				<p:messages id="msgs" closable="true" />
+				<p:messages id="msgs" closable="true" autoUpdate="true"/>
 				<p:defaultCommand target="salvar-button" scope="gestao-dialog" />
 
 				<h:panelGrid columns="2" id="painel-dialog">

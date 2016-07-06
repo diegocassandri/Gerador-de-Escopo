@@ -15,7 +15,7 @@
 		<h1>Cadastro Faixa Colaborador</h1>
 		<h:form id="frmCadastro">
 
-			<p:messages id="msgs" closable="true"/>
+			<p:messages id="msgs" closable="true" autoUpdate="true"/>
 
 			<p:toolbar id="toolbar">
 				<f:facet name="left">
@@ -62,31 +62,42 @@
 				selectionMode="single" rowKey="#{faixa.codigo}"
 				filteredValue="#{cadastroFaixaColaboradorBean.filtroFaixas}"
 				widgetVar="tabelaFaixa">
+								
+				<f:facet name="header">
+					<div align="left">
+						<p:outputPanel>
+							<h:outputText value="Filtro:" />
+							<p:inputText id="globalFilter"
+								onkeyup="PF('tabelaFaixa').filter()" style="width:150px" />
+						</p:outputPanel>
+					</div>
+				</f:facet>
 
 				<p:ajax event="rowSelect" update=":frmCadastro:toolbar" />
 				<p:ajax event="rowUnselect" update=":frmCadastro:toolbar" />
 
 				<p:column headerText="Código" sortBy="#{faixa.codigo}"
-					filterBy="#{faixa.codigo}" filterMatchMode="contains">
+					filterBy="#{faixa.codigo}" filterMatchMode="contains" filterable="false">
 					<h:outputText value="#{faixa.codigo}" />
 				</p:column>	
+				
 				<p:column headerText="Descrição" sortBy="#{faixa.descricao}"
-					filterBy="#{faixa.descricao}" filterMatchMode="contains">
+					filterBy="#{faixa.descricao}" filterMatchMode="contains" filterable="false">
 					<h:outputText value="#{faixa.descricao}" />
 				</p:column>
 
 				<p:column headerText="Indice" sortBy="#{faixa.indice}"
-					filterBy="#{faixa.indice}" filterMatchMode="contains">
+					filterBy="#{faixa.indice}" filterMatchMode="contains" filterable="false">
 					<h:outputText value="#{faixa.indice}" />
 				</p:column>
 				
 				<p:column headerText="Faixa Inicial" sortBy="#{faixa.faixaInicial}"
-					filterBy="#{faixa.faixaInicial}" filterMatchMode="contains">
+					filterBy="#{faixa.faixaInicial}" filterMatchMode="contains" filterable="false">
 					<h:outputText value="#{faixa.faixaInicial}" />
 				</p:column>
 				
 				<p:column headerText="Faixa Final" sortBy="#{faixa.faixaFinal}"
-					filterBy="#{faixa.faixaFinal}" filterMatchMode="contains">
+					filterBy="#{faixa.faixaFinal}" filterMatchMode="contains" filterable="false">
 					<h:outputText value="#{faixa.faixaFinal}" />
 				</p:column>
 			</p:dataTable>
@@ -95,7 +106,7 @@
 				id="faixa-dialog" resizable="false" modal="true"
 				closeOnEscape="true">
 
-				<p:messages id="msgs-dialog" />
+				<p:messages id="msgs-dialog" autoUpdate="true"/>
 
 				<p:defaultCommand target="salvar-button" scope="faixa-dialog" />
 
@@ -128,8 +139,7 @@
 				
 					<p:commandButton value="Salvar" id="salvar-button"
 						action="#{cadastroFaixaColaboradorBean.salvar}" process="faixa-dialog"
-						update="msgs-dialog painel-dialog"
-						oncomplete="if (!args.validationFailed) PF('edicaoFaixaDialog').hide()" />
+						update="msgs-dialog painel-dialog" />
 				</h:panelGrid>
 			</p:dialog>
 

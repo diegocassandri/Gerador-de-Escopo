@@ -15,7 +15,7 @@
 		<h1>Cadastro Tela</h1>
 		<h:form id="frmCadastro">
 
-			<p:messages id="msgs" closable="true"/>
+			<p:messages id="msgs" closable="true" autoUpdate="true"/>
 
 			<p:toolbar id="toolbar">
 				<f:facet name="left">
@@ -61,21 +61,32 @@
 				selectionMode="single" rowKey="#{tela.codigo}"
 				filteredValue="#{cadastroTelaBean.filtroTelas}" 
 				widgetVar="tabelaTela">
+				
+				<f:facet name="header">
+					<div align="left">
+						<p:outputPanel>
+							<h:outputText value="Filtro:" />
+							<p:inputText id="globalFilter"
+								onkeyup="PF('tabelaTela').filter()" style="width:150px" />
+						</p:outputPanel>
+					</div>
+				</f:facet>
 
 				<p:ajax event="rowSelect" update=":frmCadastro:toolbar" />
 				<p:ajax event="rowUnselect" update=":frmCadastro:toolbar" />
 
 				<p:column headerText="Código" sortBy="#{tela.codigo}"
-					filterBy="#{tela.codigo}" filterMatchMode="contains">
+					filterBy="#{tela.codigo}" filterMatchMode="contains" filterable="false">
 					<h:outputText value="#{tela.codigo}" />
 				</p:column>	
+				
 				<p:column headerText="Descrição" sortBy="#{tela.descricao}"
-					filterBy="#{tela.descricao}" filterMatchMode="contains">
+					filterBy="#{tela.descricao}" filterMatchMode="contains" filterable="false">
 					<h:outputText value="#{tela.descricao}" />
 				</p:column>
 
 				<p:column headerText="Url" sortBy="#{tela.url}"
-					filterBy="#{tela.url}" filterMatchMode="contains">
+					filterBy="#{tela.url}" filterMatchMode="contains" filterable="false">
 					<h:outputText value="#{tela.url}" />
 				</p:column>
 			</p:dataTable>
@@ -84,7 +95,7 @@
 				id="tela-dialog" resizable="false" modal="true"
 				closeOnEscape="true">
 
-				<p:messages id="msgs-dialog" />
+				<p:messages id="msgs-dialog" autoUpdate="true"/>
 
 				<p:defaultCommand target="salvar-button" scope="tela-dialog" />
 
@@ -114,8 +125,7 @@
 					</p:selectOneMenu>	
 					<p:commandButton value="Salvar" id="salvar-button"
 						action="#{cadastroTelaBean.salvar}" process="tela-dialog"
-						update="msgs-dialog painel-dialog"
-						oncomplete="if (!args.validationFailed) PF('edicaoTelaDialog').hide()" />
+						update="msgs-dialog painel-dialog" />
 				</h:panelGrid>
 			</p:dialog>
 

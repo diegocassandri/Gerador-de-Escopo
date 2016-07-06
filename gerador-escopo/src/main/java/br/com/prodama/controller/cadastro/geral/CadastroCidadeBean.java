@@ -58,11 +58,12 @@ public class CadastroCidadeBean implements Serializable {
 			messages.info("Cidade salva com sucesso!");
 
 			RequestContext.getCurrentInstance().update(Arrays.asList("frmCadastro:msgs", "frmCadastro:cidade-table"));
+			RequestContext.getCurrentInstance().execute("PF('edicaoCidadeDialog').hide()");
 
 		} catch (Exception e) {
 			FacesMessage mensagem = new FacesMessage(e.getMessage());
 			messages.error("Erro ao salvar cidade! \n Motivo:" + mensagem.getDetail());
-			RequestContext.getCurrentInstance().update(Arrays.asList("frmCadastro:msgs", "frmCadastro:estado-table"));
+			RequestContext.getCurrentInstance().update(Arrays.asList("frmCadastro:msgs", "frmCadastro:cidade-table"));
 
 		}
 

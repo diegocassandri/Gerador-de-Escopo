@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import br.com.prodama.model.cadastro.geral.Equipe;
 import br.com.prodama.model.cadastro.geral.NivelEquipe;
 
 public class NiveisEquipe implements Serializable {
@@ -44,5 +45,13 @@ public class NiveisEquipe implements Serializable {
 
 	public List<NivelEquipe> todos() {
 		return manager.createQuery("from NivelEquipe", NivelEquipe.class).getResultList();
+	}
+	
+	public List<NivelEquipe> niveisPorEquipe(Equipe equipe) {
+		Query query = manager.createQuery("From NivelEquipe where equipe = :equipe", NivelEquipe.class);
+		query.setParameter("equipe", equipe);
+		@SuppressWarnings("unchecked")
+		List<NivelEquipe> resultList = query.getResultList();
+		return resultList;
 	}
 }

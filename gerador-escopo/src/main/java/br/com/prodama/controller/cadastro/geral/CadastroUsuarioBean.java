@@ -122,7 +122,7 @@ public class CadastroUsuarioBean implements Serializable {
 			messages.info("Usuário salvo com sucesso!");
 
 			RequestContext.getCurrentInstance().update(Arrays.asList("frmCadastro:msgs", "frmCadastro:usuario-table"));
-
+			RequestContext.getCurrentInstance().execute("PF('edicaoUsuarioDialog').hide()");
 		} catch (Exception e) {
 			FacesMessage mensagem = new FacesMessage(e.getMessage());
 			messages.error("Erro ao salvar usuário! \n Motivo:" + mensagem.getDetail());

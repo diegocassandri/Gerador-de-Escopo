@@ -13,6 +13,7 @@ import javax.inject.Named;
 
 import org.primefaces.context.RequestContext;
 
+import br.com.prodama.enun.Status;
 import br.com.prodama.enun.TipoEmpresa;
 import br.com.prodama.enun.TipoPessoa;
 import br.com.prodama.model.cadastro.geral.Cidade;
@@ -80,6 +81,13 @@ public class CadastroPessoaBean implements Serializable {
 	private List<NivelEquipe> todosNiveisEquipe;
 	private List<Cidade> todasCidades;
 	private List<Pessoa> filtroPessoas;
+	
+	/*Filtros*/
+		private String razao;
+		private String fantasia;
+		private Status status;
+		private TipoPessoa tipoP;
+	/**/
 
 	@PostConstruct
 	public void prepararNovoCadastro() {
@@ -88,18 +96,23 @@ public class CadastroPessoaBean implements Serializable {
 		todosEstados = estados.todos();
 		todasEmpresas = empresas.todos();
 		todasEquipes = equipes.todos();
+		todasFiliais = filiais.todos();
 		todosNiveisEquipe = niveisEquipe.todos();
 	}
 
 	public void buscarCep() {
-		if (pessoaEdicao.getCep().replace("-", "").length() >= 8) {
-			buscarCep.Buscar(pessoaEdicao.getCep().replace("-", ""));
-			pessoaEdicao.setBairro(buscarCep.getXmlCep().getBairro());
-			pessoaEdicao.setEndereco(buscarCep.getXmlCep().getTipo_logradouro()+" " +  buscarCep.getXmlCep().getLogradouro());
-			Cidade cidade = cidades.pesquisaPorNome(buscarCep.getXmlCep());
-			pessoaEdicao.setEstado(cidade.getEstado());
-			carregarCidades();
-			pessoaEdicao.setCidade(cidade);
+		if (pessoaEdicao.getCep().replace("-", "").replace("_","").length() >= 8) {
+			try{
+				buscarCep.Buscar(pessoaEdicao.getCep().replace("-", ""));
+				pessoaEdicao.setBairro(buscarCep.getXmlCep().getBairro());
+				pessoaEdicao.setEndereco(buscarCep.getXmlCep().getTipo_logradouro()+" " +  buscarCep.getXmlCep().getLogradouro());
+				Cidade cidade = cidades.pesquisaPorNome(buscarCep.getXmlCep());
+				pessoaEdicao.setEstado(cidade.getEstado());
+				carregarCidades();
+				pessoaEdicao.setCidade(cidade);
+			}catch(Exception e){
+				e.getMessage();
+			}	
 		}
 	}
 
@@ -111,11 +124,12 @@ public class CadastroPessoaBean implements Serializable {
 			todosEstados = estados.todos();
 			todosEstados = estados.todos();
 			todasEmpresas = empresas.todos();
+			todasFiliais = filiais.todos();
 			todasEquipes = equipes.todos();
 			todosNiveisEquipe = niveisEquipe.todos();
 			messages.info("Pessoa salva com sucesso!");
 			RequestContext.getCurrentInstance().update(Arrays.asList("frmCadastro:msgs", "frmCadastro:pessoa-table"));
-
+			RequestContext.getCurrentInstance().execute("PF('edicaoPessoaDialog').hide()");
 		} catch (Exception e) {
 			FacesMessage mensagem = new FacesMessage(e.getMessage());
 			messages.error("Erro ao salvar Pessoa! \n Motivo:" + mensagem.getDetail());
@@ -140,6 +154,7 @@ public class CadastroPessoaBean implements Serializable {
 			todosEstados = estados.todos();
 			todosEstados = estados.todos();
 			todasEmpresas = empresas.todos();
+			todasFiliais = filiais.todos();
 			todasEquipes = equipes.todos();
 			messages.info("Pessoa excluída com sucesso!");
 		} catch (Exception e) {
@@ -152,10 +167,33 @@ public class CadastroPessoaBean implements Serializable {
 	private void carregarCidades(){
 		todasCidades = cidades.CidadesPorEstado(this.pessoaEdicao.getEstado());
 	}
+	
+	private void carregarFiliais(){ 
+		todasFiliais = filiais.filiaisPorEmpresa(this.pessoaEdicao.getEmpresa()); 
+	}
+	
+	private void carregarNiveisEquipes(){
+		todosNiveisEquipe = niveisEquipe.niveisPorEquipe(this.pessoaEdicao.getEquipe()); 
+	}
+	
 	public void consultar() {
 		todasPessoas = pessoas.todos();
 	}
+	
+	public void consultarFiltros() {
+		todasPessoas = pessoas.pesquisaFiltros(razao,fantasia,tipoP,status);
+	}
+	
 
+	public void listaFiliais(AjaxBehaviorEvent event) {
+		carregarFiliais();
+	}
+	
+	public void listaNiveisEquipes(AjaxBehaviorEvent event) {
+		carregarNiveisEquipes();
+	}
+	
+	
 	public TipoEmpresa[] getTiposEmpresas() {
 		return TipoEmpresa.values();
 	}
@@ -164,24 +202,13 @@ public class CadastroPessoaBean implements Serializable {
 		return TipoPessoa.values();
 	}
 
-
-	public Empresas getEmpresas() {
-		return empresas;
-	}
-
-	public void setEmpresas(Empresas empresas) {
-		this.empresas = empresas;
+	public List<Status> getStatusList() {
+		return Arrays.asList(Status.values());
 	}
 
 	
+	
 
-	public List<Empresa> getTodasEmpresas() {
-		return todasEmpresas;
-	}
-
-	public void setTodasEmpresas(List<Empresa> todasEmpresas) {
-		this.todasEmpresas = todasEmpresas;
-	}
 
 
 	public List<Estado> getTodosEstados() {
@@ -248,13 +275,6 @@ public class CadastroPessoaBean implements Serializable {
 		this.todasPessoas = todasPessoas;
 	}
 
-	public List<Filial> getTodasFiliais() {
-		return todasFiliais;
-	}
-
-	public void setTodasFiliais(List<Filial> todasFiliais) {
-		this.todasFiliais = todasFiliais;
-	}
 
 	public List<Equipe> getTodasEquipes() {
 		return todasEquipes;
@@ -279,6 +299,66 @@ public class CadastroPessoaBean implements Serializable {
 	public void setFiltroPessoas(List<Pessoa> filtroPessoas) {
 		this.filtroPessoas = filtroPessoas;
 	}
+
+	public Pessoa getPessoaSelecionado() {
+		return pessoaSelecionado;
+	}
+
+	public void setPessoaSelecionado(Pessoa pessoaSelecionado) {
+		this.pessoaSelecionado = pessoaSelecionado;
+	}
+
+	public List<Empresa> getTodasEmpresas() {
+		return todasEmpresas;
+	}
+
+	public void setTodasEmpresas(List<Empresa> todasEmpresas) {
+		this.todasEmpresas = todasEmpresas;
+	}
+
+	public List<Filial> getTodasFiliais() {
+		return todasFiliais;
+	}
+
+	public void setTodasFiliais(List<Filial> todasFiliais) {
+		this.todasFiliais = todasFiliais;
+	}
+
+	public String getRazao() {
+		return razao;
+	}
+
+	public void setRazao(String razao) {
+		this.razao = razao;
+	}
+
+	public String getFantasia() {
+		return fantasia;
+	}
+
+	public void setFantasia(String fantasia) {
+		this.fantasia = fantasia;
+	}
+
+	public Status getStatus() {
+		return status;
+	}
+
+	public void setStatus(Status status) {
+		this.status = status;
+	}
+
+	public TipoPessoa getTipoP() {
+		return tipoP;
+	}
+
+	public void setTipoP(TipoPessoa tipoP) {
+		this.tipoP = tipoP;
+	}
+
+	
+
+	
 	
 	
 

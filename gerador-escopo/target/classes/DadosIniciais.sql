@@ -26,6 +26,8 @@ insert into tela (codigo,descricao,url,tela_pai) values( seq_tela.nextval,'Faixa
 insert into tela (codigo,descricao,url,tela_pai) values( seq_tela.nextval,'Cadastro de Produtos','/cadastros/produtos/CadastroProduto.xhtml',3);
 insert into tela (codigo,descricao,url,tela_pai) values( seq_tela.nextval,'Cadastro Módulo','/cadastros/produtos/CadastroModulo.xhtml',3);
 insert into tela (codigo,descricao,url,tela_pai) values( seq_tela.nextval,'Gestão do Módulo','/cadastros/produtos/CadastroGestaoModulo.xhtml',3);
+insert into tela (codigo,descricao,url,tela_pai) values( seq_tela.nextval,'Gestão do Módulo','/cadastros/produtos/CadastroProcessoGestao.xhtml',3);
+insert into tela (codigo,descricao,url,tela_pai) values( seq_tela.nextval,'Gestão de Pessoa','/cadastros/CadastroPessoa.xhtml',1);
 
 insert into usuario_grupo values (1,1);
 insert into grupo_tela values (1,1);
@@ -47,4 +49,6 @@ insert into grupo_tela values (1,16);
 insert into grupo_tela values (1,17);
 insert into grupo_tela values (1,18);
 insert into grupo_tela values (1,19);
+insert into grupo_tela values (1,20);
+insert into grupo_tela values (1,21);
 

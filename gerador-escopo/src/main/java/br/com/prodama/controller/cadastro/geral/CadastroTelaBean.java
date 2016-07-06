@@ -55,6 +55,7 @@ public class CadastroTelaBean implements Serializable {
 			consultar();
 			messages.info("Tela salva com sucesso!");
 			RequestContext.getCurrentInstance().update(Arrays.asList("frmCadastro:msgs", "frmCadastro:tela-table"));
+			RequestContext.getCurrentInstance().execute("PF('edicaoTelaDialog').hide()");
 		} catch (Exception e) {
 			FacesMessage mensagem = new FacesMessage(e.getMessage());
 			messages.error("Erro ao salvar tela! \n Motivo:" + mensagem.getDetail());

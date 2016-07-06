@@ -72,18 +72,18 @@ public class Filiais implements Serializable {
 
 	@SuppressWarnings("unchecked")
 	public List<Filial> todos(Empresa empresa) {
-		/*return manager.createQuery("from Filial where empresa = :empresa", Filial.class)
-				.setParameter("empresa", usuarioLogin.getEmpresaSelecionada()).getResultList();*/
 		Query query = manager.createQuery("Select e From Filial e Where e.empresa = :empresa and exists (Select u from e.abrangenciaUsuarios u Where u = :usuario) and empresa = :empresa", Filial.class);
 		query.setParameter("usuario", usuarioLogin.getUsuarioLogin());
 		query.setParameter("empresa", empresa);
 		return query.getResultList();
 	}
 	
+	public List<Filial> todos() {
+		return manager.createQuery("from Filial", Filial.class).getResultList();
+	}
+	
 	@SuppressWarnings("unchecked")
 	public List<Filial> porNomeSemelhante(String nome,Empresa empresa) {
-		/*return manager.createQuery("from Filial where razaoSocial like :nome and empresa = :empresa" , Filial.class)
-				.setParameter("nome", "%" + nome + "%").setParameter("empresa", usuarioLogin.getEmpresaSelecionada().getCodigo()).getResultList();*/
 		Query query = manager.createQuery("Select e From Filial e Where e.empresa = :empresa and exists (Select u from e.abrangenciaUsuarios u Where u = :usuario) and empresa = :empresa and razaoSocial like :nome", Filial.class);
 		query.setParameter("usuario", usuarioLogin.getUsuarioLogin());
 		query.setParameter("empresa", empresa);
@@ -109,5 +109,14 @@ public class Filiais implements Serializable {
 		query.setParameter("empresa", empresa);
 		return query.getResultList();
 	}
+	
+	public List<Filial> filiaisPorEmpresa(Empresa empresa) {
+		Query query = manager.createQuery("From Filial where empresa = :empresa", Filial.class);
+		query.setParameter("empresa", empresa);
+		@SuppressWarnings("unchecked")
+		List<Filial> resultList = query.getResultList();
+		return resultList;
+	}
+
 
 }

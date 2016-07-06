@@ -19,4 +19,10 @@ public enum TipoPessoa {
     public String toString() {
        return this.descricao;
     }
+
+	public String getDescricao() {
+		return descricao;
+	}
+    
+    
 }

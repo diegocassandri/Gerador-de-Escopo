@@ -17,7 +17,7 @@
 		<h1>Cadastro Usuário</h1>
 		<h:form id="frmCadastro">
 
-			<p:messages id="msgs" closable="true"/>
+			<p:messages id="msgs" closable="true" autoUpdate="true"/>
 
 			<p:toolbar id="toolbar">
 				<f:facet name="left">
@@ -89,21 +89,31 @@
 				selectionMode="single" rowKey="#{usuario.codigo}"
 				filteredValue="#{cadastroUsuarioBean.filtroUsuarios}"
 				widgetVar="tabelaUsuario">
+				
+				<f:facet name="header">
+					<div align="left">
+						<p:outputPanel>
+							<h:outputText value="Filtro:" />
+							<p:inputText id="globalFilter"
+								onkeyup="PF('tabelaUsuario').filter()" style="width:150px" />
+						</p:outputPanel>
+					</div>
+				</f:facet>
 
 				<p:ajax event="rowSelect" update=":frmCadastro:toolbar" />
 				<p:ajax event="rowUnselect" update=":frmCadastro:toolbar" />
 
 				<p:column headerText="Nome" sortBy="#{usuario.nomeCompleto}"
-					filterBy="#{usuario.nomeCompleto}" filterMatchMode="contains">
+					filterBy="#{usuario.nomeCompleto}" filterMatchMode="contains" filterable="false">
 					<h:outputText value="#{usuario.nomeCompleto}" />
 				</p:column>
 
 				<p:column headerText="Usuário" sortBy="#{usuario.usuario}"
-					filterBy="#{usuario.usuario}" filterMatchMode="contains">
+					filterBy="#{usuario.usuario}" filterMatchMode="contains" filterable="false">
 					<h:outputText value="#{usuario.usuario}" />
 				</p:column>
 				<p:column headerText="Email" width="250" sortBy="#{usuario.email}"
-					filterBy="#{usuario.email}" filterMatchMode="contains">
+					filterBy="#{usuario.email}" filterMatchMode="contains" filterable="false">
 					<h:outputText value="#{usuario.email}" />
 				</p:column>
 				<p:column headerText="Status" width="120" sortBy="#{usuario.status}">
@@ -115,7 +125,7 @@
 				id="usuario-dialog" resizable="false" modal="true"
 				closeOnEscape="true">
 
-				<p:messages id="msgs-dialog" />
+				<p:messages id="msgs-dialog" autoUpdate="true" closable="true"/>
 
 				<p:defaultCommand target="salvar-button" scope="usuario-dialog" />
 
@@ -157,8 +167,7 @@
 
 					<p:commandButton value="Salvar" id="salvar-button"
 						action="#{cadastroUsuarioBean.salvar}" process="usuario-dialog"
-						update="msgs-dialog painel-dialog"
-						oncomplete="if (!args.validationFailed) PF('edicaoUsuarioDialog').hide()" />
+						update="msgs-dialog painel-dialog" />
 				</h:panelGrid>
 			</p:dialog>
 

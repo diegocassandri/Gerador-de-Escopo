@@ -50,6 +50,7 @@ public class CadastroProdutoBean implements Serializable {
 			consultar();
 			messages.info("Produto salvo com sucesso!");
 			RequestContext.getCurrentInstance().update(Arrays.asList("frmCadastro:msgs", "frmCadastro:produto-table"));
+			RequestContext.getCurrentInstance().execute("PF('edicaoProdutoDialog').hide()");
 		} catch (Exception e) {
 			FacesMessage mensagem = new FacesMessage(e.getMessage());
 			messages.error("Erro ao salvar Produto! \n Motivo:" + mensagem.getDetail());

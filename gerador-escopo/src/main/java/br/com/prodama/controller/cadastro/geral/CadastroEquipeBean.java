@@ -50,7 +50,7 @@ public class CadastroEquipeBean implements Serializable {
 			messages.info("Equipe salva com sucesso!");
 
 			RequestContext.getCurrentInstance().update(Arrays.asList("frmCadastro:msgs", "frmCadastro:equipe-table"));
-
+			RequestContext.getCurrentInstance().execute("PF('edicaoEquipeDialog').hide()");
 		} catch (Exception e) {
 			FacesMessage mensagem = new FacesMessage(e.getMessage());
 			messages.error("Erro ao salvar equipe! \n Motivo:" + mensagem.getDetail());

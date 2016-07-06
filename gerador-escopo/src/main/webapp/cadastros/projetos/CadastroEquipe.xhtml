@@ -15,7 +15,7 @@
 		<h1>Cadastro Equipe</h1>
 		<h:form id="frmCadastro">
 
-			<p:messages id="msgs" closable="true" />
+			<p:messages id="msgs" closable="true" autoUpdate="true"/>
 
 			<p:toolbar id="toolbar">
 				<f:facet name="left">
@@ -62,22 +62,32 @@
 				selectionMode="single" rowKey="#{equipe.codigo}"
 				filteredValue="#{cadastroEquipeBean.filtroEquipes}"
 				widgetVar="tabelaEquipe">
+				
+				<f:facet name="header">
+					<div align="left">
+						<p:outputPanel>
+							<h:outputText value="Filtro:" />
+							<p:inputText id="globalFilter"
+								onkeyup="PF('tabelaEquipe').filter()" style="width:150px" />
+						</p:outputPanel>
+					</div>
+				</f:facet>
 
 				<p:ajax event="rowSelect" update=":frmCadastro:toolbar" />
 				<p:ajax event="rowUnselect" update=":frmCadastro:toolbar" />
 
 				<p:column headerText="Código" sortBy="#{equipe.codigo}"
-					filterBy="#{equipe.codigo}" filterMatchMode="contains">
+					filterBy="#{equipe.codigo}" filterMatchMode="contains" filterable="false">
 					<h:outputText value="#{equipe.codigo}" />
 				</p:column>
 				
 				<p:column headerText="Descrição" sortBy="#{equipe.descricao}"
-					filterBy="#{equipe.descricao}" filterMatchMode="contains">
+					filterBy="#{equipe.descricao}" filterMatchMode="contains" filterable="false">
 					<h:outputText value="#{equipe.descricao}" />
 				</p:column>
 
 				<p:column headerText="Observação" sortBy="#{equipe.observacao}"
-					filterBy="#{equipe.observacao}" filterMatchMode="contains">
+					filterBy="#{equipe.observacao}" filterMatchMode="contains" filterable="false">
 					<h:outputText value="#{equipe.observacao}" />
 				</p:column>
 			
@@ -88,7 +98,7 @@
 				id="equipe-dialog" resizable="false" modal="true"
 				closeOnEscape="true">
 
-				<p:messages id="msgs-dialog" />
+				<p:messages id="msgs-dialog" autoUpdate="true"/>
 
 				<p:defaultCommand target="salvar-button" scope="equipe-dialog" />
 
@@ -108,8 +118,7 @@
 
 					<p:commandButton value="Salvar" id="salvar-button"
 						action="#{cadastroEquipeBean.salvar}" process="equipe-dialog"
-						update="msgs-dialog painel-dialog"
-						oncomplete="if (!args.validationFailed) PF('edicaoEquipeDialog').hide()" />
+						update="msgs-dialog painel-dialog"/>
 				</h:panelGrid>
 			</p:dialog>
 

@@ -84,6 +84,7 @@ public class CadastroGrupoBean implements Serializable {
 			consultar();
 			messages.info("Grupo salvo com sucesso!");
 			RequestContext.getCurrentInstance().update(Arrays.asList("frmCadastro:msgs", "frmCadastro:grupo-table","frmCadastro:associaTelas-Dialog"));
+			RequestContext.getCurrentInstance().execute("PF('edicaoGrupoDialog').hide()");
 		} catch (Exception e) {
 			FacesMessage mensagem = new FacesMessage(e.getMessage());
 			messages.error("Erro ao salvar grupo! \n Motivo:" + mensagem.getDetail());

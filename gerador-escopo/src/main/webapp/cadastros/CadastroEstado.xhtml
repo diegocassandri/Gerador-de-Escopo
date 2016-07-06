@@ -15,7 +15,7 @@
 		<h1>Cadastro Estado</h1>
 		<h:form id="frmCadastro">
 
-			<p:messages id="msgs" closable="true"/>
+			<p:messages id="msgs" closable="true" autoUpdate="true"/>
 
 			<p:toolbar id="toolbar">
 				<f:facet name="left">
@@ -62,21 +62,31 @@
 				selectionMode="single" rowKey="#{estado.codigo}"
 				filteredValue="#{cadastroEstadoBean.filtroEstados}"
 				widgetVar="tabelaEstado">
+				
+				<f:facet name="header">
+					<div align="left">
+						<p:outputPanel>
+							<h:outputText value="Filtro:" />
+							<p:inputText id="globalFilter"
+								onkeyup="PF('tabelaEstado').filter()" style="width:150px" />
+						</p:outputPanel>
+					</div>
+				</f:facet>
 
 				<p:ajax event="rowSelect" update=":frmCadastro:toolbar" />
 				<p:ajax event="rowUnselect" update=":frmCadastro:toolbar" />
 
 				<p:column headerText="Código" sortBy="#{estado.codigo}"
-					filterBy="#{estado.codigo}" filterMatchMode="contains">
+					filterBy="#{estado.codigo}" filterMatchMode="contains" filterable="false">
 					<h:outputText value="#{estado.codigo}" />
 				</p:column>	
 				<p:column headerText="Nome" sortBy="#{estado.nome}"
-					filterBy="#{estado.nome}" filterMatchMode="contains">
+					filterBy="#{estado.nome}" filterMatchMode="contains" filterable="false">
 					<h:outputText value="#{estado.nome}" />
 				</p:column>
 
 				<p:column headerText="Sigla" sortBy="#{estado.sigla}"
-					filterBy="#{estado.sigla}" filterMatchMode="contains">
+					filterBy="#{estado.sigla}" filterMatchMode="contains" filterable="false">
 					<h:outputText value="#{estado.sigla}" />
 				</p:column>
 			</p:dataTable>
@@ -85,7 +95,7 @@
 				id="estado-dialog" resizable="false" modal="true" dynamic="true"
 				closeOnEscape="true">
 
-				<p:messages id="msgs-dialog" />
+				<p:messages id="msgs-dialog" autoUpdate="true"/>
 
 				<p:defaultCommand target="salvar-button" scope="estado-dialog" />
 
@@ -105,8 +115,7 @@
 				
 					<p:commandButton value="Salvar" id="salvar-button"
 						action="#{cadastroEstadoBean.salvar}" process="estado-dialog"
-						update="msgs-dialog painel-dialog"
-						oncomplete="if (!args.validationFailed) PF('edicaoEstadoDialog').hide()" />
+						update="msgs-dialog painel-dialog" />
 				</h:panelGrid>
 			</p:dialog>
 

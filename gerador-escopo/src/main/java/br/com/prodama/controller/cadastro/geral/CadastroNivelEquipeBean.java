@@ -55,6 +55,7 @@ public class CadastroNivelEquipeBean implements Serializable {
 			todosNiveisEquipe = niveisEquipe.todos();
 			messages.info("Nível de Equipe salva com sucesso!");
 			RequestContext.getCurrentInstance().update(Arrays.asList("frmCadastro:msgs", "frmCadastro:equipe-table"));
+			RequestContext.getCurrentInstance().execute("PF('edicaoEquipeDialog').hide()");
 		} catch (Exception e) {
 			FacesMessage mensagem = new FacesMessage(e.getMessage());
 			messages.error("Erro ao salvar cidade! \n Motivo:" + mensagem.getDetail());

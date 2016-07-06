@@ -51,7 +51,7 @@ public class CadastroEstadoBean implements Serializable {
 			messages.info("Estado salvo com sucesso!");
 
 			RequestContext.getCurrentInstance().update(Arrays.asList("frmCadastro:msgs", "frmCadastro:estado-table"));
-
+			RequestContext.getCurrentInstance().execute("PF('edicaoEstadoDialog').hide()");
 		} catch (Exception e) {
 			FacesMessage mensagem = new FacesMessage(e.getMessage());
 			messages.error("Erro ao salvar estado! \n Motivo:" + mensagem.getDetail());

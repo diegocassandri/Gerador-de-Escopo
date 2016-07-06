@@ -97,7 +97,7 @@ public class CadastroEmpresaBean implements Serializable {
 			todosEstados = estados.todos();
 			messages.info("Empresa salva com sucesso!");
 			RequestContext.getCurrentInstance().update(Arrays.asList("frmCadastro:msgs", "frmCadastro:empresa-table"));
-
+			RequestContext.getCurrentInstance().execute("PF('edicaoEmpresaDialog').hide()");
 		} catch (Exception e) {
 			FacesMessage mensagem = new FacesMessage(e.getMessage());
 			messages.error("Erro ao salvar Empresa! \n Motivo:" + mensagem.getDetail());

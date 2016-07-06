@@ -62,8 +62,17 @@
 				selectionMode="single" rowKey="#{gestaoModulo.codigo}"
 				filteredValue="#{cadastroProcessoBean.filtroGestao}"
 				widgetVar="tabelaGestao">
+				
 				<f:facet name="header">
 					<p:outputLabel value="Listagem de Gestões" />
+					
+					<div align="left">
+						<p:outputPanel>
+							<h:outputText value="Filtro:" />
+							<p:inputText id="globalFilter"
+								onkeyup="PF('tabelaGestao').filter()" style="width:150px" />
+						</p:outputPanel>
+					</div>
 				</f:facet>
 
 				<p:ajax event="rowSelect" update=":frmCadastro:toolbar" />
@@ -72,24 +81,24 @@
 				<p:column headerText="Produto"
 					sortBy="#{gestaoModulo.modulo.produto.descricao}"
 					filterBy="#{gestaoModulo.modulo.produto.descricao}"
-					filterMatchMode="contains">
+					filterMatchMode="contains" filterable="false">
 					<h:outputText value="#{gestaoModulo.modulo.produto.descricao}" />
 				</p:column>
 
 				<p:column headerText="Módulo"
 					sortBy="#{gestaoModulo.modulo.descricao}"
 					filterBy="#{gestaoModulo.modulo.descricao}"
-					filterMatchMode="contains">
+					filterMatchMode="contains" filterable="false">
 					<h:outputText value="#{gestaoModulo.modulo.descricao}" />
 				</p:column>
 
 				<p:column headerText="Gestão" filterBy="#{gestaoModulo.descricao}"
-					sortBy="#{gestaoModulo.descricao}">
+					sortBy="#{gestaoModulo.descricao}" filterable="false">
 					<h:outputText value="#{gestaoModulo.descricao}" />
 				</p:column>
 
 				<p:column headerText="Status" sortBy="#{gestaoModulo.status}"
-					filterBy="#{gestaoModulo.status}" filterMatchMode="contains">
+					filterBy="#{gestaoModulo.status}" filterMatchMode="contains" filterable="false">
 					<h:outputText value="#{gestaoModulo.status}" />
 				</p:column>
 

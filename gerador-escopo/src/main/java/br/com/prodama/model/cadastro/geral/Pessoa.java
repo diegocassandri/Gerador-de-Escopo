@@ -28,11 +28,10 @@ public class Pessoa implements Serializable {
 	@Column(name = "Codigo", nullable = false)
 	private Long codigo;
 
-	@NotEmpty
+	@NotNull
 	@Column(name = "TipoPessoa", nullable = false, length = 10)
 	private TipoPessoa tipoPessoa;
 	
-	@NotNull
 	@Column(name = "TipoEmpresa")
 	private TipoEmpresa tipoEmpresa;
 
@@ -40,7 +39,6 @@ public class Pessoa implements Serializable {
 	@Column(name = "NomeRazaoSocial", nullable = false, length = 250)
 	private String nomeRazaoSocial;
 
-	@NotEmpty
 	@Column(name = "ApelidoFantasia", length = 250)
 	private String apelidoFantasia;
 
@@ -52,7 +50,6 @@ public class Pessoa implements Serializable {
 	@Column(name = "Cpf", length = 14)
 	private String cpf;
 
-	@NotEmpty
 	@Column(name = "RgIe", length = 18)
 	private String rgIe;
 
@@ -83,47 +80,48 @@ public class Pessoa implements Serializable {
 	@Column(name = "Telefone_3", length = 20)
 	private String telefone_3;
 
-	@Column(name = "Referencias", length = 5000)
+	@Column(name = "Referencias", length = 4000)
 	private String referencias;
 	
-	@NotEmpty
+	@Column(name = "Email", length = 50)
+	private String email;
+	
+	@NotNull
 	@Column(name = "Status", length = 7)
 	private Status status;
 
 	/* Utilizado pra rotina de custo por consultor X Unidade */
-	@NotNull 
 	@DecimalMin("0")
-	@Column(precision = 15, scale = 2, nullable = false)
+	@Column(precision = 15, scale = 2, nullable = true)
 	private BigDecimal custoPorHora;
 	
 	/*Utilizado em casos de clientes com neçociação especifica, cliente atuais*/
-	@NotNull 
 	@DecimalMin("0")
-	@Column(precision = 15, scale = 2, nullable = false)
+	@Column(precision = 15, scale = 2, nullable = true)
 	private BigDecimal valorHoraCliente;
 	
 	@JoinColumn(name = "Empresa", referencedColumnName = "codigo")
-	@ManyToOne(optional = true,fetch=FetchType.LAZY)
+	@ManyToOne(optional = true,fetch=FetchType.EAGER)
 	private Empresa empresa;
 	
 	@JoinColumn(name = "Filial", referencedColumnName = "codigo")
-	@ManyToOne(optional = true,fetch=FetchType.LAZY)
+	@ManyToOne(optional = true,fetch=FetchType.EAGER)
 	private Filial filial;
 	
 	@JoinColumn(name = "Cidade", referencedColumnName = "codigo")
-	@ManyToOne(optional = true,fetch=FetchType.LAZY)
+	@ManyToOne(optional = true,fetch=FetchType.EAGER)
 	private Cidade cidade;
 	
 	@JoinColumn(name = "Estado", referencedColumnName = "codigo")
-	@ManyToOne(optional = true,fetch=FetchType.LAZY)
+	@ManyToOne(optional = true,fetch=FetchType.EAGER)
 	private Estado estado;
 	
 	@JoinColumn(name = "Equipe", referencedColumnName = "codigo")
-	@ManyToOne(optional = true,fetch=FetchType.LAZY)
+	@ManyToOne(optional = true,fetch=FetchType.EAGER)
 	private Equipe equipe;
 	
 	@JoinColumn(name = "NivelEquipe", referencedColumnName = "codigo")
-	@ManyToOne(optional = true,fetch=FetchType.LAZY)
+	@ManyToOne(optional = true,fetch=FetchType.EAGER)
 	private NivelEquipe nivelEquipe;
 	
 	public Long getCodigo() {
@@ -321,6 +319,10 @@ public class Pessoa implements Serializable {
 		this.valorHoraCliente = valorHoraCliente;
 	}
 
+	
+
+	
+
 	public Empresa getEmpresa() {
 		return empresa;
 	}
@@ -343,6 +345,16 @@ public class Pessoa implements Serializable {
 
 	public void setTipoEmpresa(TipoEmpresa tipoEmpresa) {
 		this.tipoEmpresa = tipoEmpresa;
+	}
+	
+	
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	@Override

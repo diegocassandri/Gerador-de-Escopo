@@ -15,7 +15,7 @@
 		<h1>Cadastro Grupo de Usuário</h1>
 		<h:form id="frmCadastro">
 
-			<p:messages id="msgs" closable="true" />
+			<p:messages id="msgs" closable="true" autoUpdate="true"/>
 
 			<p:toolbar id="toolbar">
 				<f:facet name="left">
@@ -91,17 +91,28 @@
 				selectionMode="single" rowKey="#{grupo.codigo}"
 				filteredValue="#{cadastroGrupoBean.filtroGrupos}"
 				widgetVar="tabelaGrupo" reflow="true">
+				
+				<f:facet name="header">
+					<div align="left">
+						<p:outputPanel>
+							<h:outputText value="Filtro:" />
+							<p:inputText id="globalFilter"
+								onkeyup="PF('tabelaGrupo').filter()" style="width:150px" />
+						</p:outputPanel>
+					</div>
+				</f:facet>
 
 				<p:ajax event="rowSelect" update=":frmCadastro:toolbar" />
 				<p:ajax event="rowUnselect" update=":frmCadastro:toolbar" />
 
 				<p:column headerText="Código" sortBy="#{grupo.codigo}"
 					filterBy="#{grupo.codigo}" footerText="" filterMatchMode="contains"
-					width="50">
+					width="50" filterable="false">
 					<h:outputText value="#{grupo.codigo}" />
 				</p:column>
+				
 				<p:column headerText="Nome" width="200" sortBy="#{grupo.nome}"
-					filterBy="#{grupo.nome}" footerText="" filterMatchMode="contains">
+					filterBy="#{grupo.nome}" footerText="" filterMatchMode="contains" filterable="false">
 					<h:outputText value="#{grupo.nome}" />
 				</p:column>
 
@@ -117,7 +128,7 @@
 				id="grupo-dialog" resizable="false" modal="true"
 				closeOnEscape="true">
 
-				<p:messages id="msgs-dialog" />
+				<p:messages id="msgs-dialog" autoUpdate="true" />
 
 				<p:defaultCommand target="salvar-button" scope="grupo-dialog" />
 				<h:panelGrid columns="2" id="painel-dialog">
@@ -129,8 +140,7 @@
 						value="#{cadastroGrupoBean.grupoEdicao.nome}" />
 					<p:commandButton value="Salvar" id="salvar-button"
 						action="#{cadastroGrupoBean.salvar}" process="grupo-dialog"
-						update="msgs-dialog painel-dialog"
-						oncomplete="if (!args.validationFailed) PF('edicaoGrupoDialog').hide()" />
+						update="msgs-dialog painel-dialog" />
 				</h:panelGrid>
 			</p:dialog>
 

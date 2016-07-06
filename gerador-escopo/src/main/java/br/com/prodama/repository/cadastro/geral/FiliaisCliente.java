@@ -66,6 +66,15 @@ public class FiliaisCliente implements Serializable {
 		}
 	}
 	
+	public List<FilialCliente> FiliaisPorEmpresa(EmpresaCliente empresaCliente) {
+		Query query = manager.createQuery("From FilialCliente where empresaCliente = :empresa", FilialCliente.class);
+		query.setParameter("empresa", empresaCliente);
+		@SuppressWarnings("unchecked")
+		List<FilialCliente> resultList = query.getResultList();
+		return resultList;
+	}
+
+	
 	public void excluir(FilialCliente filialCliente) {
 		filialCliente = pesquisaPorId(filialCliente.getCodigo());
 		manager.remove(filialCliente);

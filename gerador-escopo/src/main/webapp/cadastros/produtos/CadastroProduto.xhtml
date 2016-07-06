@@ -15,7 +15,7 @@
 		<h1>Cadastro Produto</h1>
 		<h:form id="frmCadastro">
 
-			<p:messages id="msgs" closable="true"/>
+			<p:messages id="msgs" closable="true" autoUpdate="true"/>
 
 			<p:toolbar id="toolbar">
 				<f:facet name="left">
@@ -62,21 +62,32 @@
 				selectionMode="single" rowKey="#{produto.codigo}"
 				filteredValue="#{cadastroProdutoBean.filtroProdutos}"
 				widgetVar="tabelaProduto">
+				
+				<f:facet name="header">
+					<div align="left">
+						<p:outputPanel>
+							<h:outputText value="Filtro:" />
+							<p:inputText id="globalFilter"
+								onkeyup="PF('tabelaProduto').filter()" style="width:150px" />
+						</p:outputPanel>
+					</div>
+				</f:facet>
 
 				<p:ajax event="rowSelect" update=":frmCadastro:toolbar" />
 				<p:ajax event="rowUnselect" update=":frmCadastro:toolbar" />
 
 				<p:column headerText="Código" sortBy="#{produto.codigo}"
-					filterBy="#{produto.codigo}" filterMatchMode="contains">
+					filterBy="#{produto.codigo}" filterMatchMode="contains" filterable="false">
 					<h:outputText value="#{produto.codigo}" />
 				</p:column>	
+				
 				<p:column headerText="Descrição" sortBy="#{produto.descricao}"
-					filterBy="#{produto.descricao}" filterMatchMode="contains">
+					filterBy="#{produto.descricao}" filterMatchMode="contains" filterable="false">
 					<h:outputText value="#{produto.descricao}" />
 				</p:column>
 				
 				<p:column headerText="Status" sortBy="#{produto.status}"
-					filterBy="#{produto.status}" filterMatchMode="contains">
+					filterBy="#{produto.status}" filterMatchMode="contains" filterable="false">
 					<h:outputText value="#{produto.status}" />
 				</p:column>
 			
@@ -86,7 +97,7 @@
 				id="produto-dialog" resizable="false" modal="true"
 				closeOnEscape="true">
 
-				<p:messages id="msgs-dialog" />
+				<p:messages id="msgs-dialog" autoUpdate="true"/>
 
 				<p:defaultCommand target="salvar-button" scope="produto-dialog" />
 
@@ -113,8 +124,7 @@
 				
 					<p:commandButton value="Salvar" id="salvar-button"
 						action="#{cadastroProdutoBean.salvar}" process="produto-dialog"
-						update="msgs-dialog painel-dialog"
-						oncomplete="if (!args.validationFailed) PF('edicaoProdutoDialog').hide()" />
+						update="msgs-dialog painel-dialog" />
 				</h:panelGrid>
 			</p:dialog>
 

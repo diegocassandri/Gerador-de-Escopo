@@ -84,7 +84,7 @@ public class CadastroFilialBean implements Serializable {
 			todosEstados = estados.todos();
 			messages.info("Filial salva com sucesso!");
 			RequestContext.getCurrentInstance().update(Arrays.asList("frmCadastro:msgs", "frmCadastro:filial-table"));
-
+			RequestContext.getCurrentInstance().execute("PF('edicaoFilialDialog').hide()");
 		} catch (Exception e) {
 			FacesMessage mensagem = new FacesMessage(e.getMessage());
 			messages.error("Erro ao salvar Filial! \n Motivo:" + mensagem.getDetail());

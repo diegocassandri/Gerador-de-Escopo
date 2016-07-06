@@ -58,6 +58,7 @@ public class CadastroFaixaColaboradorBean implements Serializable {
 			consultar();
 			messages.info("Faixa de Colaborador salva com sucesso!");
 			RequestContext.getCurrentInstance().update(Arrays.asList("frmCadastro:msgs", "frmCadastro:faixa-table"));
+			RequestContext.getCurrentInstance().execute("PF('edicaoFaixaDialog').hide()");
 		} catch (Exception e) {
 			FacesMessage mensagem = new FacesMessage(e.getMessage());
 			messages.error("Erro ao salvar faixa de Colaborador! \n Motivo:" + mensagem.getDetail());

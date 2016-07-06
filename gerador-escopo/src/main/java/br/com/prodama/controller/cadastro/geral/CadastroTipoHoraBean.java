@@ -61,7 +61,7 @@ public class CadastroTipoHoraBean implements Serializable {
 			consultar();
 			messages.info("Tipo de Hora salvo com sucesso!");
 			RequestContext.getCurrentInstance().update(Arrays.asList("frmCadastro:msgs", "frmCadastro:tipo-table"));
-
+			RequestContext.getCurrentInstance().execute("PF('edicaoTipoDialog').hide()");
 		} catch (Exception e) {
 			FacesMessage mensagem = new FacesMessage(e.getMessage());
 			messages.error("Erro ao salvar Tipo de Hora! \n Motivo:" + mensagem.getDetail());
