@@ -13,44 +13,46 @@
 
 	<ui:define name="corpo">
 		<h1>Cadastro Pessoa</h1>
-		
-		
-		
+
+
+
 		<p:panel id="filtro" header="Filtros de Pesquisa" toggleable="true"
-				 style="margin-top:10px">
-				<div class="ui-fluid">
-					<h:form id="frmPesquisa">
-						<h:panelGrid columns="4"
-							columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid"
-							styleClass="ui-panelgrid-blank">
-							<h:outputText value="Nome / Razão Social" />
-							<p:inputText  value="#{cadastroPessoaBean.razao}"/>
-							<h:outputText value="Apelido / Razão Social" />
-							<p:inputText  value="#{cadastroPessoaBean.fantasia}"/>
+			style="margin-top:10px">
+			<div class="ui-fluid">
+				<h:form id="frmPesquisa">
+					<h:panelGrid columns="4"
+						columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid"
+						styleClass="ui-panelgrid-blank">
+						<h:outputText value="Nome / Razão Social" />
+						<p:inputText value="#{cadastroPessoaBean.razao}" />
+						<h:outputText value="Apelido / Razão Social" />
+						<p:inputText value="#{cadastroPessoaBean.fantasia}" />
 
-							<p:outputLabel value="Tipo de pessoa" />
-							<p:selectOneMenu id="tipoPesquisa" value="#{cadastroPessoaBean.tipoP}">
-								<f:selectItem itemLabel="Selecione" />
-								<f:selectItems value="#{cadastroPessoaBean.tiposPessoas}"
-									var="tipo" itemLabel="#{tipo.descricao}" itemValue="#{tipo}" />
-							</p:selectOneMenu>
+						<p:outputLabel value="Tipo de pessoa" />
+						<p:selectOneMenu id="tipoPesquisa"
+							value="#{cadastroPessoaBean.tipoP}">
+							<f:selectItem itemLabel="Selecione" />
+							<f:selectItems value="#{cadastroPessoaBean.tiposPessoas}"
+								var="tipo" itemLabel="#{tipo.descricao}" itemValue="#{tipo}" />
+						</p:selectOneMenu>
 
-							<p:outputLabel value="Status" for="status" />
-							<p:selectOneMenu id="status" value="#{cadastroPessoaBean.status}">
-								<f:selectItems value="#{cadastroPessoaBean.statusList}" />
-							</p:selectOneMenu>
+						<p:outputLabel value="Status" for="status" />
+						<p:selectOneMenu id="status" value="#{cadastroPessoaBean.status}">
+							<f:selectItems value="#{cadastroPessoaBean.statusList}" />
+						</p:selectOneMenu>
 
-							<p:commandButton value="Consultar" id="consultar-button"
-								update="frmCadastro:pessoa-table" process="@form" action="#{cadastroPessoaBean.consultarFiltros}" />
-						</h:panelGrid>
-					</h:form>
+						<p:commandButton value="Consultar" id="consultar-button"
+							update="frmCadastro:pessoa-table" process="@form"
+							action="#{cadastroPessoaBean.consultarFiltros}" />
+					</h:panelGrid>
+				</h:form>
 
-				</div>
-			</p:panel>	
-			
+			</div>
+		</p:panel>
+
 		<h:form id="frmCadastro">
 
-			<p:messages id="msgs" closable="true" autoUpdate="true"/>
+			<p:messages id="msgs" closable="true" autoUpdate="true" />
 
 			<p:toolbar id="toolbar" style="margin-top:20px">
 				<f:facet name="left">
@@ -89,11 +91,10 @@
 				</f:facet>
 
 			</p:toolbar>
-			
+
 			<p:dataTable value="#{cadastroPessoaBean.todasPessoas}" var="pessoa"
 				emptyMessage="Nenhuma pessoa cadastrada." rows="10" paginator="true"
-				paginatorPosition="bottom" reflow="true"
-				id="pessoa-table"
+				paginatorPosition="bottom" reflow="true" id="pessoa-table"
 				selection="#{cadastroPessoaBean.pessoaSelecionado}"
 				selectionMode="single" rowKey="#{pessoa.codigo}"
 				filteredValue="#{cadastroPessoaBean.filtroPessoas}"
@@ -142,7 +143,7 @@
 				id="pessoa-dialog" resizable="false" modal="true"
 				closeOnEscape="true" width="680" height="390">
 
-				<p:messages id="msgs-dialog" closable="true" autoUpdate="true"/>
+				<p:messages id="msgs-dialog" closable="true" autoUpdate="true" />
 
 				<p:defaultCommand target="salvar-button" scope="pessoa-dialog" />
 
@@ -187,7 +188,9 @@
 									<f:selectItem itemLabel="Selecione" />
 									<f:selectItems value="#{cadastroPessoaBean.tiposPessoas}"
 										var="tipo" itemLabel="#{tipo.descricao}" itemValue="#{tipo}" />
-									<p:ajax event="change" render="labelValor valor labelEmpresa empresa labelFilial filial labelCusto custo labelEquipe equipe labelNivel nivel" process="tipo" />
+									<p:ajax event="change"
+										update="pnlCliente pnlConsultor"
+										process="tipo" />
 								</p:selectOneMenu>
 
 
@@ -270,7 +273,7 @@
 							<p:outputLabel value="Estado:" for="estado" />
 							<p:selectOneMenu filter="true"
 								value="#{cadastroPessoaBean.pessoaEdicao.estado}"
-								converter="omnifaces.SelectItemsConverter"  id="estado">
+								converter="omnifaces.SelectItemsConverter" id="estado">
 								<f:selectItem noSelectionOption="true"
 									itemLabel="Selecione um estado" />
 								<f:selectItems value="#{cadastroPessoaBean.todosEstados}"
@@ -283,7 +286,7 @@
 							<p:outputLabel value="Cidade" for="cidade" />
 							<p:selectOneMenu filter="true"
 								value="#{cadastroPessoaBean.pessoaEdicao.cidade}"
-								converter="omnifaces.SelectItemsConverter"  id="cidade">
+								converter="omnifaces.SelectItemsConverter" id="cidade">
 								<f:selectItem noSelectionOption="true"
 									itemLabel="Selecione uma cidade" />
 								<f:selectItems value="#{cadastroPessoaBean.todasCidades}"
@@ -293,73 +296,92 @@
 					</p:tab>
 
 					<p:tab title="Cliente" id="TabCliente">
-						<h:panelGrid columns="2">
-							<p:outputLabel value="Valor Hora" for="valor" id="labelValor" rendered="#{cadastroPessoaBean.pessoaEdicao.tipoPessoa == 'CLIENTE'}"/>
-							<p:inputText id="valor" rendered="#{cadastroPessoaBean.pessoaEdicao.tipoPessoa == 'CLIENTE'}"
-								value="#{cadastroPessoaBean.pessoaEdicao.valorHoraCliente}"
-								onfocus="maskMoney(this)">
-								<f:convertNumber pattern="#,##0.00" />
-							</p:inputText>
-						</h:panelGrid>
+						<p:outputPanel id="pnlCliente">
+							<h:panelGrid columns="2">
+								<p:outputLabel value="Valor Hora" for="valor" id="labelValor"
+									rendered="#{cadastroPessoaBean.pessoaEdicao.tipoPessoa == 'CLIENTE'}" />
+								<p:inputText id="valor"
+									rendered="#{cadastroPessoaBean.pessoaEdicao.tipoPessoa == 'CLIENTE'}"
+									value="#{cadastroPessoaBean.pessoaEdicao.valorHoraCliente}"
+									onfocus="maskMoney(this)">
+									<f:convertNumber pattern="#,##0.00" />
+								</p:inputText>
+							</h:panelGrid>
+						</p:outputPanel>
 					</p:tab>
 
 					<p:tab title="Consultor">
-						<h:panelGrid columns="2">
-							<p:outputLabel value="Empresa: " for="empresa" id="labelEmpresa" rendered="#{cadastroPessoaBean.pessoaEdicao.tipoPessoa == 'CONSULTOR'}"/>
-							<p:selectOneMenu filter="true"   rendered="#{cadastroPessoaBean.pessoaEdicao.tipoPessoa == 'CONSULTOR'}"
-								value="#{cadastroPessoaBean.pessoaEdicao.empresa}"
-								converter="omnifaces.SelectItemsConverter" id="empresa">
-								<f:selectItem noSelectionOption="true"
-									itemLabel="Selecione uma empresa" />
-								<f:selectItems value="#{cadastroPessoaBean.todasEmpresas}"
-									var="empresa" itemValue="#{empresa}"
-									itemLabel="#{empresa.razaoSocial}" />
-								<f:ajax event="change" render="filial"
-									listener="#{cadastroPessoaBean.listaFiliais}" />
-							</p:selectOneMenu>
+						<p:outputPanel id="pnlConsultor">
+							<h:panelGrid columns="2">
+								<p:outputLabel value="Empresa: " for="empresa" id="labelEmpresa"
+									rendered="#{cadastroPessoaBean.pessoaEdicao.tipoPessoa == 'CONSULTOR'}" />
+								<p:selectOneMenu filter="true"
+									rendered="#{cadastroPessoaBean.pessoaEdicao.tipoPessoa == 'CONSULTOR'}"
+									value="#{cadastroPessoaBean.pessoaEdicao.empresa}"
+									converter="omnifaces.SelectItemsConverter" id="empresa">
+									<f:selectItem noSelectionOption="true"
+										itemLabel="Selecione uma empresa" />
+									<f:selectItems value="#{cadastroPessoaBean.todasEmpresas}"
+										var="empresa" itemValue="#{empresa}"
+										itemLabel="#{empresa.razaoSocial}" />
+									<f:ajax event="change" render="filial"
+										listener="#{cadastroPessoaBean.listaFiliais}" />
+								</p:selectOneMenu>
 
-							<p:outputLabel value="Filial: " for="filial" id="labelFilial"  rendered="#{cadastroPessoaBean.pessoaEdicao.tipoPessoa == 'CONSULTOR'}"/>
-							<p:selectOneMenu filter="true"  rendered="#{cadastroPessoaBean.pessoaEdicao.tipoPessoa == 'CONSULTOR'}"
-								value="#{cadastroPessoaBean.pessoaEdicao.filial}"
-								converter="omnifaces.SelectItemsConverter" id="filial">
-								<f:selectItem noSelectionOption="true"
-									itemLabel="Selecione uma filial" />
-								<f:selectItems value="#{cadastroPessoaBean.todasFiliais}"
-									var="filial" itemValue="#{filial}"
-									itemLabel="#{filial.razaoSocial}" />
-							</p:selectOneMenu>
+								<p:outputLabel value="Filial: " for="filial" id="labelFilial"
+									rendered="#{cadastroPessoaBean.pessoaEdicao.tipoPessoa == 'CONSULTOR'}" />
+								<p:selectOneMenu filter="true"
+									rendered="#{cadastroPessoaBean.pessoaEdicao.tipoPessoa == 'CONSULTOR'}"
+									value="#{cadastroPessoaBean.pessoaEdicao.filial}"
+									converter="omnifaces.SelectItemsConverter" id="filial">
+									<f:selectItem noSelectionOption="true"
+										itemLabel="Selecione uma filial" />
+									<f:selectItems value="#{cadastroPessoaBean.todasFiliais}"
+										var="filial" itemValue="#{filial}"
+										itemLabel="#{filial.razaoSocial}" />
+								</p:selectOneMenu>
 
-							<p:outputLabel value="Custo por Hora" for="custo" id="labelCusto"  rendered="#{cadastroPessoaBean.pessoaEdicao.tipoPessoa == 'CONSULTOR'}"/>
-							<p:inputText id="custo"  rendered="#{cadastroPessoaBean.pessoaEdicao.tipoPessoa == 'CONSULTOR'}"
-								value="#{cadastroPessoaBean.pessoaEdicao.custoPorHora}"
-								onfocus="maskMoney(this)">
-								<f:convertNumber pattern="#,##0.00" />
-							</p:inputText>
+								<p:outputLabel value="Custo por Hora" for="custo"
+									id="labelCusto"
+									rendered="#{cadastroPessoaBean.pessoaEdicao.tipoPessoa == 'CONSULTOR'}" />
+								<p:inputText id="custo"
+									rendered="#{cadastroPessoaBean.pessoaEdicao.tipoPessoa == 'CONSULTOR'}"
+									value="#{cadastroPessoaBean.pessoaEdicao.custoPorHora}"
+									onfocus="maskMoney(this)">
+									<f:convertNumber pattern="#,##0.00" />
+								</p:inputText>
 
-							<p:outputLabel value="Equipe: " for="equipe" id="labelEquipe"  rendered="#{cadastroPessoaBean.pessoaEdicao.tipoPessoa == 'CONSULTOR'}"/>
-							<p:selectOneMenu filter="true"  rendered="#{cadastroPessoaBean.pessoaEdicao.tipoPessoa == 'CONSULTOR'}"
-								value="#{cadastroPessoaBean.pessoaEdicao.equipe}"
-								converter="omnifaces.SelectItemsConverter" id="equipe">
-								<f:selectItem noSelectionOption="true"
-									itemLabel="Selecione uma equipe" />
-								<f:selectItems value="#{cadastroPessoaBean.todasEquipes}"
-									var="equipe" itemValue="#{equipe}"
-									itemLabel="#{equipe.descricao}" />
-								<f:ajax event="change" render="nivelEquipe"
-									listener="#{cadastroPessoaBean.listaNiveisEquipes}" />
-							</p:selectOneMenu>
+								<p:outputLabel value="Equipe: " for="equipe" id="labelEquipe"
+									rendered="#{cadastroPessoaBean.pessoaEdicao.tipoPessoa == 'CONSULTOR'}" />
+								<p:selectOneMenu filter="true"
+									rendered="#{cadastroPessoaBean.pessoaEdicao.tipoPessoa == 'CONSULTOR'}"
+									value="#{cadastroPessoaBean.pessoaEdicao.equipe}"
+									converter="omnifaces.SelectItemsConverter" id="equipe">
+									<f:selectItem noSelectionOption="true"
+										itemLabel="Selecione uma equipe" />
+									<f:selectItems value="#{cadastroPessoaBean.todasEquipes}"
+										var="equipe" itemValue="#{equipe}"
+										itemLabel="#{equipe.descricao}" />
+									<f:ajax event="change" render="nivelEquipe"
+										listener="#{cadastroPessoaBean.listaNiveisEquipes}" />
+								</p:selectOneMenu>
 
-							<p:outputLabel value="Nível Equipe:" for="nivelEquipe" id="labelNivel"  rendered="#{cadastroPessoaBean.pessoaEdicao.tipoPessoa == 'CONSULTOR'}"/>
-							<p:selectOneMenu filter="true"  rendered="#{cadastroPessoaBean.pessoaEdicao.tipoPessoa == 'CONSULTOR'}"
-								value="#{cadastroPessoaBean.pessoaEdicao.nivelEquipe}"
-								converter="omnifaces.SelectItemsConverter" id="nivelEquipe">
-								<f:selectItem noSelectionOption="true"
-									itemLabel="Selecione um nível" />
-								<f:selectItems value="#{cadastroPessoaBean.todosNiveisEquipe}"
-									var="nivel" itemValue="#{nivel}" itemLabel="#{nivel.descricao}" />
-							</p:selectOneMenu>
+								<p:outputLabel value="Nível Equipe:" for="nivelEquipe"
+									id="labelNivel"
+									rendered="#{cadastroPessoaBean.pessoaEdicao.tipoPessoa == 'CONSULTOR'}" />
+								<p:selectOneMenu filter="true"
+									rendered="#{cadastroPessoaBean.pessoaEdicao.tipoPessoa == 'CONSULTOR'}"
+									value="#{cadastroPessoaBean.pessoaEdicao.nivelEquipe}"
+									converter="omnifaces.SelectItemsConverter" id="nivelEquipe">
+									<f:selectItem noSelectionOption="true"
+										itemLabel="Selecione um nível" />
+									<f:selectItems value="#{cadastroPessoaBean.todosNiveisEquipe}"
+										var="nivel" itemValue="#{nivel}"
+										itemLabel="#{nivel.descricao}" />
+								</p:selectOneMenu>
 
-						</h:panelGrid>
+							</h:panelGrid>
+						</p:outputPanel>
 					</p:tab>
 
 				</p:tabView>
