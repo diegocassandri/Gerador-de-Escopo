@@ -52,3 +52,13 @@ insert into grupo_tela values (1,19);
 insert into grupo_tela values (1,20);
 insert into grupo_tela values (1,21);
 
+insert into faixacolaborador (codigo,descricao,faixainicial,faixafinal,indice,codigousuarioalteracao,codigousuarioinclusao) values (seq_faixa_colaborador.nextval,'Faixa 1',0,100,1,1,1);
+insert into faixacolaborador (codigo,descricao,faixainicial,faixafinal,indice,codigousuarioalteracao,codigousuarioinclusao) values (seq_faixa_colaborador.nextval,'Faixa 2',100,300,2,1,1);
+insert into faixacolaborador (codigo,descricao,faixainicial,faixafinal,indice,codigousuarioalteracao,codigousuarioinclusao) values (seq_faixa_colaborador.nextval,'Faixa 3',300,500,3,1,1);
+insert into faixacolaborador (codigo,descricao,faixainicial,faixafinal,indice,codigousuarioalteracao,codigousuarioinclusao) values (seq_faixa_colaborador.nextval,'Faixa 4',500,800,4,1,1);
+insert into faixacolaborador (codigo,descricao,faixainicial,faixafinal,indice,codigousuarioalteracao,codigousuarioinclusao) values (seq_faixa_colaborador.nextval,'Faixa 5',800,1200,5,1,1);
+insert into faixacolaborador (codigo,descricao,faixainicial,faixafinal,indice,codigousuarioalteracao,codigousuarioinclusao) values (seq_faixa_colaborador.nextval,'Faixa 6',1200,1800,6,1,1);
+insert into faixacolaborador (codigo,descricao,faixainicial,faixafinal,indice,codigousuarioalteracao,codigousuarioinclusao) values (seq_faixa_colaborador.nextval,'Faixa 7',1800,2500,7,1,1);
+insert into faixacolaborador (codigo,descricao,faixainicial,faixafinal,indice,codigousuarioalteracao,codigousuarioinclusao) values (seq_faixa_colaborador.nextval,'Faixa 8',2500,3500,8,1,1);
+insert into faixacolaborador (codigo,descricao,faixainicial,faixafinal,indice,codigousuarioalteracao,codigousuarioinclusao) values (seq_faixa_colaborador.nextval,'Faixa 9',3500,999999,9,1,1);
+

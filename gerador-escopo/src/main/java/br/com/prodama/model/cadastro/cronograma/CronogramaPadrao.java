@@ -51,6 +51,7 @@ public class CronogramaPadrao implements Serializable{
 	@Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
 	private List<AtividadeHoraPadrao> listaAtividadesHorasPadroes;
 
+	
 	public Long getCodigo() {
 		return codigo;
 	}
@@ -116,11 +117,9 @@ public class CronogramaPadrao implements Serializable{
 		return true;
 	}
 
-	@Override
-	public String toString() {
-		return codigo +" "+ descricao;
-	}
 	
+
+
 	
 	
 
