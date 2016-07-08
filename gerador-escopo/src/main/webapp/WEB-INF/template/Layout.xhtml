@@ -7,12 +7,13 @@
 	xmlns:p="http://primefaces.org/ui">
 
 <h:head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<title><ui:insert name="titulo">Gerador de Escopo</ui:insert></title>
 	<h:outputStylesheet library="prodama" name="estilo.css" />
 	<h:outputScript target="body" library="prodama" name="MaskMoney.js" />
-	<link rel="shortcut icon" type="image/x-ico"  href="resources/prodama/favicon.ico" />
-	
+	<link rel="shortcut icon" type="image/x-ico"
+		href="resources/prodama/favicon.ico" />
+
 </h:head>
 
 <h:body>
@@ -58,15 +59,15 @@
 							outcome="/cadastros/CadastroFilial.xhtml" />
 						<p:menuitem value="Pessoas"
 							outcome="/cadastros/CadastroPessoa.xhtml" />
-						<p:submenu label="Produtos" >
+						<p:submenu label="Produtos">
 							<p:menuitem value="Produtos"
-							outcome="/cadastros/produtos/CadastroProduto.xhtml" />
+								outcome="/cadastros/produtos/CadastroProduto.xhtml" />
 							<p:menuitem value="Módulos"
-							outcome="/cadastros/produtos/CadastroModulo.xhtml" />
+								outcome="/cadastros/produtos/CadastroModulo.xhtml" />
 							<p:menuitem value="Processos"
-							outcome="/cadastros/produtos/CadastroProcessoGestao.xhtml" />
+								outcome="/cadastros/produtos/CadastroProcessoGestao.xhtml" />
 						</p:submenu>
-						<p:submenu label="Projetos" >
+						<p:submenu label="Projetos">
 							<p:menuitem value="Tipos de hora"
 								outcome="/cadastros/projetos/CadastroTipoDeHora.xhtml" />
 							<p:menuitem value="Empresa Cliente"
@@ -102,7 +103,7 @@
 	</header>
 
 
-	<div id="conteudo" style="min-height:450px">
+	<div id="conteudo" style="min-height: 450px">
 		<ui:insert name="corpo" />
 	</div>
 
@@ -114,12 +115,12 @@
 				<br />
 				<p:commandButton icon="fa fa-globe" title="Selecionar Empresa"
 					action="#{selecaoEmpresaBean.abrirDialogo}" process="@this"
-					update="frm"  >
+					update="frm">
 					<p:ajax event="dialogReturn"
 						listener="#{usuarioLogin.SelecionarEmpresa}" process="@this"
 						update="empresa" />
 					<p:resetInput target="empresa" />
-				</p:commandButton> 
+				</p:commandButton>
 				<p:outputLabel value=" " />
 				<p:outputLabel value="Empresa: " />
 				<p:outputLabel id="empresa"
@@ -127,7 +128,7 @@
 				<br />
 				<p:commandButton icon="fa fa-building" title="Selecionar Filial"
 					action="#{selecaoFilialBean.abrirDialogo}" process="@this"
-					update="frm"  >
+					update="frm">
 					<p:ajax event="dialogReturn"
 						listener="#{usuarioLogin.SelecionarFilial}" process="@this"
 						update="filial" />
@@ -149,6 +150,8 @@
 				styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
 		</p:confirmDialog>
 	</h:form>
+
+	
 </h:body>
 
 </html>

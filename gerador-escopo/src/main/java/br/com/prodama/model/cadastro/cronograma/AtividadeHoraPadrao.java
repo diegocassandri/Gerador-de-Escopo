@@ -77,7 +77,7 @@ public class AtividadeHoraPadrao implements Serializable{
 	
 	@ManyToOne
 	@JoinColumn(name = "CodigoAgrupamento")
-	private AgrupamentoAtidade agrupamento;
+	private AgrupamentoAtividade agrupamento;
 	
 	@ManyToOne
 	@JoinColumn(name = "AtividadeHoraPai")
@@ -171,11 +171,11 @@ public class AtividadeHoraPadrao implements Serializable{
 		this.nivelEquipe = nivelEquipe;
 	}
 
-	public AgrupamentoAtidade getAgrupamento() {
+	public AgrupamentoAtividade getAgrupamento() {
 		return agrupamento;
 	}
 
-	public void setAgrupamento(AgrupamentoAtidade agrupamento) {
+	public void setAgrupamento(AgrupamentoAtividade agrupamento) {
 		this.agrupamento = agrupamento;
 	}
 
