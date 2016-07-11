@@ -13,6 +13,7 @@
 	<ui:define name="titulo">Edição Cronograma Padrão</ui:define>
 
 	<ui:define name="corpo">
+		<p:messages id="msgs" closable="true" autoUpdate="true" />
 		<p:panel header="Dados Gerais">
 			<h:form>
 				<h:panelGrid columns="2">
@@ -23,7 +24,7 @@
 					<p:outputLabel value="Descrição: " for="descricao" />
 					<p:outputLabel id="descricao"
 						value="#{cadastroCronogramaPadraoBean.cronogramaEdicao.descricao}" />
-						
+
 					<p:outputLabel value="Produto: " for="produto" />
 					<p:outputLabel id="produto"
 						value="#{cadastroCronogramaPadraoBean.cronogramaEdicao.produto.descricao}" />
@@ -32,20 +33,108 @@
 			</h:form>
 		</p:panel>
 
-		<p:layout style="min-width:400px;min-height:200px;margin-top:10px">
-			<p:layoutUnit position="west" resizable="true" size="100" header="Atividades"
-				minSize="40" maxSize="200">
+		<p:layout style="min-width:40px;min-height:20px;margin-top:10px">
+			<p:layoutUnit position="west" resizable="true" size="480"
+				header="Atividades" minSize="40" maxSize="400">
+				<h:form id="frmTree">
 
+					<p:treeTable value="#{cadastroCronogramaPadraoBean.raiz}"
+						editable="true" var="raiz" editMode="cell"
+						emptyMessage="Nenhuma atividade encontrada."
+						id="treeTableAtividades" scrollable="true">
+
+						<p:ajax event="cellEdit"
+							listener="#{cadastroCronogramaPadraoBean.onCellEdit}" />
+
+						<p:column headerText="Descrição">
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{raiz}" />
+								</f:facet>
+								<f:facet name="input">
+									<p:inputText value="#{raiz}" style="width:80%" />
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+						<p:column style="width:15%">
+							<p:commandButton icon="ui-icon-pencil" process="@this"
+								update="frmAtividade:pnlAtividade">
+								<f:setPropertyActionListener value="#{raiz}" 
+									target="#{cadastroCronogramaPadraoBean.atividadeEdicao}" />
+								<f:ajax event="click" render=":frmAtividade:pnlAtividade"/>
+
+							</p:commandButton>
+						</p:column>
+
+						<f:facet name="footer">
+							<div align="left">
+								<p:commandButton icon="ui-icon-plus" value="Adicionar Sintético" />
+								<p:commandButton icon="ui-icon-plus" value="Adicionar Análitico" />
+								<p:commandButton icon="ui-icon-minus" value="Remover" />
+							</div>
+						</f:facet>
+					</p:treeTable>
+				</h:form>
 			</p:layoutUnit>
 
-			<p:layoutUnit position="center" header="Documentos">
+			<p:layoutUnit position="center" header="Dados Atividade" >
+				<h:form id="frmAtividade" >
+					<p:outputPanel id="pnlAtividade" rendered="#{cadastroCronogramaPadraoBean.atividadeEdicao != null}">
+						<h:panelGrid columns="2">
+							<p:outputLabel value="Código" for="codigoAtividade" />
+							<p:inputText size="8"
+								value="#{cadastroCronogramaPadraoBean.atividadeEdicao.codigo}"
+								id="codigoAtividade" readonly="true" />
 
+							<p:outputLabel value="Descrição" for="descricaoAtividade" />
+							<p:inputText size="30" maxlength="50"
+								value="#{cadastroCronogramaPadraoBean.atividadeEdicao.descricao}"
+								id="descricaoAtividade" />
+
+							<p:outputLabel value="Observação" />
+							<p:inputTextarea rows="5" cols="40" maxlength="10"
+								value="#{cadastroCronogramaPadraoBean.atividadeEdicao.observacao}"
+								autoResize="false" />
+
+							<p:outputLabel value="Equipe:" for="equipe" />
+							<p:selectOneMenu filter="true"
+								value="#{cadastroCronogramaPadraoBean.atividadeEdicao.equipe}"
+								converter="omnifaces.SelectItemsConverter" required="true"
+								requiredMessage="O Campo Equipe é obrigatório" id="equipe">
+								<f:selectItem noSelectionOption="true"
+									itemLabel="Selecione uma equipe" />
+								<f:selectItems
+									value="#{cadastroCronogramaPadraoBean.todasEquipes}"
+									var="equipe" itemValue="#{equipe}"
+									itemLabel="#{equipe.descricao}" />
+								<f:ajax event="change" render="nivelEquipe"
+									listener="#{cadastroPessoaBean.listaNiveisEquipes}" />
+							</p:selectOneMenu>
+
+							<p:outputLabel value="Nível Equipe:" for="nivelEquipe"
+								id="labelNivel" />
+							<p:selectOneMenu filter="true"
+								value="#{cadastroCronogramaPadraoBean.atividadeEdicao.nivelEquipe}"
+								converter="omnifaces.SelectItemsConverter" id="nivelEquipe">
+								<f:selectItem noSelectionOption="true"
+									itemLabel="Selecione um nível" />
+								<f:selectItems
+									value="#{cadastroCronogramaPadraoBean.todosNiveisEquipe}"
+									var="nivel" itemValue="#{nivel}" itemLabel="#{nivel.descricao}" />
+							</p:selectOneMenu>
+
+						</h:panelGrid>
+						<h:panelGrid columns="2" cellpadding="10">
+							<p:commandButton value="Salvar" id="salvar-button"
+								action="#{cadastroCronogramaPadraoBean.salvarAtividade}" process="frmAtividade"
+								update="msgs frmAtividade" />
+						</h:panelGrid>
+
+					</p:outputPanel>
+				</h:form>
 			</p:layoutUnit>
+
 		</p:layout>
-
-
-
-
 	</ui:define>
 
 </ui:composition>

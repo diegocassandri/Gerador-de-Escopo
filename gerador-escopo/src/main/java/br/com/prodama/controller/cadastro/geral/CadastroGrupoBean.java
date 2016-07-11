@@ -183,11 +183,9 @@ public class CadastroGrupoBean implements Serializable {
 	   Tela telaTemp;
 	   grupoEdicao.getTelas().clear();
 		for (TreeNode no : checkboxSelectedNodes){
-				System.out.println("--->" + no.getData());
 				telaTemp = ((Tela)no.getData());
 				grupoEdicao.getTelas().remove(telaTemp);
 				grupoEdicao.getTelas().add(telaTemp);
-
 		}
 		salvar();
 	}

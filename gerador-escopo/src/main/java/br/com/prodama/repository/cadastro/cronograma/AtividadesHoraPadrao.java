@@ -8,6 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import br.com.prodama.model.cadastro.cronograma.AtividadeHoraPadrao;
+import br.com.prodama.model.cadastro.cronograma.CronogramaPadrao;
 
 public class AtividadesHoraPadrao implements Serializable {
 
@@ -45,6 +46,12 @@ public class AtividadesHoraPadrao implements Serializable {
 
 	public List<AtividadeHoraPadrao> todos() {
 		return manager.createQuery("from AtividadeHoraPadrao", AtividadeHoraPadrao.class).getResultList();
+	}
+	
+	public List<AtividadeHoraPadrao> raizes(CronogramaPadrao cronograma) {
+
+		return (List<AtividadeHoraPadrao>) manager.createQuery("from AtividadeHoraPadrao where atividadeHoraPai is null and cronogramaPadrao = :cronograma", AtividadeHoraPadrao.class).setParameter("cronograma", cronograma).getResultList();
+		 
 	}
 
 
