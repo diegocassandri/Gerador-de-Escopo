@@ -23,7 +23,7 @@ import br.com.prodama.enun.Status;
 
 @Entity
 @Table(name="AgrupamentoAtidade")
-public class AgrupamentoAtidade {
+public class AgrupamentoAtividade {
 	
 	private static final long serialVersionUID = 1L;
 
@@ -82,6 +82,14 @@ public class AgrupamentoAtidade {
 
 	public void setListaEstimativaHoras(List<AtividadeHoraPadrao> listaEstimativaHoras) {
 		this.listaEstimativaHoras = listaEstimativaHoras;
+	}
+
+	public AtividadeHoraPadrao getAtividadeHoraPrao() {
+		return atividadeHoraPrao;
+	}
+
+	public void setAtividadeHoraPrao(AtividadeHoraPadrao atividadeHoraPrao) {
+		this.atividadeHoraPrao = atividadeHoraPrao;
 	}
 	
 	

@@ -7,6 +7,8 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -53,13 +55,15 @@ public class AtividadeHoraPadrao implements Serializable{
 	@Column(name = "horaAtividade", nullable = true)
 	private Long horaAtividade;
 
-	@NotEmpty
-	@Column(name = "AnaliticoSintetico", nullable = false)
+
+	@Enumerated(EnumType.STRING)
 	private AnaliticoSintetico analiticoSitetico;
 	
+	@Enumerated(EnumType.STRING)
 	@Column(name = "FormatoExecucao", nullable = true)
 	private FormatoExecucao formatoExecucao;
 	
+	@Enumerated(EnumType.STRING)
 	@Column(name = "ResponsavelExecucao", nullable = true)
 	private ResponsavelExecucao responsavelExecucao;
 	
@@ -77,7 +81,7 @@ public class AtividadeHoraPadrao implements Serializable{
 	
 	@ManyToOne
 	@JoinColumn(name = "CodigoAgrupamento")
-	private AgrupamentoAtidade agrupamento;
+	private AgrupamentoAtividade agrupamento;
 	
 	@ManyToOne
 	@JoinColumn(name = "AtividadeHoraPai")
@@ -171,11 +175,11 @@ public class AtividadeHoraPadrao implements Serializable{
 		this.nivelEquipe = nivelEquipe;
 	}
 
-	public AgrupamentoAtidade getAgrupamento() {
+	public AgrupamentoAtividade getAgrupamento() {
 		return agrupamento;
 	}
 
-	public void setAgrupamento(AgrupamentoAtidade agrupamento) {
+	public void setAgrupamento(AgrupamentoAtividade agrupamento) {
 		this.agrupamento = agrupamento;
 	}
 

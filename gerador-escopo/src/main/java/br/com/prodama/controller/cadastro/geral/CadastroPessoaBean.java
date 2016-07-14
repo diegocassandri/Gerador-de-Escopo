@@ -206,10 +206,6 @@ public class CadastroPessoaBean implements Serializable {
 		return Arrays.asList(Status.values());
 	}
 
-	
-	
-
-
 
 	public List<Estado> getTodosEstados() {
 		return todosEstados;
