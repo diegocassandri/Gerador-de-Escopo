@@ -12,13 +12,12 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.primefaces.context.RequestContext;
-import org.primefaces.event.CellEditEvent;
-import org.primefaces.event.RowEditEvent;
-import org.primefaces.event.SelectEvent;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 
 import br.com.prodama.enun.AnaliticoSintetico;
+import br.com.prodama.enun.FormatoExecucao;
+import br.com.prodama.enun.ResponsavelExecucao;
 import br.com.prodama.model.cadastro.cronograma.AtividadeHoraPadrao;
 import br.com.prodama.model.cadastro.cronograma.CronogramaPadrao;
 import br.com.prodama.model.cadastro.geral.Equipe;
@@ -29,7 +28,6 @@ import br.com.prodama.repository.cadastro.cronograma.CronogramasPadrao;
 import br.com.prodama.repository.cadastro.geral.Equipes;
 import br.com.prodama.repository.cadastro.geral.NiveisEquipe;
 import br.com.prodama.repository.cadastro.produto.Produtos;
-import br.com.prodama.service.cadastro.cronograma.CadastroAtividadePadrao;
 import br.com.prodama.service.cadastro.cronograma.CadastroCromogramaPadrao;
 import br.com.prodama.util.FacesMessages;
 
@@ -44,8 +42,6 @@ public class CadastroCronogramaPadraoBean implements Serializable {
 	@Inject
 	private CadastroCromogramaPadrao cadastroCromogramaPadrao;
 	
-	@Inject
-	private CadastroAtividadePadrao cadastroAtividadePadrao;
 
 	@Inject
 	private CronogramasPadrao cronogramasPadrao;
@@ -67,6 +63,7 @@ public class CadastroCronogramaPadraoBean implements Serializable {
 	private List<CronogramaPadrao> todosCronogramas;
 	private List<CronogramaPadrao> filtroCronogramas;
 	private AtividadeHoraPadrao atividadeEdicao;
+	private AtividadeHoraPadrao atividadeSelecionada;
 	private TreeNode selectedNode;
 	
 	private List<Equipe> todasEquipes;
@@ -76,14 +73,18 @@ public class CadastroCronogramaPadraoBean implements Serializable {
 	
 	private TreeNode raiz;
 	
+	private boolean habilitar = false;
+	
 	@PostConstruct
 	public void prepararNovoCadastro() {
 		this.raiz = new DefaultTreeNode("Raiz", null);
 		todosProdutos = produtos.todos();
 		todasEquipes = equipes.todos();
 		todosNiveisEquipe = niveisEquipe.todos();
+		atividadeEdicao = new AtividadeHoraPadrao();
 		if(cronogramaEdicao == null){
 			cronogramaEdicao = new CronogramaPadrao();
+			atividadeEdicao = new AtividadeHoraPadrao();
 		}
 		
 		
@@ -109,16 +110,44 @@ public class CadastroCronogramaPadraoBean implements Serializable {
 	
 	public void salvarAtividade(){
 		try {
-			this.cadastroAtividadePadrao.salvar(atividadeEdicao);
+			cronogramaEdicao = this.cronogramasPadrao.pesquisaPorId(cronogramaEdicao.getCodigo());
+			atividadeEdicao.setCronogramaPadrao(cronogramaEdicao);
+			cronogramaEdicao.getListaAtividadesHorasPadroes().add(atividadeEdicao);
+			this.cadastroCromogramaPadrao.salvar(cronogramaEdicao);
+			//cronogramaEdicao = this.cronogramasPadrao.pesquisaPorId(cronogramaEdicao.getCodigo());
+			carregaArvore(cronogramaEdicao);
+			habilitar = false;
 			messages.info("Atividade salva com sucesso!");
-			RequestContext.getCurrentInstance().update(Arrays.asList("frmCadastro:msgs", "frmCadastro:cronograma-table"));
+			RequestContext.getCurrentInstance().update(Arrays.asList("msgs","frmTree","painel-tab"));
+			//RequestContext.getCurrentInstance().execute("location.reload()");
 		}catch (Exception e){
 			FacesMessage mensagem = new FacesMessage(e.getMessage());
-			messages.error("Erro ao salvar atividade! \n Motivo:" + mensagem.getDetail());
-			RequestContext.getCurrentInstance().update(Arrays.asList("msgs" ));
+			if(mensagem.getDetail() != null){
+				messages.error("Erro ao salvar atividade! \n Motivo:" + mensagem.getDetail());
+				RequestContext.getCurrentInstance().update(Arrays.asList("msgs","frmTree:treeTableAtividades"));
+			} else {
+				RequestContext.getCurrentInstance().update(Arrays.asList("frmTree:treeTableAtividades"));
+			}
 		}
 	}
 
+	public void addSintetico(){
+		atividadeEdicao = new AtividadeHoraPadrao();
+		atividadeEdicao.setAnaliticoSitetico(AnaliticoSintetico.SINTETICO);
+		if(atividadeSelecionada != null){
+			atividadeEdicao.setAtividadeHoraPai(atividadeSelecionada);
+		}
+		habilitar = true;
+		RequestContext.getCurrentInstance().update(Arrays.asList("painel-tab:frmAtividade"));
+	}
+	
+	public void addAnalitico(){
+		atividadeEdicao = new AtividadeHoraPadrao();
+		atividadeEdicao.setAnaliticoSitetico(AnaliticoSintetico.ANALITICO);
+		atividadeEdicao.setAtividadeHoraPai(atividadeSelecionada);
+		habilitar = true;
+		RequestContext.getCurrentInstance().update(Arrays.asList("painel-tab:frmAtividade"));
+	}
 
 	public void excluir() {
 		try {
@@ -136,38 +165,37 @@ public class CadastroCronogramaPadraoBean implements Serializable {
 
 	}
 	
-	 public void onRowSelect(SelectEvent event) {
-	     
-	    }
+	public void excluirAtividade() {
+		try {
+			cronogramaEdicao.getListaAtividadesHorasPadroes().remove(atividadeEdicao);
+			this.cadastroCromogramaPadrao.salvar(cronogramaEdicao);
+			todosProdutos = produtos.todos();
+			todasEquipes = equipes.todos();
+			todosNiveisEquipe = niveisEquipe.todos();
+			carregaArvore(cronogramaEdicao);
+			messages.info("Atividade excluída com sucesso!");
+			habilitar = false;
+			RequestContext.getCurrentInstance().update(Arrays.asList("msgs","frmTree:treeTableAtividades","painel-tab"));
+		} catch (Exception e) {
+			FacesMessage mensagem = new FacesMessage(e.getMessage());
+			messages.error("Erro ao excluir atividade! \n Motivo:" + mensagem);
+			RequestContext.getCurrentInstance().update(Arrays.asList("msgs","frmTree:treeTableAtividades"));
+		}
+
+	}
 	
-	 public void onCellEdit(CellEditEvent event) {
-	        Object oldValue = event.getOldValue();
-	        Object newValue = event.getNewValue();
-	         
-	        if(newValue != null && !newValue.equals(oldValue)) {
-	            
-	        }
-	    } 
-	
-	public void onRowEdit(RowEditEvent event) {
-        
-    }
-     
-    public void onRowCancel(RowEditEvent event) {
-       
-    }
-    
     public void carregaArvore(CronogramaPadrao cronogramaEdicao)  {
-		List<AtividadeHoraPadrao> atividadesRaizes = atividades.raizes(cronogramaEdicao);
+    	this.cronogramaEdicao = cronogramasPadrao.pesquisaPorId(cronogramaEdicao.getCodigo());
+		List<AtividadeHoraPadrao> atividadesRaizes = atividades.raizes(this.cronogramaEdicao);
 		this.raiz = new DefaultTreeNode("Raiz", null);
 		adicionarNos(atividadesRaizes, this.raiz);
 	}
     
 
-	private void adicionarNos(List<AtividadeHoraPadrao> atividades, TreeNode pai) {
-		for (AtividadeHoraPadrao atividade : atividades) {
+	private void adicionarNos(List<AtividadeHoraPadrao> atividadesRaizes, TreeNode pai) {
+		for (AtividadeHoraPadrao atividade : atividadesRaizes) {
 			TreeNode no = new DefaultTreeNode(atividade, pai);
-			adicionarNos(atividade.getSubAtividadeHoras(), no);
+			adicionarNos(atividades.filhos(atividade), no);
 			}
 	}
     
@@ -282,7 +310,7 @@ public class CadastroCronogramaPadraoBean implements Serializable {
 	public void setAtividadeEdicao(AtividadeHoraPadrao atividadeEdicao) {
 		this.atividadeEdicao = atividadeEdicao;
 		if(atividadeEdicao != null ){
-			RequestContext.getCurrentInstance().update(Arrays.asList("frmAtividade:pnlAtividade"));
+			RequestContext.getCurrentInstance().update(Arrays.asList("painel-tab"));
 		}
 	}
 
@@ -290,20 +318,32 @@ public class CadastroCronogramaPadraoBean implements Serializable {
 		return selectedNode;
 	}
 	
-	public List<AnaliticoSintetico> getTipoList() {
-		return Arrays.asList(AnaliticoSintetico.values());
-	}
-
-	
 	public void setSelectedNode(TreeNode selectedNode) {
 		this.selectedNode = selectedNode;
-		if(selectedNode != null){
-			atividadeEdicao =  (AtividadeHoraPadrao) selectedNode.getData();
-			RequestContext.getCurrentInstance().update(Arrays.asList("frmAtividade"));
+		if (selectedNode != null){
+			atividadeSelecionada = (AtividadeHoraPadrao) selectedNode.getData();
+			atividadeEdicao = (AtividadeHoraPadrao) selectedNode.getData();
+			habilitar = true;
+			atividadeEdicao.setAnaliticoSitetico(AnaliticoSintetico.ANALITICO);
+			RequestContext.getCurrentInstance().update(Arrays.asList("painel-tab","painel-tab:frmAtividade"));
 		}
-		
 	}
 
+
+	
+	public AnaliticoSintetico[] getTipoList() {
+		return AnaliticoSintetico.values();
+	}
+
+	public List<FormatoExecucao> getFormatoList() {
+		return Arrays.asList(FormatoExecucao.values());
+	}
+	
+	public List<ResponsavelExecucao> getResponsavelList() {
+		return Arrays.asList(ResponsavelExecucao.values());
+	}
+	
+	
 	public Equipes getEquipes() {
 		return equipes;
 	}
@@ -326,6 +366,22 @@ public class CadastroCronogramaPadraoBean implements Serializable {
 
 	public void setTodosNiveisEquipe(List<NivelEquipe> todosNiveisEquipe) {
 		this.todosNiveisEquipe = todosNiveisEquipe;
+	}
+
+	public AtividadeHoraPadrao getAtividadeSelecionada() {
+		return atividadeSelecionada;
+	}
+
+	public void setAtividadeSelecionada(AtividadeHoraPadrao atividadeSelecionada) {
+		this.atividadeSelecionada = atividadeSelecionada;
+	}
+
+	public boolean isHabilitar() {
+		return habilitar;
+	}
+
+	public void setHabilitar(boolean habilitar) {
+		this.habilitar = habilitar;
 	}
 	
 	

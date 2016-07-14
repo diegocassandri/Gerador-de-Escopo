@@ -103,16 +103,16 @@
 	</header>
 
 
-	<div id="conteudo" style="min-height: 450px">
+	<div id="conteudo" style="min-height: 480px">
 		<ui:insert name="corpo" />
 	</div>
 
 	<footer>
 		<h:form id="frm">
-			<p:outputPanel id="painel" columns="1" autoUpdate="true">
+			<div style="align:right">
 				<p:outputLabel value="Sistema gerador de proposta - Prodama" />
-				<br />
-				<br />
+			</div>
+			<p:outputPanel id="painel" columns="1">
 				<p:commandButton icon="fa fa-globe" title="Selecionar Empresa"
 					action="#{selecaoEmpresaBean.abrirDialogo}" process="@this"
 					update="frm">
@@ -139,6 +139,8 @@
 				<p:outputLabel id="filial"
 					value="      #{usuarioLogin.filialSelecionada.razaoSocial}    " />
 			</p:outputPanel>
+			
+			
 		</h:form>
 	</footer>
 	<h:form>

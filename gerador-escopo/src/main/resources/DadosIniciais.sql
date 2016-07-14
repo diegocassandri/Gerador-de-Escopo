@@ -26,8 +26,10 @@ insert into tela (codigo,descricao,url,tela_pai) values( seq_tela.nextval,'Faixa
 insert into tela (codigo,descricao,url,tela_pai) values( seq_tela.nextval,'Cadastro de Produtos','/cadastros/produtos/CadastroProduto.xhtml',3);
 insert into tela (codigo,descricao,url,tela_pai) values( seq_tela.nextval,'Cadastro Módulo','/cadastros/produtos/CadastroModulo.xhtml',3);
 insert into tela (codigo,descricao,url,tela_pai) values( seq_tela.nextval,'Gestão do Módulo','/cadastros/produtos/CadastroGestaoModulo.xhtml',3);
-insert into tela (codigo,descricao,url,tela_pai) values( seq_tela.nextval,'Gestão do Módulo','/cadastros/produtos/CadastroProcessoGestao.xhtml',3);
-insert into tela (codigo,descricao,url,tela_pai) values( seq_tela.nextval,'Gestão de Pessoa','/cadastros/CadastroPessoa.xhtml',1);
+insert into tela (codigo,descricao,url,tela_pai) values( seq_tela.nextval,'Processos do Módulo','/cadastros/produtos/CadastroProcessoGestao.xhtml',3);
+insert into tela (codigo,descricao,url,tela_pai) values( seq_tela.nextval,'Cadastro de Pessoa','/cadastros/CadastroPessoa.xhtml',1);
+insert into tela (codigo,descricao,url,tela_pai) values( seq_tela.nextval,'Cronograma Padrão','/cadastros/projetos/CadastroCronogramaPadrao.xhtml',2);
+insert into tela (codigo,descricao,url,tela_pai) values( seq_tela.nextval,'Edição Cronograma Padrão','/cadastros/projetos/EdicaoCronogramaPadrao.xhtml',2);
 
 insert into usuario_grupo values (1,1);
 insert into grupo_tela values (1,1);
@@ -51,6 +53,8 @@ insert into grupo_tela values (1,18);
 insert into grupo_tela values (1,19);
 insert into grupo_tela values (1,20);
 insert into grupo_tela values (1,21);
+insert into grupo_tela values (1,22);
+insert into grupo_tela values (1,23);
 
 insert into faixacolaborador (codigo,descricao,faixainicial,faixafinal,indice,codigousuarioalteracao,codigousuarioinclusao) values (seq_faixa_colaborador.nextval,'Faixa 1',0,100,1,1,1);
 insert into faixacolaborador (codigo,descricao,faixainicial,faixafinal,indice,codigousuarioalteracao,codigousuarioinclusao) values (seq_faixa_colaborador.nextval,'Faixa 2',100,300,2,1,1);
