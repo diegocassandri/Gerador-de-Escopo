@@ -125,8 +125,7 @@ public class CadastroCronogramaPadraoBean implements Serializable {
 			
 			cronogramaEdicao.getListaAtividadesHorasPadroes().add(atividadeEdicao);
 			this.cadastroCromogramaPadrao.salvar(cronogramaEdicao);
-			// cronogramaEdicao =
-			// this.cronogramasPadrao.pesquisaPorId(cronogramaEdicao.getCodigo());
+			 cronogramaEdicao = this.cronogramasPadrao.pesquisaPorId(cronogramaEdicao.getCodigo());
 			carregaArvore(cronogramaEdicao);
 			habilitar = false;
 			messages.info("Atividade salva com sucesso!");
