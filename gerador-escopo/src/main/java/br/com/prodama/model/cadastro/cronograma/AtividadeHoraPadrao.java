@@ -18,7 +18,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -28,12 +28,17 @@ import br.com.prodama.enun.FormatoExecucao;
 import br.com.prodama.enun.ResponsavelExecucao;
 import br.com.prodama.model.cadastro.geral.Equipe;
 import br.com.prodama.model.cadastro.geral.NivelEquipe;
+import br.com.prodama.util.componentes.ConversorHora;
 
 @Entity
 @Table(name="AtividadeHoraPadrao")
 public class AtividadeHoraPadrao implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
+	
+	@Transient
+	private ConversorHora conversorHora;
+	
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="gen_atividadeHoraPadrao") 
@@ -51,10 +56,11 @@ public class AtividadeHoraPadrao implements Serializable{
 	@Column(name = "Observacao", nullable = true,length=4000)
 	private String observacao;
 	
-	@NotNull
 	@Column(name = "horaAtividade", nullable = true)
-	private Long horaAtividade;
+	private Integer horaAtividade;
 
+	@Transient
+	private String horaString;
 
 	@Enumerated(EnumType.STRING)
 	private AnaliticoSintetico analiticoSitetico;
@@ -91,7 +97,7 @@ public class AtividadeHoraPadrao implements Serializable{
 	private List<AtividadeHoraPadrao> subAtividadeHoras;
 
 	@SuppressWarnings("deprecation")
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "atividadeHoraPadrao",cascade=CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "atividadeHoraPadrao",cascade=CascadeType.ALL,orphanRemoval = true)
 	@Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
 	private List<DocAtividadeHoraPadrao> listaDocAtividadesHorasPadroes;
 	
@@ -119,14 +125,28 @@ public class AtividadeHoraPadrao implements Serializable{
 		this.observacao = observacao;
 	}
 
-	public Long getHoraAtividade() {
+	public Integer getHoraAtividade() {
 		return horaAtividade;
 	}
 
-	public void setHoraAtividade(Long horaAtividade) {
+	public void setHoraAtividade(Integer horaAtividade) {
 		this.horaAtividade = horaAtividade;
 	}
 
+	public String getHoraAtividadeForm() {
+		conversorHora = new ConversorHora();
+		if(horaAtividade != null){
+			return conversorHora.converteMinutoHora(horaAtividade);
+		}else {
+			return "000:00";
+		}
+		
+	}
+
+	public void setHoraAtividadeForm(String horaAtividade) {
+		this.horaAtividade = conversorHora.converteHoraMinuto(horaAtividade);
+	}
+	
 	public AnaliticoSintetico getAnaliticoSitetico() {
 		return analiticoSitetico;
 	}
@@ -197,6 +217,16 @@ public class AtividadeHoraPadrao implements Serializable{
 
 	public void setSubAtividadeHoras(List<AtividadeHoraPadrao> subAtividadeHoras) {
 		this.subAtividadeHoras = subAtividadeHoras;
+	}
+	
+	
+
+	public String getHoraString() {
+		return horaString;
+	}
+
+	public void setHoraString(String horaString) {
+		this.horaString = horaString;
 	}
 
 	@Override

@@ -48,15 +48,16 @@
 						<f:ajax event="select" update="frmTree painel-tab"
 							render="frmTree painel-tab:frmAtividade" />
 
-						<p:column headerText="Descrição" style="width:100px">
-							<h:outputText value="#{raiz}" />
+						<p:column headerText="Descrição" style="width:100px" >
+								<h:outputText value="#{raiz}" />
 						</p:column>
 
 						<f:facet name="footer">
 							<p:outputPanel id="pnlBotoes">
 								<p:commandButton icon="ui-icon-plus" process="@this"
 									value="Adicionar Sintético" update="painel-tab"
-									action="#{cadastroCronogramaPadraoBean.addSintetico}">
+									action="#{cadastroCronogramaPadraoBean.addSintetico}"
+									disabled="#{cadastroCronogramaPadraoBean.atividadeSelecionada.analiticoSitetico == 'ANALITICO'}">
 
 									<!-- <f:ajax event="click" render="painel-tab" /> -->
 								</p:commandButton>
@@ -116,11 +117,9 @@
 										autoResize="false" />
 
 									<p:outputLabel value="Quantidade de Horas" for="hora" />
-									<p:inputMask size="10" maxlength="30"
-										disabled="#{cadastroCronogramaPadraoBean.habilitar == false}"
-										value="#{cadastroCronogramaPadraoBean.atividadeEdicao.horaAtividade}"
-										id="hora">
-
+									<p:inputMask size="10" maxlength="30" required="true" mask="999:99"
+										disabled="#{cadastroCronogramaPadraoBean.habilitar == false or cadastroCronogramaPadraoBean.atividadeSelecionada.analiticoSitetico == 'SINTETICO'}"
+										value="#{cadastroCronogramaPadraoBean.atividadeEdicao.horaAtividadeForm}" id="hora">
 									</p:inputMask>
 
 									<p:outputLabel value="Formato Execução:" for="formato" />
@@ -178,7 +177,7 @@
 										disabled="#{cadastroCronogramaPadraoBean.habilitar == false}"
 										actionListener="#{cadastroCronogramaPadraoBean.salvarAtividade}"
 										process="painel-tab:frmAtividade frmTree:treeTableAtividades" />
-									
+
 								</h:panelGrid>
 
 							</p:outputPanel>

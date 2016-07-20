@@ -1,8 +1,11 @@
 package br.com.prodama.util.componentes;
 
+import java.io.Serializable;
 import java.text.DecimalFormat;
 
-public class CampoHora {
+public  class ConversorHora implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	protected String horaTexto;
 	protected Integer horaNumero;
@@ -11,7 +14,7 @@ public class CampoHora {
 		return this.horaTexto;
 	}
 
-	public void setHora(Integer horaBanco) {
+	public String converteMinutoHora(Integer horaBanco) {
 		Integer hora;
 		double minutos;
 		double valorConversao = (Double.parseDouble(horaBanco.toString()) / 60d);
@@ -20,13 +23,18 @@ public class CampoHora {
 		minutos = converterDoubleDoisDecimais((minutos / 100) * 60);
 		String sMinutos = Double.toString(minutos).substring(Double.toString(minutos).indexOf(".") + 1,
 				Double.toString(minutos).length());
-		String sHora = lpad(hora.toString(), "0", 2) + ":" + rpad(sMinutos, "0", 2);
-		this.horaTexto = sHora;
+		String sHora = lpad(hora.toString(), "0", 3) + ":" + rpad(sMinutos, "0", 2);
+		return this.horaTexto = sHora;
 	}
 	
-	public void setHora(String horaInteface) {
-		this.horaTexto = horaInteface;
-		horaNumero  = getTotalMunutos();
+	public Integer converteHoraMinuto(String horaInteface) {
+		if((horaInteface == null) || (horaInteface.equals(""))){
+			return 0;
+		}else{
+			this.horaTexto = horaInteface;
+			return horaNumero  = getTotalMunutos();
+		}
+		
 	}
 	
 	public Integer getTotalMunutos() {
