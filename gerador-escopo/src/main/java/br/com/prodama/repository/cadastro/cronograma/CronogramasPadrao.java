@@ -18,6 +18,12 @@ public class CronogramasPadrao implements Serializable {
 	
 	public void adicionar(CronogramaPadrao cronogramaPadrao) {
 		manager.merge(cronogramaPadrao);
+		manager.flush();
+		manager.clear();
+	}
+	
+	public void recarregar(CronogramaPadrao cronogramaPadrao){
+		manager.refresh(cronogramaPadrao);
 	}
 
 	public CronogramaPadrao pesquisaPorId(Long id) {
@@ -44,6 +50,7 @@ public class CronogramasPadrao implements Serializable {
 
 	public List<CronogramaPadrao> todos() {
 		return manager.createQuery("from CronogramaPadrao", CronogramaPadrao.class).getResultList();
+		
 	}
 
 

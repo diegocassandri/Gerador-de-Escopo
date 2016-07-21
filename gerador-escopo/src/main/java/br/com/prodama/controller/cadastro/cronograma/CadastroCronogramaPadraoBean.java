@@ -1,5 +1,6 @@
 package br.com.prodama.controller.cadastro.cronograma;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
@@ -11,23 +12,32 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.omnifaces.util.Faces;
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.DefaultTreeNode;
+import org.primefaces.model.StreamedContent;
 import org.primefaces.model.TreeNode;
 
 import br.com.prodama.enun.AnaliticoSintetico;
 import br.com.prodama.enun.FormatoExecucao;
 import br.com.prodama.enun.ResponsavelExecucao;
+import br.com.prodama.model.cadastro.cronograma.AnexoAtividadeHoraPadrao;
 import br.com.prodama.model.cadastro.cronograma.AtividadeHoraPadrao;
 import br.com.prodama.model.cadastro.cronograma.CronogramaPadrao;
+import br.com.prodama.model.cadastro.cronograma.DocAtividadeHoraPadrao;
 import br.com.prodama.model.cadastro.geral.Equipe;
 import br.com.prodama.model.cadastro.geral.NivelEquipe;
 import br.com.prodama.model.cadastro.produto.Produto;
+import br.com.prodama.repository.cadastro.cronograma.AnexosAtividadesHoraPadrao;
 import br.com.prodama.repository.cadastro.cronograma.AtividadesHoraPadrao;
 import br.com.prodama.repository.cadastro.cronograma.CronogramasPadrao;
+import br.com.prodama.repository.cadastro.cronograma.DocsAtividadesHoraPadrao;
 import br.com.prodama.repository.cadastro.geral.Equipes;
 import br.com.prodama.repository.cadastro.geral.NiveisEquipe;
 import br.com.prodama.repository.cadastro.produto.Produtos;
+import br.com.prodama.service.NegocioException;
+import br.com.prodama.service.cadastro.cronograma.CadastroAnexoAtividadePadrao;
 import br.com.prodama.service.cadastro.cronograma.CadastroCromogramaPadrao;
 import br.com.prodama.util.FacesMessages;
 import br.com.prodama.util.componentes.ConversorHora;
@@ -42,9 +52,14 @@ public class CadastroCronogramaPadraoBean implements Serializable {
 
 	@Inject
 	private CadastroCromogramaPadrao cadastroCromogramaPadrao;
+	
+	
+	@Inject
+	private CadastroAnexoAtividadePadrao cadastroAnexo;
 
 	@Inject
 	private CronogramasPadrao cronogramasPadrao;
+
 
 	@Inject
 	private Produtos produtos;
@@ -59,25 +74,37 @@ public class CadastroCronogramaPadraoBean implements Serializable {
 	private AtividadesHoraPadrao atividades;
 
 	@Inject
+	private DocsAtividadesHoraPadrao documentos;
+
+	@Inject
+	private AnexosAtividadesHoraPadrao anexos;
+
+	@Inject
 	private ConversorHora conversorHora;
 
 	private CronogramaPadrao cronogramaEdicao;
 	private CronogramaPadrao cronogramaSelecionado;
+	private DocAtividadeHoraPadrao documentoSelecionado;
 	private List<CronogramaPadrao> todosCronogramas;
 	private List<CronogramaPadrao> filtroCronogramas;
 	private AtividadeHoraPadrao atividadeEdicao;
 	private AtividadeHoraPadrao atividadeSelecionada;
 	private TreeNode selectedNode;
+	private DocAtividadeHoraPadrao documentoEdicao;
+	private AnexoAtividadeHoraPadrao anexoEdicao;
 
 	private List<Equipe> todasEquipes;
 	private List<NivelEquipe> todosNiveisEquipe;
 
 	private List<Produto> todosProdutos;
+	private List<DocAtividadeHoraPadrao> todosDocumentos;
+	private List<AnexoAtividadeHoraPadrao> todosAnexos;
 
 	private TreeNode raiz;
 
 	private boolean habilitar = false;
 	private String horaString;
+	private StreamedContent arquivoDownload;
 
 	@PostConstruct
 	public void prepararNovoCadastro() {
@@ -89,31 +116,17 @@ public class CadastroCronogramaPadraoBean implements Serializable {
 		if (cronogramaEdicao == null) {
 			cronogramaEdicao = new CronogramaPadrao();
 			atividadeEdicao = new AtividadeHoraPadrao();
+			atividadeEdicao.setAnaliticoSitetico(AnaliticoSintetico.SINTETICO);
 		}
 	}
 
-	public void salvar() {
-		try {
-			this.cadastroCromogramaPadrao.salvar(cronogramaEdicao);
-			consultar();
-			todosProdutos = produtos.todos();
-			todasEquipes = equipes.todos();
-			todosNiveisEquipe = niveisEquipe.todos();
-			messages.info("Cronograma Padrão salvo com sucesso!");
-			RequestContext.getCurrentInstance()
-					.update(Arrays.asList("frmCadastro:msgs", "frmCadastro:cronograma-table"));
-			RequestContext.getCurrentInstance().execute("PF('edicaoCronogramaDialog').hide()");
-		} catch (Exception e) {
-			FacesMessage mensagem = new FacesMessage(e.getMessage());
-			messages.error("Erro ao salvar cronograma padrão! \n Motivo:" + mensagem.getDetail());
-			RequestContext.getCurrentInstance().update(Arrays.asList("msgs"));
-		}
-
+	public void prepararNovoCadastroDocumento() {
+		documentoEdicao = new DocAtividadeHoraPadrao();
 	}
 
 	public void salvarAtividade() {
 		try {
-			//cronogramaEdicao = this.cronogramasPadrao.pesquisaPorId(cronogramaEdicao.getCodigo());
+		    cronogramaEdicao =  this.cronogramasPadrao.pesquisaPorId(cronogramaEdicao.getCodigo());
 			atividadeEdicao.setCronogramaPadrao(cronogramaEdicao);
 
 			if (atividadeEdicao.getAnaliticoSitetico() == AnaliticoSintetico.ANALITICO) {
@@ -122,10 +135,10 @@ public class CadastroCronogramaPadraoBean implements Serializable {
 				atividadeEdicao.setDescricao(atividadeEdicao.getDescricao().toUpperCase());
 			}
 			atividadeEdicao.setHoraAtividade(conversorHora.converteHoraMinuto(this.horaString));
-			
+
 			cronogramaEdicao.getListaAtividadesHorasPadroes().add(atividadeEdicao);
 			this.cadastroCromogramaPadrao.salvar(cronogramaEdicao);
-			 cronogramaEdicao = this.cronogramasPadrao.pesquisaPorId(cronogramaEdicao.getCodigo());
+			cronogramaEdicao = this.cronogramasPadrao.pesquisaPorId(cronogramaEdicao.getCodigo());
 			carregaArvore(cronogramaEdicao);
 			habilitar = false;
 			messages.info("Atividade salva com sucesso!");
@@ -138,10 +151,72 @@ public class CadastroCronogramaPadraoBean implements Serializable {
 				messages.error("Erro ao salvar atividade! \n Motivo:" + mensagem.getDetail());
 				RequestContext.getCurrentInstance().update(Arrays.asList("msgs", "frmTree:treeTableAtividades"));
 			} else {
+				messages.error("Erro ao salvar atividade! \n Motivo:" + mensagem.getDetail());
 				RequestContext.getCurrentInstance().update(Arrays.asList("frmTree:treeTableAtividades"));
 			}
 		}
 	}
+
+	public void salvarDocumento() {
+		documentoEdicao.setAtividadeHoraPadrao(atividadeEdicao);
+		atividadeEdicao.getListaDocAtividadesHorasPadroes().add(documentoEdicao);
+		try {
+			this.cadastroCromogramaPadrao.salvar(cronogramaEdicao);
+			cronogramaEdicao = this.cronogramasPadrao.pesquisaPorId(cronogramaEdicao.getCodigo());
+			messages.info("Documento salvo com sucesso!");
+			todosDocumentos = documentos.todos(atividadeEdicao);
+			prepararNovoCadastroDocumento();
+			RequestContext.getCurrentInstance().update(Arrays.asList("painel-tab:frmDoc:documento-table"));
+		} catch (NegocioException e) {
+			FacesMessage mensagem = new FacesMessage(e.getMessage());
+			messages.error("Erro ao salvar documento! \n Motivo:" + mensagem.getDetail());
+			RequestContext.getCurrentInstance().update(Arrays.asList("painel-tab:frmDoc:documento-table"));
+			e.printStackTrace();
+		}
+
+	}
+
+	public void carregarAnexos(FileUploadEvent event) {
+		cronogramaEdicao = this.cronogramasPadrao.pesquisaPorId(cronogramaEdicao.getCodigo());
+		if (event.getFile() != null) {
+			byte[] conteudo = event.getFile().getContents();
+			anexoEdicao = new AnexoAtividadeHoraPadrao();
+			anexoEdicao.setDescricao(event.getFile().getFileName());
+			anexoEdicao.setArquivo(conteudo);
+			anexoEdicao.setDocAtividadeHoraPadrao(documentoEdicao);
+			documentoEdicao.getListaAnexoAtividadesHorasPadroes().add(anexoEdicao);
+			try {
+				this.cadastroAnexo.salvar(anexoEdicao);
+				cronogramaEdicao = this.cronogramasPadrao.pesquisaPorId(cronogramaEdicao.getCodigo());
+				messages.info("Documento salvo com sucesso!");
+				todosAnexos = anexos.todos(documentoEdicao);
+				RequestContext.getCurrentInstance().update(Arrays.asList("painel-tab:frmDoc:documento-table"));
+			} catch (Exception e) {
+				messages.info("Erro ao salvar documento!");
+				FacesMessage mensagem = new FacesMessage(e.getMessage());
+				messages.error("Erro ao salvar documento! \n Motivo:" + mensagem.getDetail());
+			}
+		}
+	}
+	
+	public void baixarAnexo() throws IOException {
+		 Faces.sendFile(anexoEdicao.getArquivo(), anexoEdicao.getDescricao(), true);
+	}
+	
+	public void removerAnexo(){
+		anexoEdicao.setDocAtividadeHoraPadrao(documentoEdicao);
+		documentoEdicao.getListaAnexoAtividadesHorasPadroes().remove(anexoEdicao);
+		try {
+			this.cadastroAnexo.excluir(anexoEdicao);
+			cronogramaEdicao = this.cronogramasPadrao.pesquisaPorId(cronogramaEdicao.getCodigo());
+			messages.info("Anexo excluido com sucesso!");
+			todosAnexos = anexos.todos(documentoEdicao);
+		} catch (Exception e) {
+			FacesMessage mensagem = new FacesMessage(e.getMessage());
+			messages.error("Erro ao remover anexo! \n Motivo:" + mensagem.getDetail());
+		}
+	}
+
 
 	public void addSintetico() {
 		atividadeEdicao = new AtividadeHoraPadrao();
@@ -151,7 +226,15 @@ public class CadastroCronogramaPadraoBean implements Serializable {
 		}
 		habilitar = true;
 		horaString = "";
-		RequestContext.getCurrentInstance().update(Arrays.asList("painel-tab:frmAtividade"));
+		RequestContext.getCurrentInstance().update(Arrays.asList("painel-tab:frmAtividade","painel-tab:frmAtividade:tipo"));
+	}
+	
+	public void addSinteticoAvulso() {
+		atividadeEdicao = new AtividadeHoraPadrao();
+		atividadeEdicao.setAnaliticoSitetico(AnaliticoSintetico.SINTETICO);
+		habilitar = true;
+		horaString = "";
+		RequestContext.getCurrentInstance().update(Arrays.asList("painel-tab:frmAtividade","painel-tab:frmAtividade:hora"));
 	}
 
 	public void addAnalitico() {
@@ -160,23 +243,7 @@ public class CadastroCronogramaPadraoBean implements Serializable {
 		atividadeEdicao.setAtividadeHoraPai(atividadeSelecionada);
 		habilitar = true;
 		horaString = "";
-		RequestContext.getCurrentInstance().update(Arrays.asList("painel-tab:frmAtividade"));
-	}
-
-	public void excluir() {
-		try {
-			this.cadastroCromogramaPadrao.excluir(cronogramaSelecionado);
-			cronogramaSelecionado = null;
-			consultar();
-			todosProdutos = produtos.todos();
-			todasEquipes = equipes.todos();
-			todosNiveisEquipe = niveisEquipe.todos();
-			messages.info("Cronograma Padrão excluído com sucesso!");
-		} catch (Exception e) {
-			FacesMessage mensagem = new FacesMessage(e.getMessage());
-			messages.error("Erro ao excluir estado! \n Motivo:" + mensagem);
-		}
-
+		RequestContext.getCurrentInstance().update(Arrays.asList("painel-tab:frmAtividade","painel-tab:frmAtividade:hora"));
 	}
 
 	public void excluirAtividade() {
@@ -190,13 +257,34 @@ public class CadastroCronogramaPadraoBean implements Serializable {
 			messages.info("Atividade excluída com sucesso!");
 			habilitar = false;
 			horaString = "";
-			RequestContext.getCurrentInstance().update(Arrays.asList("msgs", "frmTree:treeTableAtividades", "painel-tab"));
+			RequestContext.getCurrentInstance()	.update(Arrays.asList("msgs", "frmTree:treeTableAtividades", "painel-tab"));
+			todosDocumentos = documentos.todos(atividadeEdicao);
+			RequestContext.getCurrentInstance().update(Arrays.asList("painel-tab", "painel-tab:frmDoc"));
 		} catch (Exception e) {
 			FacesMessage mensagem = new FacesMessage(e.getMessage());
 			messages.error("Erro ao excluir atividade! \n Motivo:" + mensagem);
 			RequestContext.getCurrentInstance().update(Arrays.asList("msgs", "frmTree:treeTableAtividades"));
 		}
 
+	}
+
+	public void excluirDocumento() {
+		documentoEdicao.setAtividadeHoraPadrao(atividadeEdicao);
+		atividadeEdicao.getListaDocAtividadesHorasPadroes().remove(documentoEdicao);
+		try {
+			this.cadastroCromogramaPadrao.salvar(cronogramaEdicao);
+			messages.info("Documento excluído com sucesso!");
+			habilitar = false;
+			horaString = "";
+			todosDocumentos = documentos.todos(atividadeEdicao);
+			prepararNovoCadastroDocumento();
+			cronogramaEdicao = this.cronogramasPadrao.pesquisaPorId(cronogramaEdicao.getCodigo());
+			RequestContext.getCurrentInstance().update(Arrays.asList("painel-tab:frmDoc:documento-table"));
+		} catch (NegocioException e) {
+			FacesMessage mensagem = new FacesMessage(e.getMessage());
+			messages.error("Erro ao excluir atividade! \n Motivo:" + mensagem);
+			RequestContext.getCurrentInstance().update(Arrays.asList("painel-tab:frmDoc:documento-table"));
+		}
 	}
 
 	public void carregaArvore(CronogramaPadrao cronogramaEdicao) {
@@ -224,7 +312,6 @@ public class CadastroCronogramaPadraoBean implements Serializable {
 	public void consultar() {
 		todosCronogramas = cronogramasPadrao.todos();
 	}
-	
 
 	public FacesMessages getMessages() {
 		return messages;
@@ -322,9 +409,6 @@ public class CadastroCronogramaPadraoBean implements Serializable {
 
 	public void setAtividadeEdicao(AtividadeHoraPadrao atividadeEdicao) {
 		this.atividadeEdicao = atividadeEdicao;
-		/*if (atividadeEdicao != null) {
-			RequestContext.getCurrentInstance().update(Arrays.asList("painel-tab"));
-		}*/
 	}
 
 	public TreeNode getSelectedNode() {
@@ -337,7 +421,9 @@ public class CadastroCronogramaPadraoBean implements Serializable {
 			atividadeSelecionada = (AtividadeHoraPadrao) selectedNode.getData();
 			atividadeEdicao = (AtividadeHoraPadrao) selectedNode.getData();
 			habilitar = true;
-			RequestContext.getCurrentInstance().update(Arrays.asList("painel-tab", "painel-tab:frmAtividade"));
+			todosDocumentos = documentos.todos(atividadeEdicao);
+			RequestContext.getCurrentInstance().update(Arrays.asList("painel-tab:frmAtividade", "painel-tab:frmDoc"));
+			RequestContext.getCurrentInstance().execute("PF('tab').select(0);");
 		}
 	}
 
@@ -399,6 +485,57 @@ public class CadastroCronogramaPadraoBean implements Serializable {
 
 	public void setHoraString(String horaString) {
 		this.horaString = horaString;
+	}
+
+	public DocAtividadeHoraPadrao getDocumentoEdicao() {
+		return documentoEdicao;
+	}
+
+	public void setDocumentoEdicao(DocAtividadeHoraPadrao documentoEdicao) {
+		if (documentoEdicao != null) {
+			todosAnexos = anexos.todos(documentoEdicao); 
+		}
+		this.documentoEdicao = documentoEdicao;
+	}
+
+	public DocAtividadeHoraPadrao getDocumentoSelecionado() {
+		return documentoSelecionado;
+	}
+
+	public void setDocumentoSelecionado(DocAtividadeHoraPadrao documentoSelecionado) {
+		this.documentoSelecionado = documentoSelecionado;
+	}
+
+	public List<DocAtividadeHoraPadrao> getTodosDocumentos() {
+		return todosDocumentos;
+	}
+
+	public void setTodosDocumentos(List<DocAtividadeHoraPadrao> todosDocumentos) {
+		this.todosDocumentos = todosDocumentos;
+	}
+
+	public AnexoAtividadeHoraPadrao getAnexoEdicao() {
+		return anexoEdicao;
+	}
+
+	public void setAnexoEdicao(AnexoAtividadeHoraPadrao anexoEdicao) {
+		this.anexoEdicao = anexoEdicao;
+	}
+
+	public List<AnexoAtividadeHoraPadrao> getTodosAnexos() {
+		return todosAnexos;
+	}
+
+	public void setTodosAnexos(List<AnexoAtividadeHoraPadrao> todosAnexos) {
+		this.todosAnexos = todosAnexos;
+	}
+
+	public StreamedContent getArquivoDownload() {
+		return arquivoDownload;
+	}
+
+	public void setArquivoDownload(StreamedContent arquivoDownload) {
+		this.arquivoDownload = arquivoDownload;
 	}
 
 	

@@ -21,6 +21,8 @@ public class AtividadesHoraPadrao implements Serializable {
 
 	public void adicionar(AtividadeHoraPadrao atividadeHoraPadrao) {
 		manager.merge(atividadeHoraPadrao);
+		manager.flush();
+		manager.clear();
 	}
 
 	public AtividadeHoraPadrao pesquisaPorId(Long id) {
@@ -53,7 +55,7 @@ public class AtividadesHoraPadrao implements Serializable {
 	}
 
 	public List<AtividadeHoraPadrao> raizes(CronogramaPadrao cronograma) {
-		 return (List<AtividadeHoraPadrao>) manager.createQuery("from AtividadeHoraPadrao where atividadeHoraPai is null and cronogramaPadrao = :cronograma", AtividadeHoraPadrao.class).setParameter("cronograma", cronograma).getResultList();
+		 return (List<AtividadeHoraPadrao>) manager.createQuery("from AtividadeHoraPadrao a where a.atividadeHoraPai is null and a.cronogramaPadrao = :cronograma", AtividadeHoraPadrao.class).setParameter("cronograma", cronograma).getResultList();
 		/*Query query = manager.createQuery("From AtividadeHoraPadrao a JOIN FETCH a.subAtividadeHoras  where a.cronogramaPadrao = :cronograma",	AtividadeHoraPadrao.class).setParameter("cronograma", cronograma);
 		List<AtividadeHoraPadrao> listaAtividades = query.getResultList();
 		if (!listaAtividades.isEmpty()) {
@@ -70,7 +72,7 @@ public class AtividadesHoraPadrao implements Serializable {
 	
 	@SuppressWarnings("unchecked")
 	public List<AtividadeHoraPadrao> filhos (AtividadeHoraPadrao atividadeHoraPadrao) {
-		Query query = manager.createQuery("From AtividadeHoraPadrao a  where a.atividadeHoraPai = :atividadePai and a.cronogramaPadrao = :cronograma",	AtividadeHoraPadrao.class)
+		Query query = manager.createQuery("From AtividadeHoraPadrao a where a.atividadeHoraPai = :atividadePai and a.cronogramaPadrao = :cronograma",	AtividadeHoraPadrao.class)
 				.setParameter("cronograma", atividadeHoraPadrao.getCronogramaPadrao())
 				.setParameter("atividadePai", atividadeHoraPadrao);
 		return  query.getResultList();

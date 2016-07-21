@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import br.com.prodama.model.cadastro.cronograma.AtividadeHoraPadrao;
 import br.com.prodama.model.cadastro.cronograma.DocAtividadeHoraPadrao;
 
 public class DocsAtividadesHoraPadrao implements Serializable {
@@ -18,6 +19,8 @@ public class DocsAtividadesHoraPadrao implements Serializable {
 	
 	public void adicionar(DocAtividadeHoraPadrao docAtividadeHoraPadrao) {
 		manager.merge(docAtividadeHoraPadrao);
+		manager.flush();
+		manager.clear();
 	}
 
 	public DocAtividadeHoraPadrao pesquisaPorId(Long id) {
@@ -43,8 +46,9 @@ public class DocsAtividadesHoraPadrao implements Serializable {
 
 	}
 
-	public List<DocAtividadeHoraPadrao> todos() {
-		return manager.createQuery("from DocAtividadeHoraPadrao", DocAtividadeHoraPadrao.class).getResultList();
+	public List<DocAtividadeHoraPadrao> todos(AtividadeHoraPadrao atividade) {
+		return manager.createQuery("from DocAtividadeHoraPadrao d join fetch d.atividadeHoraPadrao  where d.atividadeHoraPadrao = :atividade", DocAtividadeHoraPadrao.class)
+				.setParameter("atividade", atividade).getResultList();
 	}
 
 

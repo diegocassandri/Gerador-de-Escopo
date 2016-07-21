@@ -8,7 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import br.com.prodama.model.cadastro.cronograma.AnexoAtividadeHoraPadrao;
-
+import br.com.prodama.model.cadastro.cronograma.DocAtividadeHoraPadrao;
 
 public class AnexosAtividadesHoraPadrao implements Serializable {
 
@@ -16,17 +16,21 @@ public class AnexosAtividadesHoraPadrao implements Serializable {
 
 	@Inject
 	private EntityManager manager;
-	
+
 	public void adicionar(AnexoAtividadeHoraPadrao anexoAtividadeHoraPadrao) {
 		manager.merge(anexoAtividadeHoraPadrao);
+		manager.flush();
+		manager.clear();
 	}
 
 	public AnexoAtividadeHoraPadrao pesquisaPorId(Long id) {
 		return manager.find(AnexoAtividadeHoraPadrao.class, id);
 	}
-	
+
 	public boolean pesquisaPorNome(AnexoAtividadeHoraPadrao anexoAtividadeHoraPadrao) {
-		Query query = manager.createQuery("From AnexoAtividadeHoraPadrao where descricao = :descricao and docAtividadeHoraPadrao = :doc", AnexoAtividadeHoraPadrao.class);
+		Query query = manager.createQuery(
+				"From AnexoAtividadeHoraPadrao where descricao = :descricao and docAtividadeHoraPadrao = :doc",
+				AnexoAtividadeHoraPadrao.class);
 		query.setParameter("descricao", anexoAtividadeHoraPadrao.getDescricao());
 		query.setParameter("doc", anexoAtividadeHoraPadrao.getDocAtividadeHoraPadrao());
 		List<?> resultList = query.getResultList();
@@ -36,17 +40,17 @@ public class AnexosAtividadesHoraPadrao implements Serializable {
 			return true;
 		}
 	}
-	
-	
+
 	public void excluir(AnexoAtividadeHoraPadrao anexoAtividadeHoraPadrao) {
 		anexoAtividadeHoraPadrao = pesquisaPorId(anexoAtividadeHoraPadrao.getCodigo());
 		manager.remove(anexoAtividadeHoraPadrao);
 
 	}
 
-	public List<AnexoAtividadeHoraPadrao> todos() {
-		return manager.createQuery("from AnexoAtividadeHoraPadrao", AnexoAtividadeHoraPadrao.class).getResultList();
-	}
+	public List<AnexoAtividadeHoraPadrao> todos(DocAtividadeHoraPadrao documento) {
+		return manager.createQuery("from AnexoAtividadeHoraPadrao a join fetch a.docAtividadeHoraPadrao where a.docAtividadeHoraPadrao = :documento",
+				AnexoAtividadeHoraPadrao.class).setParameter("documento", documento).getResultList();
 
+	}
 
 }

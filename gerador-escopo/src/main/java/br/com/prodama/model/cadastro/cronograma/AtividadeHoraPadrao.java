@@ -93,11 +93,13 @@ public class AtividadeHoraPadrao implements Serializable{
 	@JoinColumn(name = "AtividadeHoraPai")
 	private AtividadeHoraPadrao atividadeHoraPai;
 
-	@OneToMany(fetch = FetchType.EAGER,mappedBy = "atividadeHoraPai")
+	@SuppressWarnings("deprecation")
+	@OneToMany(fetch = FetchType.EAGER,mappedBy = "atividadeHoraPai",orphanRemoval = true)
+	@Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
 	private List<AtividadeHoraPadrao> subAtividadeHoras;
 
 	@SuppressWarnings("deprecation")
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "atividadeHoraPadrao",cascade=CascadeType.ALL,orphanRemoval = true)
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "atividadeHoraPadrao",cascade=CascadeType.ALL,orphanRemoval = true)
 	@Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
 	private List<DocAtividadeHoraPadrao> listaDocAtividadesHorasPadroes;
 	
@@ -220,6 +222,15 @@ public class AtividadeHoraPadrao implements Serializable{
 	}
 	
 	
+	
+
+	public List<DocAtividadeHoraPadrao> getListaDocAtividadesHorasPadroes() {
+		return listaDocAtividadesHorasPadroes;
+	}
+
+	public void setListaDocAtividadesHorasPadroes(List<DocAtividadeHoraPadrao> listaDocAtividadesHorasPadroes) {
+		this.listaDocAtividadesHorasPadroes = listaDocAtividadesHorasPadroes;
+	}
 
 	public String getHoraString() {
 		return horaString;

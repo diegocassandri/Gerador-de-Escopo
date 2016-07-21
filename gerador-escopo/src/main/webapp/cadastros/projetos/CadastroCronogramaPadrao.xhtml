@@ -6,7 +6,7 @@
 	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui">
 
 	<f:metadata>
-		<f:viewAction action="#{cadastroCronogramaPadraoBean.consultar}" />
+		<f:viewAction action="#{cronogramaBean.consultar}" />
 	</f:metadata>
 
 	<ui:define name="titulo">Cadastro de Cronograma Padrão</ui:define>
@@ -20,7 +20,7 @@
 			<p:toolbar id="toolbar">
 				<f:facet name="left">
 					<p:commandButton value="Novo" icon="ui-icon-document"
-						action="#{cadastroCronogramaPadraoBean.prepararNovoCadastro}"
+						action="#{cronogramaBean.prepararNovoCadastro}"
 						process="@this" update="cronograma-dialog"
 						oncomplete="PF('edicaoCronogramaDialog').show()">
 						<p:resetInput target="cronograma-dialog" />
@@ -33,18 +33,18 @@
 					<p:commandButton icon="ui-icon-pencil" title="Editar"
 						process="@this" update="cronograma-dialog"
 						oncomplete="PF('edicaoCronogramaDialog').show()"
-						disabled="#{cadastroCronogramaPadraoBean.cronogramaSelecionado == null}">
+						disabled="#{cronogramaBean.cronogramaSelecionado == null}">
 						<p:resetInput target="cronograma-dialog" />
 
 						<f:setPropertyActionListener
-							value="#{cadastroCronogramaPadraoBean.cronogramaSelecionado}"
-							target="#{cadastroCronogramaPadraoBean.cronogramaEdicao}" />
+							value="#{cronogramaBean.cronogramaSelecionado}"
+							target="#{cronogramaBean.cronogramaEdicao}" />
 					</p:commandButton>
 
 					<p:commandButton icon="ui-icon-trash" title="Excluir"
 						process="@this" update="cronograma-table msgs toolbar"
-						action="#{cadastroCronogramaPadraoBean.excluir}"
-						disabled="#{cadastroCronogramaPadraoBean.cronogramaSelecionado == null}">
+						action="#{cronogramaBean.excluir}"
+						disabled="#{cronogramaBean.cronogramaSelecionado == null}">
 
 						<p:confirm icon="ui-icon-alert" header="Confirmação de exclusão"
 							message="Tem certeza que deseja excluir o cronograma?" />
@@ -53,13 +53,13 @@
 				</f:facet>
 			</p:toolbar>
 
-			<p:dataTable value="#{cadastroCronogramaPadraoBean.todosCronogramas}"
+			<p:dataTable value="#{cronogramaBean.todosCronogramas}"
 				var="cronograma" emptyMessage="Nenhum cronograma padrão cadastrado."
 				rows="10" paginator="true" paginatorPosition="bottom"
 				style="margin-top: 10px" id="cronograma-table"
-				selection="#{cadastroCronogramaPadraoBean.cronogramaSelecionado}"
+				selection="#{cronogramaBean.cronogramaSelecionado}"
 				selectionMode="single" rowKey="#{cronograma.codigo}"
-				filteredValue="#{cadastroCronogramaPadraoBean.filtroCronogramas}"
+				filteredValue="#{cronogramaBean.filtroCronogramas}"
 				widgetVar="tabelaCronograma">
 
 				<f:facet name="header">
@@ -116,28 +116,28 @@
 				<h:panelGrid columns="2" id="painel-dialog">
 					<p:outputLabel value="Código" for="codigo" />
 					<p:inputText id="codigo" size="7" maxlength="10"
-						value="#{cadastroCronogramaPadraoBean.cronogramaEdicao.codigo}"
+						value="#{cronogramaBean.cronogramaEdicao.codigo}"
 						readonly="true" />
 
 					<p:outputLabel value="Descrição" for="descricao" />
 					<p:inputText id="descricao" size="30" maxlength="50"
-						value="#{cadastroCronogramaPadraoBean.cronogramaEdicao.descricao}" />
+						value="#{cronogramaBean.cronogramaEdicao.descricao}" />
 
 					<p:outputLabel value="Produto:" for="produto" />
 					<p:selectOneMenu filter="true"
-						value="#{cadastroCronogramaPadraoBean.cronogramaEdicao.produto}"
+						value="#{cronogramaBean.cronogramaEdicao.produto}"
 						converter="omnifaces.SelectItemsConverter" required="true"
-						requiredMessage="O Campo EProduto é obrigatório" id="produto">
+						requiredMessage="O Campo Produto é obrigatório" id="produto">
 						<f:selectItem noSelectionOption="true"
 							itemLabel="Selecione um produto" />
 						<f:selectItems
-							value="#{cadastroCronogramaPadraoBean.todosProdutos}"
+							value="#{cronogramaBean.todosProdutos}" 
 							var="produto" itemValue="#{produto}"
 							itemLabel="#{produto.descricao}" />
 					</p:selectOneMenu>
 
 					<p:commandButton value="Salvar" id="salvar-button"
-						actionL="#{cadastroCronogramaPadraoBean.salvar}"
+						action="#{cronogramaBean.salvar}"
 						process="cronograma-dialog" update="msgs-dialog painel-dialog" />
 				</h:panelGrid>
 			</p:dialog>

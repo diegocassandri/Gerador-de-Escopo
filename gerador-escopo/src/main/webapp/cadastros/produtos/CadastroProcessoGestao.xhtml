@@ -62,10 +62,10 @@
 				selectionMode="single" rowKey="#{gestaoModulo.codigo}"
 				filteredValue="#{cadastroProcessoBean.filtroGestao}"
 				widgetVar="tabelaGestao">
-				
+
 				<f:facet name="header">
 					<p:outputLabel value="Listagem de Gestões" />
-					
+
 					<div align="left">
 						<p:outputPanel>
 							<h:outputText value="Filtro:" />
@@ -98,7 +98,8 @@
 				</p:column>
 
 				<p:column headerText="Status" sortBy="#{gestaoModulo.status}"
-					filterBy="#{gestaoModulo.status}" filterMatchMode="contains" filterable="false">
+					filterBy="#{gestaoModulo.status}" filterMatchMode="contains"
+					filterable="false">
 					<h:outputText value="#{gestaoModulo.status}" />
 				</p:column>
 
@@ -164,7 +165,7 @@
 			<h:form id="frmProcesso">
 
 
-				<p:messages id="msgs-consulta" closable="true"/>
+				<p:messages id="msgs-consulta" closable="true" />
 
 				<p:dataTable value="#{cadastroProcessoBean.todosProcessos}"
 					var="processo" emptyMessage="Nenhum processo para essa gestão."
@@ -175,26 +176,37 @@
 					widgetVar="tabelaProcesso" editable="true">
 
 					<f:facet name="header">
-							<div align="right">
-								<p:commandButton value="Adicionar Processo"
-									icon="ui-icon-circle-plus"
-									action="#{cadastroProcessoBean.novoProcesso}"
-									process="@this" update="processo-table"> 
-									<p:resetInput target="processo-table" />
-								</p:commandButton>
-							</div>
-						</f:facet>
-			
-					<p:ajax event="rowEdit" listener="#{cadastroProcessoBean.onRowEdit}" update=":frmProcesso:msgs-consulta" />
-					<p:ajax event="rowEditCancel" listener="#{cadastroProcessoBean.onRowCancel}" update=":frmProcesso:msgs-consulta" />
-					
+						<div align="left">
+							<p:outputPanel>
+								<h:outputText value="Filtro:" />
+								<p:inputText id="globalFilter"
+									onkeyup="PF('tabelaProcesso').filter()" style="width:150px" />
+							</p:outputPanel>
+						</div>
+						<div align="right">
+							<p:commandButton value="Adicionar Processo"
+								icon="ui-icon-circle-plus"
+								action="#{cadastroProcessoBean.novoProcesso}" process="@this"
+								update="processo-table">
+								<p:resetInput target="processo-table" />
+							</p:commandButton>
+						</div>
+					</f:facet>
+
+					<p:ajax event="rowEdit"
+						listener="#{cadastroProcessoBean.onRowEdit}"
+						update=":frmProcesso:msgs-consulta" />
+					<p:ajax event="rowEditCancel"
+						listener="#{cadastroProcessoBean.onRowCancel}"
+						update=":frmProcesso:msgs-consulta" />
+
 					<p:column headerText="Código Proprietária"
 						sortBy="#{processo.codigoProprietaria}"
 						filterBy="#{processo.codigoProprietaria}"
 						filterMatchMode="contains">
 						<p:cellEditor>
 							<f:facet name="output">
-								<h:outputText value="#{processo.codigoProprietaria}"/>
+								<h:outputText value="#{processo.codigoProprietaria}" />
 							</f:facet>
 							<f:facet name="input">
 								<p:inputText id="prop" maxlength="50" style="width:93%"

@@ -80,7 +80,7 @@ public class CadastroCidadeBean implements Serializable {
 			todosEstados = estados.todos();
 			messages.info("Cidade excluída com sucesso!");
 		} catch (Exception e) {
-			FacesMessage mensagem = new FacesMessage(e.getMessage());
+			FacesMessage mensagem = new FacesMessage("" + e.getStackTrace());
 			messages.error("Erro ao excluir Cidade! \n Motivo:" + mensagem);
 		}
 

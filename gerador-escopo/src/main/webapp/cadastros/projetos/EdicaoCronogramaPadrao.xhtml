@@ -39,31 +39,42 @@
 
 				<h:form id="frmTree">
 					<p:treeTable value="#{cadastroCronogramaPadraoBean.raiz}"
-						editable="true" var="raiz" selectionMode="single"
+						editable="true" var="raiz" sortBy="#{raiz.descricao}"
 						emptyMessage="Nenhuma atividade encontrada."
-						id="treeTableAtividades"
+						id="treeTableAtividades" selectionMode="single"
 						selection="#{cadastroCronogramaPadraoBean.selectedNode}"
 						scrollable="true" scrollHeight="300">
 
-						<f:ajax event="select" update="frmTree painel-tab"
-							render="frmTree painel-tab:frmAtividade" />
+						<f:ajax event="select"
+							render="frmTree painel-tab:frmAtividade painel-tab:frmDoc" />
 
-						<p:column headerText="Descrição" style="width:100px" >
-								<h:outputText value="#{raiz}" />
+						<p:column headerText="Descrição" style="width:100px">
+							<h:outputText value="#{raiz.descricao}" />
 						</p:column>
 
 						<f:facet name="footer">
 							<p:outputPanel id="pnlBotoes">
-								<p:commandButton icon="ui-icon-plus" process="@this"
-									value="Adicionar Sintético" update="painel-tab"
+								<p:splitButton icon="ui-icon-plus" process="@this"
+									value="Adicionar Sintético"
+									update="painel-tab painel-tab:frmAtividade:hora"
 									action="#{cadastroCronogramaPadraoBean.addSintetico}"
 									disabled="#{cadastroCronogramaPadraoBean.atividadeSelecionada.analiticoSitetico == 'ANALITICO'}">
 
-									<!-- <f:ajax event="click" render="painel-tab" /> -->
-								</p:commandButton>
+									<p:menuitem icon="ui-icon-plus" process="@this"
+										value="Adicionar Sintético Avulso"
+										update="painel-tab painel-tab:frmAtividade:hora"
+										action="#{cadastroCronogramaPadraoBean.addSinteticoAvulso}"
+										disabled="#{cadastroCronogramaPadraoBean.atividadeSelecionada.analiticoSitetico == 'ANALITICO'}">
+
+										<f:ajax event="click" render="painel-tab:frmAtividade:hora" />
+									</p:menuitem>
+
+									<f:ajax event="click" render="painel-tab:frmAtividade:hora" />
+								</p:splitButton>
 
 								<p:commandButton icon="ui-icon-plus" process="@this"
-									value="Adicionar Análitico" update="painel-tab"
+									value="Adicionar Análitico"
+									update="painel-tab painel-tab:frmAtividade:hora"
 									action="#{cadastroCronogramaPadraoBean.addAnalitico}"
 									disabled="#{cadastroCronogramaPadraoBean.selectedNode == null}" />
 
@@ -117,9 +128,11 @@
 										autoResize="false" />
 
 									<p:outputLabel value="Quantidade de Horas" for="hora" />
-									<p:inputMask size="10" maxlength="30" required="true" mask="999:99"
+									<p:inputMask size="10" maxlength="30" required="true"
+										mask="999:99"
 										disabled="#{cadastroCronogramaPadraoBean.habilitar == false or cadastroCronogramaPadraoBean.atividadeSelecionada.analiticoSitetico == 'SINTETICO'}"
-										value="#{cadastroCronogramaPadraoBean.atividadeEdicao.horaAtividadeForm}" id="hora">
+										value="#{cadastroCronogramaPadraoBean.atividadeEdicao.horaAtividadeForm}"
+										id="hora">
 									</p:inputMask>
 
 									<p:outputLabel value="Formato Execução:" for="formato" />
@@ -185,14 +198,177 @@
 					</p:tab>
 
 					<p:tab title="Documentos">
+						<h:form id="frmDoc">
+							<p:dataTable
+								value="#{cadastroCronogramaPadraoBean.todosDocumentos}"
+								var="documento" emptyMessage="Nenhum documento cadastrado."
+								rows="100" style="margin-top: 10px" id="documento-table"
+								sortBy="#{documento.codigo}" rowKey="#{documento.codigo}"
+								widgetVar="tabelaDoc" reflow="true">
 
+								<f:facet name="header">
+									<div align="left">
+										<p:outputPanel>
+											<h:outputText value="Filtro:" />
+											<p:inputText id="globalFilter"
+												onkeyup="PF('tabelaDoc').filter()" style="width:150px" />
+										</p:outputPanel>
+									</div>
+								</f:facet>
+								<f:facet name="footer">
+									<div align="left">
+										<p:commandButton value="Adicionar Documento"
+											icon="ui-icon-circle-plus"
+											action="#{cadastroCronogramaPadraoBean.prepararNovoCadastroDocumento}"
+											process="@this" update="documento-dialog"
+											oncomplete="PF('edicaoDocumentoDialog').show()">
+
+											<p:resetInput target="documento-dialog" />
+										</p:commandButton>
+									</div>
+								</f:facet>
+
+								<p:column headerText="Código" sortBy="#{documento.codigo}"
+									filterMatchMode="contains" filterBy="#{documento.codigo}"
+									filterable="false">
+									<h:outputText value="#{documento.codigo}" />
+								</p:column>
+
+								<p:column headerText="Descrição" sortBy="#{documento.descricao}"
+									filterMatchMode="contains" filterBy="#{documento.descricao}"
+									filterable="false">
+									<h:outputText value="#{documento.descricao}" />
+								</p:column>
+
+								<p:column width="70">
+									<p:commandButton icon="ui-icon-pencil" title="Editar"
+										ajax="true" process="@this" update="documento-dialog"
+										oncomplete="PF('edicaoDocumentoDialog').show()">
+										<p:resetInput target="documento-dialog" />
+
+										<f:setPropertyActionListener value="#{documento}"
+											target="#{cadastroCronogramaPadraoBean.documentoEdicao}" />
+
+									</p:commandButton>
+
+									<p:commandButton icon="ui-icon-trash" title="Excluir"
+										process="@this" update="documento-dialog"
+										action="#{cadastroCronogramaPadraoBean.excluirDocumento}">
+
+										<f:setPropertyActionListener value="#{documento}"
+											target="#{cadastroCronogramaPadraoBean.documentoEdicao}" />
+										<p:confirm icon="ui-icon-alert"
+											header="Confirmação de exclusão"
+											message="Tem certeza que deseja excluir o documento?" />
+
+									</p:commandButton>
+								</p:column>
+							</p:dataTable>
+						</h:form>
 					</p:tab>
 
 				</p:tabView>
-
 			</p:layoutUnit>
 
 		</p:layout>
+
+		<p:dialog header="Cadastro Documento"
+			widgetVar="edicaoDocumentoDialog" id="documento-dialog"
+			resizable="false" closeOnEscape="true" width="730" height="430"
+			modal="true">
+			<h:form id="frmDocCadastro">
+
+				<p:messages id="msgs-dialogDoc" autoUpdate="true" />
+
+				<p:tabView id="tabDoc">
+					<p:tab title="Documento">
+						<h:panelGrid columns="2">
+							<p:outputLabel value="Código" for="docCodigo" />
+							<p:inputText size="8"
+								value="#{cadastroCronogramaPadraoBean.documentoEdicao.codigo}"
+								id="docCodigo" readonly="true" />
+
+							<p:outputLabel value="Descrição" for="descricaoDoc" />
+							<p:inputText size="30" maxlength="50"
+								value="#{cadastroCronogramaPadraoBean.documentoEdicao.descricao}"
+								id="descricaoDoc" />
+
+							<p:outputLabel value="Observação" for="docObs" />
+							<p:editor id="docObs"
+								value="#{cadastroCronogramaPadraoBean.documentoEdicao.observacao}"
+								width="600" widgetVar="editorWidget" />
+
+						</h:panelGrid>
+						<h:panelGrid columns="2" cellpadding="10">
+							<p:commandButton value="Salvar" id="salvar-button-doc"
+								actionListener="#{cadastroCronogramaPadraoBean.salvarDocumento}"
+								process="documento-dialog"
+								oncomplete="if (!args.validationFailed) PF('edicaoDocumentoDialog').hide()"
+								update="frmDocCadastro:msgs-dialogDoc" />
+
+						</h:panelGrid>
+					</p:tab>
+					<p:tab title="Anexos">
+						<h:form id="frmAnexos">
+							<p:fileUpload cancelLabel="Cancelar" uploadLabel="Upload"
+								label="Adiconar"
+								fileUploadListener="#{cadastroCronogramaPadraoBean.carregarAnexos}"
+								mode="advanced" dragDropSupport="true" multiple="true"
+								update="anexo-table" sizeLimit="1000000000" fileLimit="10"
+								allowTypes="/(\.|\/)(gif|jpe?g|png|doc|docx|pdf|xls|xlsx|txt)$/" />
+
+							<p:dataTable value="#{cadastroCronogramaPadraoBean.todosAnexos}"
+								var="anexo" emptyMessage="Nenhum documento anexo." rows="100"
+								style="margin-top: 10px" id="anexo-table"
+								rowKey="#{anexo.codigo}" widgetVar="tabelaAnexo" reflow="true">
+
+								<p:column headerText="Arquivo" sortBy="#{anexo.descricao}"
+									filterMatchMode="contains" filterBy="#{anexo.descricao}"
+									filterable="false">
+									<h:outputText value="#{anexo.descricao}" />
+								</p:column>
+
+								<p:column headerText="Opções" width="100">
+									<p:commandButton icon="fa fa-download" title="Baixar Arquivo"
+										ajax="false"
+										action="#{cadastroCronogramaPadraoBean.baixarAnexo}">
+
+										<f:setPropertyActionListener value="#{anexo}"
+											target="#{cadastroCronogramaPadraoBean.anexoEdicao}" />
+									</p:commandButton>
+
+									<p:commandButton icon="fa fa-trash" title="Remover Arquivo"
+										ajax="false"
+										action="#{cadastroCronogramaPadraoBean.removerAnexo}">
+
+										<f:setPropertyActionListener value="#{anexo}"
+											target="#{cadastroCronogramaPadraoBean.anexoEdicao}" />
+									</p:commandButton>
+								</p:column>
+
+							</p:dataTable>
+						</h:form>
+					</p:tab>
+				</p:tabView>
+			</h:form>
+		</p:dialog>
+
+		<p:dialog modal="true" widgetVar="statusDialog" header="Status"
+			draggable="false" closable="false" resizable="false">
+			<p:graphicImage name="resources/prodama/loading.gif" />
+		</p:dialog>
+
+		<script type="text/javascript">
+			function start() {
+				PF('statusDialog').show();
+			}
+
+			function stop() {
+				PF('statusDialog').hide();
+			}
+		</script>
+
+
 	</ui:define>
 
 </ui:composition>
