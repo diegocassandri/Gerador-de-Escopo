@@ -39,6 +39,7 @@ import br.com.prodama.repository.cadastro.produto.Produtos;
 import br.com.prodama.service.NegocioException;
 import br.com.prodama.service.cadastro.cronograma.CadastroAnexoAtividadePadrao;
 import br.com.prodama.service.cadastro.cronograma.CadastroCromogramaPadrao;
+import br.com.prodama.service.cadastro.cronograma.CadastroDocAtividadePadrao;
 import br.com.prodama.util.FacesMessages;
 import br.com.prodama.util.componentes.ConversorHora;
 
@@ -56,6 +57,9 @@ public class CadastroCronogramaPadraoBean implements Serializable {
 	
 	@Inject
 	private CadastroAnexoAtividadePadrao cadastroAnexo;
+	
+	@Inject
+	private CadastroDocAtividadePadrao cadastroDocumento;
 
 	@Inject
 	private CronogramasPadrao cronogramasPadrao;
@@ -135,10 +139,10 @@ public class CadastroCronogramaPadraoBean implements Serializable {
 				atividadeEdicao.setDescricao(atividadeEdicao.getDescricao().toUpperCase());
 			}
 			atividadeEdicao.setHoraAtividade(conversorHora.converteHoraMinuto(this.horaString));
-
 			cronogramaEdicao.getListaAtividadesHorasPadroes().add(atividadeEdicao);
 			this.cadastroCromogramaPadrao.salvar(cronogramaEdicao);
 			cronogramaEdicao = this.cronogramasPadrao.pesquisaPorId(cronogramaEdicao.getCodigo());
+			//recarregarArvore(cronogramaEdicao);
 			carregaArvore(cronogramaEdicao);
 			habilitar = false;
 			messages.info("Atividade salva com sucesso!");
@@ -161,7 +165,7 @@ public class CadastroCronogramaPadraoBean implements Serializable {
 		documentoEdicao.setAtividadeHoraPadrao(atividadeEdicao);
 		atividadeEdicao.getListaDocAtividadesHorasPadroes().add(documentoEdicao);
 		try {
-			this.cadastroCromogramaPadrao.salvar(cronogramaEdicao);
+			this.cadastroDocumento.salvar(documentoEdicao);
 			cronogramaEdicao = this.cronogramasPadrao.pesquisaPorId(cronogramaEdicao.getCodigo());
 			messages.info("Documento salvo com sucesso!");
 			todosDocumentos = documentos.todos(atividadeEdicao);
@@ -243,7 +247,7 @@ public class CadastroCronogramaPadraoBean implements Serializable {
 		atividadeEdicao.setAtividadeHoraPai(atividadeSelecionada);
 		habilitar = true;
 		horaString = "";
-		RequestContext.getCurrentInstance().update(Arrays.asList("painel-tab:frmAtividade","painel-tab:frmAtividade:hora"));
+		RequestContext.getCurrentInstance().update(Arrays.asList("painel-tab:frmAtividade"));
 	}
 
 	public void excluirAtividade() {
@@ -300,6 +304,21 @@ public class CadastroCronogramaPadraoBean implements Serializable {
 			adicionarNos(atividades.filhos(atividade), no);
 		}
 	}
+	
+	public void recarregarArvore(CronogramaPadrao cronogramaEdicao){
+	 	List<AtividadeHoraPadrao> atividadesLoop=  this.cronogramaEdicao.getListaAtividadesHorasPadroes();
+	 	for(AtividadeHoraPadrao atividade : atividadesLoop){
+	 		Long x = (atividades.somaFilhos(atividade));
+	 		Integer i = x != null ? x.intValue() : null;
+	 		atividade.setHoraAtividade(i);
+	 	}
+	 	try {
+			this.cadastroCromogramaPadrao.salvar(cronogramaEdicao);
+		} catch (NegocioException e) {
+			e.printStackTrace();
+		}
+	}
+	
 
 	public void listaNiveisEquipes(AjaxBehaviorEvent event) {
 		carregarNiveisEquipes();
