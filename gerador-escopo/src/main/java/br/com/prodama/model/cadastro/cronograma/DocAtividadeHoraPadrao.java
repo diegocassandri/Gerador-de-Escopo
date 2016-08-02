@@ -18,6 +18,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cascade;
 import org.hibernate.validator.constraints.NotEmpty;
 
 
@@ -47,10 +48,11 @@ public class DocAtividadeHoraPadrao implements Serializable{
 	@JoinColumn(name = "codigoAtividadeHoraPadrao")
 	private AtividadeHoraPadrao atividadeHoraPadrao;
 	
-	/*@SuppressWarnings("deprecation")*/
+	@SuppressWarnings("deprecation")
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "docAtividadeHoraPadrao",cascade=CascadeType.ALL)
-	/*@Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)*/
+	@Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
 	private List<AnexoAtividadeHoraPadrao> listaAnexoAtividadesHorasPadroes;
+	
 
 	public Long getCodigo() {
 		return codigo;

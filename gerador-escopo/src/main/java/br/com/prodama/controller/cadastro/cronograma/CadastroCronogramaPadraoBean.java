@@ -2,6 +2,7 @@ package br.com.prodama.controller.cadastro.cronograma;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
@@ -53,17 +54,15 @@ public class CadastroCronogramaPadraoBean implements Serializable {
 
 	@Inject
 	private CadastroCromogramaPadrao cadastroCromogramaPadrao;
-	
-	
+
 	@Inject
 	private CadastroAnexoAtividadePadrao cadastroAnexo;
-	
+
 	@Inject
 	private CadastroDocAtividadePadrao cadastroDocumento;
 
 	@Inject
 	private CronogramasPadrao cronogramasPadrao;
-
 
 	@Inject
 	private Produtos produtos;
@@ -121,6 +120,7 @@ public class CadastroCronogramaPadraoBean implements Serializable {
 			cronogramaEdicao = new CronogramaPadrao();
 			atividadeEdicao = new AtividadeHoraPadrao();
 			atividadeEdicao.setAnaliticoSitetico(AnaliticoSintetico.SINTETICO);
+			atividadeEdicao.setNivelAtividade("00.000.0000.00000.00000");
 		}
 	}
 
@@ -130,7 +130,7 @@ public class CadastroCronogramaPadraoBean implements Serializable {
 
 	public void salvarAtividade() {
 		try {
-		    cronogramaEdicao =  this.cronogramasPadrao.pesquisaPorId(cronogramaEdicao.getCodigo());
+			cronogramaEdicao = this.cronogramasPadrao.pesquisaPorId(cronogramaEdicao.getCodigo());
 			atividadeEdicao.setCronogramaPadrao(cronogramaEdicao);
 
 			if (atividadeEdicao.getAnaliticoSitetico() == AnaliticoSintetico.ANALITICO) {
@@ -140,9 +140,9 @@ public class CadastroCronogramaPadraoBean implements Serializable {
 			}
 			atividadeEdicao.setHoraAtividade(conversorHora.converteHoraMinuto(this.horaString));
 			cronogramaEdicao.getListaAtividadesHorasPadroes().add(atividadeEdicao);
-			this.cadastroCromogramaPadrao.salvar(cronogramaEdicao);
+			this.cadastroCromogramaPadrao.salvar(atividadeEdicao,cronogramaEdicao);
 			cronogramaEdicao = this.cronogramasPadrao.pesquisaPorId(cronogramaEdicao.getCodigo());
-			//recarregarArvore(cronogramaEdicao);
+			recarregarArvore(cronogramaEdicao);
 			carregaArvore(cronogramaEdicao);
 			habilitar = false;
 			messages.info("Atividade salva com sucesso!");
@@ -202,27 +202,30 @@ public class CadastroCronogramaPadraoBean implements Serializable {
 			}
 		}
 	}
-	
+
 	public void baixarAnexo() throws IOException {
-		 Faces.sendFile(anexoEdicao.getArquivo(), anexoEdicao.getDescricao(), true);
+		Faces.sendFile(anexoEdicao.getArquivo(), anexoEdicao.getDescricao(), true);
 	}
-	
-	public void removerAnexo(){
+
+	public void removerAnexo() {
+		atividadeEdicao.setCronogramaPadrao(cronogramaEdicao);
+		documentoEdicao.setAtividadeHoraPadrao(atividadeEdicao);
 		anexoEdicao.setDocAtividadeHoraPadrao(documentoEdicao);
 		documentoEdicao.getListaAnexoAtividadesHorasPadroes().remove(anexoEdicao);
 		try {
-			this.cadastroAnexo.excluir(anexoEdicao);
+			this.cadastroDocumento.salvar(documentoEdicao);
 			cronogramaEdicao = this.cronogramasPadrao.pesquisaPorId(cronogramaEdicao.getCodigo());
 			messages.info("Anexo excluido com sucesso!");
 			todosAnexos = anexos.todos(documentoEdicao);
+			RequestContext.getCurrentInstance().update(Arrays.asList("painel-tab:frmDoc:documento-table"));
 		} catch (Exception e) {
 			FacesMessage mensagem = new FacesMessage(e.getMessage());
 			messages.error("Erro ao remover anexo! \n Motivo:" + mensagem.getDetail());
 		}
 	}
 
-
 	public void addSintetico() {
+		String nivelAnterior = atividadeEdicao.getNivelAtividade();
 		atividadeEdicao = new AtividadeHoraPadrao();
 		atividadeEdicao.setAnaliticoSitetico(AnaliticoSintetico.SINTETICO);
 		if (atividadeSelecionada != null) {
@@ -230,24 +233,76 @@ public class CadastroCronogramaPadraoBean implements Serializable {
 		}
 		habilitar = true;
 		horaString = "";
-		RequestContext.getCurrentInstance().update(Arrays.asList("painel-tab:frmAtividade","painel-tab:frmAtividade:tipo"));
+		geraMascara(nivelAnterior);
+		RequestContext.getCurrentInstance()	.update(Arrays.asList("painel-tab:frmAtividade", "painel-tab:frmAtividade:tipo"));
 	}
-	
+
 	public void addSinteticoAvulso() {
+		String nivelAnterior = atividadeEdicao.getNivelAtividade();
 		atividadeEdicao = new AtividadeHoraPadrao();
 		atividadeEdicao.setAnaliticoSitetico(AnaliticoSintetico.SINTETICO);
 		habilitar = true;
 		horaString = "";
-		RequestContext.getCurrentInstance().update(Arrays.asList("painel-tab:frmAtividade","painel-tab:frmAtividade:hora"));
+		geraMascara(nivelAnterior);
+		RequestContext.getCurrentInstance()	.update(Arrays.asList("painel-tab:frmAtividade", "painel-tab:frmAtividade:hora"));
 	}
 
 	public void addAnalitico() {
+		String nivelAnterior = atividadeEdicao.getNivelAtividade();
 		atividadeEdicao = new AtividadeHoraPadrao();
 		atividadeEdicao.setAnaliticoSitetico(AnaliticoSintetico.ANALITICO);
 		atividadeEdicao.setAtividadeHoraPai(atividadeSelecionada);
 		habilitar = true;
 		horaString = "";
+		geraMascara(nivelAnterior);
 		RequestContext.getCurrentInstance().update(Arrays.asList("painel-tab:frmAtividade"));
+	}
+
+	public void geraMascara(String nivelAnterior) {
+		boolean nExist = true;
+		Integer nivelAtual = 0;
+		String StringNivel = "";
+		Integer n1 = Integer.valueOf(nivelAnterior.substring(0, 2));
+		Integer n2 = Integer.valueOf(nivelAnterior.substring(3, 6));
+		Integer n3 = Integer.valueOf(nivelAnterior.substring(8, 11));
+		Integer n4 = Integer.valueOf(nivelAnterior.substring(13, 17));
+		Integer n5 = Integer.valueOf(nivelAnterior.substring(18, 23));
+		
+		while(nExist == true){
+			if(n1 == 0){
+				n1++;
+				nivelAtual = 1;
+			}else if (((n1 != 0) & (n2 == 0)) || (nivelAtual == 2)) {
+				n2++;
+				nivelAtual = 2;
+			} else if (((n2 != 0) & (n3 == 0)) || (nivelAtual == 3)) {
+				n3++;
+				nivelAtual =3;
+			} else if (((n3 != 0) & (n4 == 0)) || (nivelAtual == 4))  {
+				n4++;
+				nivelAtual = 4;
+			} else if (((n4 != 0) & (n5 == 0)) || (nivelAtual == 5))  {
+				n5++;	
+				nivelAtual = 5;
+			} else{
+				n5++;	
+				nivelAtual = 5;
+			}
+			
+			StringNivel =  lpad(n1.toString(), "0", 2) + "." + lpad(n2.toString(), "0", 3) + "." + lpad(n3.toString(), "0", 4) +  "." +
+					              lpad(n4.toString(), "0", 5) + "." + lpad(n5.toString(), "0", 5);
+			
+			nExist = atividades.pesquisaPorNivel(StringNivel, cronogramaEdicao);
+		}
+		
+		atividadeEdicao.setNivelAtividade(StringNivel);
+	}
+	
+	public static String lpad(String valueToPad, String filler, int size) {
+		while (valueToPad.length() < size) {
+			valueToPad = filler + valueToPad;
+		}
+		return valueToPad;
 	}
 
 	public void excluirAtividade() {
@@ -261,7 +316,8 @@ public class CadastroCronogramaPadraoBean implements Serializable {
 			messages.info("Atividade excluída com sucesso!");
 			habilitar = false;
 			horaString = "";
-			RequestContext.getCurrentInstance()	.update(Arrays.asList("msgs", "frmTree:treeTableAtividades", "painel-tab"));
+			RequestContext.getCurrentInstance()
+					.update(Arrays.asList("msgs", "frmTree:treeTableAtividades", "painel-tab"));
 			todosDocumentos = documentos.todos(atividadeEdicao);
 			RequestContext.getCurrentInstance().update(Arrays.asList("painel-tab", "painel-tab:frmDoc"));
 		} catch (Exception e) {
@@ -278,6 +334,8 @@ public class CadastroCronogramaPadraoBean implements Serializable {
 		try {
 			this.cadastroCromogramaPadrao.salvar(cronogramaEdicao);
 			messages.info("Documento excluído com sucesso!");
+			
+			
 			habilitar = false;
 			horaString = "";
 			todosDocumentos = documentos.todos(atividadeEdicao);
@@ -289,6 +347,24 @@ public class CadastroCronogramaPadraoBean implements Serializable {
 			messages.error("Erro ao excluir atividade! \n Motivo:" + mensagem);
 			RequestContext.getCurrentInstance().update(Arrays.asList("painel-tab:frmDoc:documento-table"));
 		}
+	}
+
+
+
+	public void recarregarArvore(CronogramaPadrao cronogramaEdicao) {
+		List<Object[]> atividadesLoop = atividades.retornaHierarquia(cronogramaEdicao);
+		for (Object[] atividade : atividadesLoop) {
+			BigDecimal codigo = (BigDecimal) atividade[0];
+			BigDecimal total = (BigDecimal) atividade[1];
+			AtividadeHoraPadrao atv = atividades.pesquisaPorId(codigo.longValue());
+			atv.setHoraAtividade(total.intValue());
+		}
+		try {
+			this.cadastroCromogramaPadrao.salvar(atividadeEdicao,cronogramaEdicao);
+		} catch (NegocioException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	public void carregaArvore(CronogramaPadrao cronogramaEdicao) {
@@ -304,21 +380,6 @@ public class CadastroCronogramaPadraoBean implements Serializable {
 			adicionarNos(atividades.filhos(atividade), no);
 		}
 	}
-	
-	public void recarregarArvore(CronogramaPadrao cronogramaEdicao){
-	 	List<AtividadeHoraPadrao> atividadesLoop=  this.cronogramaEdicao.getListaAtividadesHorasPadroes();
-	 	for(AtividadeHoraPadrao atividade : atividadesLoop){
-	 		Long x = (atividades.somaFilhos(atividade));
-	 		Integer i = x != null ? x.intValue() : null;
-	 		atividade.setHoraAtividade(i);
-	 	}
-	 	try {
-			this.cadastroCromogramaPadrao.salvar(cronogramaEdicao);
-		} catch (NegocioException e) {
-			e.printStackTrace();
-		}
-	}
-	
 
 	public void listaNiveisEquipes(AjaxBehaviorEvent event) {
 		carregarNiveisEquipes();
@@ -422,6 +483,8 @@ public class CadastroCronogramaPadraoBean implements Serializable {
 	public AtividadeHoraPadrao getAtividadeEdicao() {
 		if (atividadeEdicao.getHoraAtividade() != null) {
 			horaString = (conversorHora.converteMinutoHora(atividadeEdicao.getHoraAtividade()));
+		} else {
+			horaString = "0000:00";
 		}
 		return atividadeEdicao;
 	}
@@ -512,7 +575,7 @@ public class CadastroCronogramaPadraoBean implements Serializable {
 
 	public void setDocumentoEdicao(DocAtividadeHoraPadrao documentoEdicao) {
 		if (documentoEdicao != null) {
-			todosAnexos = anexos.todos(documentoEdicao); 
+			todosAnexos = anexos.todos(documentoEdicao);
 		}
 		this.documentoEdicao = documentoEdicao;
 	}
@@ -557,5 +620,4 @@ public class CadastroCronogramaPadraoBean implements Serializable {
 		this.arquivoDownload = arquivoDownload;
 	}
 
-	
 }
