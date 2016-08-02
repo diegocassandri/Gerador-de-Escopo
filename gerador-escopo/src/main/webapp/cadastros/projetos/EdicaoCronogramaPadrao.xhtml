@@ -33,13 +33,13 @@
 			</h:form>
 		</p:panel>
 
-		<p:layout style="min-width:40px;min-height:20px;margin-top:10px">
+		<p:layout style="min-width:10%;min-height:200%;margin-top:10px">
 			<p:layoutUnit position="west" resizable="true" header="Atividades"
 				maxSize="400">
 
 				<h:form id="frmTree">
 					<p:treeTable value="#{cadastroCronogramaPadraoBean.raiz}"
-						editable="true" var="raiz" sortBy="#{raiz.descricao}"
+						editable="true" var="raiz" sortBy="#{raiz.nivelAtividade}"
 						emptyMessage="Nenhuma atividade encontrada."
 						id="treeTableAtividades" selectionMode="single"
 						selection="#{cadastroCronogramaPadraoBean.selectedNode}"
@@ -60,23 +60,22 @@
 									action="#{cadastroCronogramaPadraoBean.addSintetico}"
 									disabled="#{cadastroCronogramaPadraoBean.atividadeSelecionada.analiticoSitetico == 'ANALITICO'}">
 
-									<p:menuitem icon="ui-icon-plus" process="@this"
+									<!--  <p:menuitem icon="ui-icon-plus" process="@this"
 										value="Adicionar Sintético Avulso"
 										update="painel-tab painel-tab:frmAtividade:hora"
 										action="#{cadastroCronogramaPadraoBean.addSinteticoAvulso}"
 										disabled="#{cadastroCronogramaPadraoBean.atividadeSelecionada.analiticoSitetico == 'ANALITICO'}">
 
 										<f:ajax event="click" render="painel-tab:frmAtividade:hora" />
-									</p:menuitem>
+									</p:menuitem>-->
 
 									<f:ajax event="click" render="painel-tab:frmAtividade:hora" />
 								</p:splitButton>
 
 								<p:commandButton icon="ui-icon-plus" process="@this"
-									value="Adicionar Análitico"
-									update="painel-tab painel-tab:frmAtividade:hora"
+									value="Adicionar Análitico" update="painel-tab"
 									action="#{cadastroCronogramaPadraoBean.addAnalitico}"
-									disabled="#{cadastroCronogramaPadraoBean.selectedNode == null}" />
+									disabled="#{cadastroCronogramaPadraoBean.selectedNode == null or cadastroCronogramaPadraoBean.atividadeSelecionada.analiticoSitetico == 'ANALITICO' }" />
 
 								<p:commandButton icon="ui-icon-trash" title="Excluir"
 									process="@this" update="painel-tab msgs" value="Remover"
@@ -112,8 +111,15 @@
 										<f:selectItems var="tipo"
 											value="#{cadastroCronogramaPadraoBean.tipoList}"
 											itemLabel="#{tipo.descricao}" itemValue="#{tipo}" />
-
 									</p:selectOneMenu>
+
+									<p:outputLabel value="Nível:" for="nivel" />
+									<p:inputMask size="20" maxlength="30"
+										mask="99.999.9999.99999.99999"
+										disabled="#{cadastroCronogramaPadraoBean.habilitar == false}"
+										value="#{cadastroCronogramaPadraoBean.atividadeEdicao.nivelAtividade}"
+										id="nivel">
+									</p:inputMask>
 
 									<p:outputLabel value="Descrição" for="descricaoAtividade" />
 									<p:inputText size="30" maxlength="50"
@@ -122,15 +128,15 @@
 										id="descricaoAtividade" />
 
 									<p:outputLabel value="Observação" for="obs" />
-									<p:inputTextarea rows="5" cols="40" maxlength="10" id="obs"
+									<p:inputTextarea rows="5" cols="40" id="obs"
 										disabled="#{cadastroCronogramaPadraoBean.habilitar == false}"
 										value="#{cadastroCronogramaPadraoBean.atividadeEdicao.observacao}"
 										autoResize="false" />
 
 									<p:outputLabel value="Quantidade de Horas" for="hora" />
 									<p:inputMask size="10" maxlength="30" required="true"
-										mask="999:99"
-										disabled="#{cadastroCronogramaPadraoBean.habilitar == false or cadastroCronogramaPadraoBean.atividadeSelecionada.analiticoSitetico == 'SINTETICO'}"
+										mask="9999:99"
+										disabled="#{cadastroCronogramaPadraoBean.habilitar == false or cadastroCronogramaPadraoBean.atividadeEdicao.analiticoSitetico == 'SINTETICO'}"
 										value="#{cadastroCronogramaPadraoBean.atividadeEdicao.horaAtividadeForm}"
 										id="hora">
 									</p:inputMask>
@@ -308,7 +314,8 @@
 
 						</h:panelGrid>
 					</p:tab>
-					<p:tab title="Anexos">
+					<p:tab title="Anexos"
+						disabled="#{cadastroCronogramaPadraoBean.documentoEdicao.codigo == null}">
 						<h:form id="frmAnexos">
 							<p:fileUpload cancelLabel="Cancelar" uploadLabel="Upload"
 								label="Adiconar"
@@ -338,9 +345,10 @@
 									</p:commandButton>
 
 									<p:commandButton icon="fa fa-trash" title="Remover Arquivo"
-										ajax="false"
 										action="#{cadastroCronogramaPadraoBean.removerAnexo}">
-
+										<p:confirm icon="ui-icon-alert"
+											header="Confirmação de exclusão"
+											message="Tem certeza que deseja excluir o anexo?" />
 										<f:setPropertyActionListener value="#{anexo}"
 											target="#{cadastroCronogramaPadraoBean.anexoEdicao}" />
 									</p:commandButton>

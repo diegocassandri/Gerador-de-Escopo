@@ -19,10 +19,6 @@ public class CadastroDocAtividadePadrao implements Serializable {
 	@Transactional
 	public void salvar(DocAtividadeHoraPadrao docAtividadeHoraPadrao) throws NegocioException {
 
-		if (docsAtividadesHoraPadrao.pesquisaPorNome(docAtividadeHoraPadrao) && (docAtividadeHoraPadrao.getCodigo() == null || docAtividadeHoraPadrao.getCodigo()==0)) {
-			throw new NegocioException(
-					"Já existe um Documento nessa atividade com este nome: "+docAtividadeHoraPadrao.getDescricao());
-		}
 		this.docsAtividadesHoraPadrao.adicionar(docAtividadeHoraPadrao);
 	}
 

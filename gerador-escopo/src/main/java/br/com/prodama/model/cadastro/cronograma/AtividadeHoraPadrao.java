@@ -31,31 +31,29 @@ import br.com.prodama.model.cadastro.geral.NivelEquipe;
 import br.com.prodama.util.componentes.ConversorHora;
 
 @Entity
-@Table(name="AtividadeHoraPadrao")
-public class AtividadeHoraPadrao implements Serializable{
-	
+@Table(name = "AtividadeHoraPadrao")
+public class AtividadeHoraPadrao implements Serializable {
+
 	private static final long serialVersionUID = 1L;
-	
+
 	@Transient
 	private ConversorHora conversorHora;
-	
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="gen_atividadeHoraPadrao") 
-    @SequenceGenerator(name="gen_atividadeHoraPadrao", sequenceName = "seq_atividadeHoraPadrao", initialValue=1, allocationSize=1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gen_atividadeHoraPadrao")
+	@SequenceGenerator(name = "gen_atividadeHoraPadrao", sequenceName = "seq_atividadeHoraPadrao", initialValue = 1, allocationSize = 1)
 	@Column(name = "Codigo", nullable = false)
 	private Long codigo;
 
 	@NotEmpty
 	@Basic(optional = false)
-	@Column(name = "Descricao", nullable = false, length = 250)
+	@Column(name = "Descricao", length = 250)
 	private String descricao;
-	
-	@NotEmpty
-	@Basic(optional = false)
-	@Column(name = "Observacao", nullable = true,length=4000)
+
+
+	@Column(name = "Observacao", nullable = true, length = 4000)
 	private String observacao;
-	
+
 	@Column(name = "horaAtividade", nullable = true)
 	private Integer horaAtividade;
 
@@ -64,45 +62,52 @@ public class AtividadeHoraPadrao implements Serializable{
 
 	@Enumerated(EnumType.STRING)
 	private AnaliticoSintetico analiticoSitetico;
-	
+
 	@Enumerated(EnumType.STRING)
 	@Column(name = "FormatoExecucao", nullable = true)
 	private FormatoExecucao formatoExecucao;
-	
+
 	@Enumerated(EnumType.STRING)
 	@Column(name = "ResponsavelExecucao", nullable = true)
 	private ResponsavelExecucao responsavelExecucao;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "CronogramaPadrao")
-	private CronogramaPadrao cronogramaPadrao;	
-	
-	@ManyToOne(optional=true)
+	private CronogramaPadrao cronogramaPadrao;
+
+	@ManyToOne(optional = true)
 	@JoinColumn(name = "codigoEquipe")
 	private Equipe equipe;
-	
-	@ManyToOne(optional=true)
+
+	@ManyToOne(optional = true)
 	@JoinColumn(name = "codigoNivelEquipe")
 	private NivelEquipe nivelEquipe;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "CodigoAgrupamento")
 	private AgrupamentoAtividade agrupamento;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "AtividadeHoraPai")
 	private AtividadeHoraPadrao atividadeHoraPai;
 
 	@SuppressWarnings("deprecation")
-	@OneToMany(fetch = FetchType.EAGER,mappedBy = "atividadeHoraPai",orphanRemoval = true)
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "atividadeHoraPai", orphanRemoval = true)
 	@Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
 	private List<AtividadeHoraPadrao> subAtividadeHoras;
+	
+	@NotEmpty
+	@Basic(optional = false)
+	@Column(name = "nivelAtividade", nullable = false)
+	private String nivelAtividade;
+	
+	
 
 	@SuppressWarnings("deprecation")
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "atividadeHoraPadrao",cascade=CascadeType.ALL,orphanRemoval = true)
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "atividadeHoraPadrao", cascade = CascadeType.ALL, orphanRemoval = true)
 	@Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
 	private List<DocAtividadeHoraPadrao> listaDocAtividadesHorasPadroes;
-	
+
 	public Long getCodigo() {
 		return codigo;
 	}
@@ -137,18 +142,18 @@ public class AtividadeHoraPadrao implements Serializable{
 
 	public String getHoraAtividadeForm() {
 		conversorHora = new ConversorHora();
-		if(horaAtividade != null){
+		if (horaAtividade != null) {
 			return conversorHora.converteMinutoHora(horaAtividade);
-		}else {
+		} else {
 			return "000:00";
 		}
-		
+
 	}
 
 	public void setHoraAtividadeForm(String horaAtividade) {
 		this.horaAtividade = conversorHora.converteHoraMinuto(horaAtividade);
 	}
-	
+
 	public AnaliticoSintetico getAnaliticoSitetico() {
 		return analiticoSitetico;
 	}
@@ -220,9 +225,6 @@ public class AtividadeHoraPadrao implements Serializable{
 	public void setSubAtividadeHoras(List<AtividadeHoraPadrao> subAtividadeHoras) {
 		this.subAtividadeHoras = subAtividadeHoras;
 	}
-	
-	
-	
 
 	public List<DocAtividadeHoraPadrao> getListaDocAtividadesHorasPadroes() {
 		return listaDocAtividadesHorasPadroes;
@@ -239,12 +241,22 @@ public class AtividadeHoraPadrao implements Serializable{
 	public void setHoraString(String horaString) {
 		this.horaString = horaString;
 	}
+	
+	public String getNivelAtividade() {
+		return nivelAtividade;
+	}
+
+	public void setNivelAtividade(String nivelAtividade) {
+		this.nivelAtividade = nivelAtividade;
+	}
+
+	
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((codigo == null) ? 0 : codigo.hashCode());
+		result = prime * result + ((atividadeHoraPai == null) ? 0 : atividadeHoraPai.hashCode());
 		return result;
 	}
 
@@ -257,20 +269,22 @@ public class AtividadeHoraPadrao implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		AtividadeHoraPadrao other = (AtividadeHoraPadrao) obj;
-		if (codigo == null) {
-			if (other.codigo != null)
+		if (atividadeHoraPai == null) {
+			if (other.atividadeHoraPai != null)
 				return false;
-		} else if (!codigo.equals(other.codigo))
+		} else if (!atividadeHoraPai.equals(other.atividadeHoraPai))
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return  descricao;
+		return descricao;
 	}
+
+
+
 	
-	
-	
-	
+
+
 }

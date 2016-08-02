@@ -23,7 +23,7 @@ public  class ConversorHora implements Serializable {
 		minutos = converterDoubleDoisDecimais((minutos / 100) * 60);
 		String sMinutos = Double.toString(minutos).substring(Double.toString(minutos).indexOf(".") + 1,
 				Double.toString(minutos).length());
-		String sHora = lpad(hora.toString(), "0", 3) + ":" + rpad(sMinutos, "0", 2);
+		String sHora = lpad(hora.toString(), "0", 4) + ":" + rpad(sMinutos, "0", 2);
 		return this.horaTexto = sHora;
 	}
 	

@@ -23,14 +23,14 @@ import org.hibernate.validator.constraints.NotEmpty;
 import br.com.prodama.model.cadastro.produto.Produto;
 
 @Entity
-@Table(name="CronogramaPradrao")
-public class CronogramaPadrao implements Serializable{
-	
+@Table(name = "CronogramaPradrao")
+public class CronogramaPadrao implements Serializable {
+
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="gen_cronogramaPradrao") 
-    @SequenceGenerator(name="gen_cronogramaPradrao", sequenceName = "seq_cronogramaPradrao", initialValue=1, allocationSize=1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gen_cronogramaPradrao")
+	@SequenceGenerator(name = "gen_cronogramaPradrao", sequenceName = "seq_cronogramaPradrao", initialValue = 1, allocationSize = 1)
 	@Column(name = "Codigo", nullable = false)
 	private Long codigo;
 
@@ -38,20 +38,19 @@ public class CronogramaPadrao implements Serializable{
 	@Basic(optional = false)
 	@Column(name = "Descricao", nullable = false, length = 250)
 	private String descricao;
-	
+
 	@Column(name = "TotalHoras", nullable = true)
 	private Long totalHoras;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "produto")
 	private Produto produto;
-	
+
 	@SuppressWarnings("deprecation")
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "cronogramaPadrao",cascade=CascadeType.ALL)
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "cronogramaPadrao", cascade = CascadeType.ALL)
 	@Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
 	private List<AtividadeHoraPadrao> listaAtividadesHorasPadroes;
 
-	
 	public Long getCodigo() {
 		return codigo;
 	}
@@ -84,7 +83,11 @@ public class CronogramaPadrao implements Serializable{
 		this.produto = produto;
 	}
 
+
 	public List<AtividadeHoraPadrao> getListaAtividadesHorasPadroes() {
+		if (listaAtividadesHorasPadroes != null) {
+	
+		}
 		return listaAtividadesHorasPadroes;
 	}
 
@@ -117,10 +120,6 @@ public class CronogramaPadrao implements Serializable{
 		return true;
 	}
 
-	
 
-
-	
-	
 
 }

@@ -5,7 +5,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
+
 
 import br.com.prodama.model.cadastro.cronograma.AtividadeHoraPadrao;
 import br.com.prodama.model.cadastro.cronograma.DocAtividadeHoraPadrao;
@@ -27,7 +27,7 @@ public class DocsAtividadesHoraPadrao implements Serializable {
 		return manager.find(DocAtividadeHoraPadrao.class, id);
 	}
 	
-	public boolean pesquisaPorNome(DocAtividadeHoraPadrao docAtividadeHoraPadrao) {
+	/*public boolean pesquisaPorNome(DocAtividadeHoraPadrao docAtividadeHoraPadrao) {
 		Query query = manager.createQuery("From DocAtividadeHoraPadrao where descricao = :descricao and AtividadeHoraPadrao = :atividade", DocAtividadeHoraPadrao.class);
 		query.setParameter("descricao", docAtividadeHoraPadrao.getDescricao());
 		query.setParameter("atividade", docAtividadeHoraPadrao.getAtividadeHoraPadrao());
@@ -37,7 +37,7 @@ public class DocsAtividadesHoraPadrao implements Serializable {
 		} else {
 			return true;
 		}
-	}
+	}*/
 	
 	
 	public void excluir(DocAtividadeHoraPadrao docAtividadeHoraPadrao) {

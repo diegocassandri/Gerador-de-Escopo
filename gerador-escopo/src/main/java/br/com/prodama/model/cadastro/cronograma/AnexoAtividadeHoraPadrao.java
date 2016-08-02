@@ -102,10 +102,6 @@ public class AnexoAtividadeHoraPadrao implements Serializable{
 		return true;
 	}
 
-	@Override
-	public String toString() {
-		return  descricao;
-	}
 	
 	
 	
