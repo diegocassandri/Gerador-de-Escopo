@@ -19,6 +19,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -75,11 +76,13 @@ public class AtividadeHoraPadrao implements Serializable {
 	@JoinColumn(name = "CronogramaPadrao")
 	private CronogramaPadrao cronogramaPadrao;
 
-	@ManyToOne(optional = true)
+	@NotNull
+	@ManyToOne(optional = false)
 	@JoinColumn(name = "codigoEquipe")
 	private Equipe equipe;
 
-	@ManyToOne(optional = true)
+	@NotNull
+	@ManyToOne(optional = false)
 	@JoinColumn(name = "codigoNivelEquipe")
 	private NivelEquipe nivelEquipe;
 

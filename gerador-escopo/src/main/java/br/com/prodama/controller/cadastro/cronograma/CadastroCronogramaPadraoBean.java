@@ -39,6 +39,7 @@ import br.com.prodama.repository.cadastro.geral.NiveisEquipe;
 import br.com.prodama.repository.cadastro.produto.Produtos;
 import br.com.prodama.service.NegocioException;
 import br.com.prodama.service.cadastro.cronograma.CadastroAnexoAtividadePadrao;
+import br.com.prodama.service.cadastro.cronograma.CadastroAtividadePadrao;
 import br.com.prodama.service.cadastro.cronograma.CadastroCromogramaPadrao;
 import br.com.prodama.service.cadastro.cronograma.CadastroDocAtividadePadrao;
 import br.com.prodama.util.FacesMessages;
@@ -60,6 +61,9 @@ public class CadastroCronogramaPadraoBean implements Serializable {
 
 	@Inject
 	private CadastroDocAtividadePadrao cadastroDocumento;
+
+	@Inject
+	private CadastroAtividadePadrao cadastroAtividade;
 
 	@Inject
 	private CronogramasPadrao cronogramasPadrao;
@@ -140,7 +144,7 @@ public class CadastroCronogramaPadraoBean implements Serializable {
 			}
 			atividadeEdicao.setHoraAtividade(conversorHora.converteHoraMinuto(this.horaString));
 			cronogramaEdicao.getListaAtividadesHorasPadroes().add(atividadeEdicao);
-			this.cadastroCromogramaPadrao.salvar(atividadeEdicao,cronogramaEdicao);
+			this.cadastroCromogramaPadrao.salvar(atividadeEdicao, cronogramaEdicao);
 			cronogramaEdicao = this.cronogramasPadrao.pesquisaPorId(cronogramaEdicao.getCodigo());
 			recarregarArvore(cronogramaEdicao);
 			carregaArvore(cronogramaEdicao);
@@ -208,15 +212,13 @@ public class CadastroCronogramaPadraoBean implements Serializable {
 	}
 
 	public void removerAnexo() {
-		atividadeEdicao.setCronogramaPadrao(cronogramaEdicao);
-		documentoEdicao.setAtividadeHoraPadrao(atividadeEdicao);
-		anexoEdicao.setDocAtividadeHoraPadrao(documentoEdicao);
 		documentoEdicao.getListaAnexoAtividadesHorasPadroes().remove(anexoEdicao);
 		try {
 			this.cadastroDocumento.salvar(documentoEdicao);
 			cronogramaEdicao = this.cronogramasPadrao.pesquisaPorId(cronogramaEdicao.getCodigo());
+			documentoEdicao = this.documentos.pesquisaPorId(documentoEdicao.getCodigo());
 			messages.info("Anexo excluido com sucesso!");
-			todosAnexos = anexos.todos(documentoEdicao);
+			todosAnexos = anexos.todos(this.documentoEdicao);
 			RequestContext.getCurrentInstance().update(Arrays.asList("painel-tab:frmDoc:documento-table"));
 		} catch (Exception e) {
 			FacesMessage mensagem = new FacesMessage(e.getMessage());
@@ -234,7 +236,8 @@ public class CadastroCronogramaPadraoBean implements Serializable {
 		habilitar = true;
 		horaString = "";
 		geraMascara(nivelAnterior);
-		RequestContext.getCurrentInstance()	.update(Arrays.asList("painel-tab:frmAtividade", "painel-tab:frmAtividade:tipo"));
+		RequestContext.getCurrentInstance()
+				.update(Arrays.asList("painel-tab:frmAtividade", "painel-tab:frmAtividade:tipo"));
 	}
 
 	public void addSinteticoAvulso() {
@@ -244,7 +247,8 @@ public class CadastroCronogramaPadraoBean implements Serializable {
 		habilitar = true;
 		horaString = "";
 		geraMascara(nivelAnterior);
-		RequestContext.getCurrentInstance()	.update(Arrays.asList("painel-tab:frmAtividade", "painel-tab:frmAtividade:hora"));
+		RequestContext.getCurrentInstance()
+				.update(Arrays.asList("painel-tab:frmAtividade", "painel-tab:frmAtividade:hora"));
 	}
 
 	public void addAnalitico() {
@@ -267,37 +271,38 @@ public class CadastroCronogramaPadraoBean implements Serializable {
 		Integer n3 = Integer.valueOf(nivelAnterior.substring(8, 11));
 		Integer n4 = Integer.valueOf(nivelAnterior.substring(13, 17));
 		Integer n5 = Integer.valueOf(nivelAnterior.substring(18, 23));
-		
-		while(nExist == true){
-			if(n1 == 0){
+
+		while (nExist == true) {
+			if (n1 == 0) {
 				n1++;
 				nivelAtual = 1;
-			}else if (((n1 != 0) & (n2 == 0)) || (nivelAtual == 2)) {
+			} else if (((n1 != 0) & (n2 == 0)) || (nivelAtual == 2)) {
 				n2++;
 				nivelAtual = 2;
 			} else if (((n2 != 0) & (n3 == 0)) || (nivelAtual == 3)) {
 				n3++;
-				nivelAtual =3;
-			} else if (((n3 != 0) & (n4 == 0)) || (nivelAtual == 4))  {
+				nivelAtual = 3;
+			} else if (((n3 != 0) & (n4 == 0)) || (nivelAtual == 4)) {
 				n4++;
 				nivelAtual = 4;
-			} else if (((n4 != 0) & (n5 == 0)) || (nivelAtual == 5))  {
-				n5++;	
+			} else if (((n4 != 0) & (n5 == 0)) || (nivelAtual == 5)) {
+				n5++;
 				nivelAtual = 5;
-			} else{
-				n5++;	
+			} else {
+				n5++;
 				nivelAtual = 5;
 			}
-			
-			StringNivel =  lpad(n1.toString(), "0", 2) + "." + lpad(n2.toString(), "0", 3) + "." + lpad(n3.toString(), "0", 4) +  "." +
-					              lpad(n4.toString(), "0", 5) + "." + lpad(n5.toString(), "0", 5);
-			
+
+			StringNivel = lpad(n1.toString(), "0", 2) + "." + lpad(n2.toString(), "0", 3) + "."
+					+ lpad(n3.toString(), "0", 4) + "." + lpad(n4.toString(), "0", 5) + "."
+					+ lpad(n5.toString(), "0", 5);
+
 			nExist = atividades.pesquisaPorNivel(StringNivel, cronogramaEdicao);
 		}
-		
+
 		atividadeEdicao.setNivelAtividade(StringNivel);
 	}
-	
+
 	public static String lpad(String valueToPad, String filler, int size) {
 		while (valueToPad.length() < size) {
 			valueToPad = filler + valueToPad;
@@ -334,8 +339,7 @@ public class CadastroCronogramaPadraoBean implements Serializable {
 		try {
 			this.cadastroCromogramaPadrao.salvar(cronogramaEdicao);
 			messages.info("Documento excluído com sucesso!");
-			
-			
+
 			habilitar = false;
 			horaString = "";
 			todosDocumentos = documentos.todos(atividadeEdicao);
@@ -349,22 +353,22 @@ public class CadastroCronogramaPadraoBean implements Serializable {
 		}
 	}
 
-
-
 	public void recarregarArvore(CronogramaPadrao cronogramaEdicao) {
-		List<Object[]> atividadesLoop = atividades.retornaHierarquia(cronogramaEdicao);
-		for (Object[] atividade : atividadesLoop) {
-			BigDecimal codigo = (BigDecimal) atividade[0];
-			BigDecimal total = (BigDecimal) atividade[1];
-			AtividadeHoraPadrao atv = atividades.pesquisaPorId(codigo.longValue());
-			atv.setHoraAtividade(total.intValue());
+		for (int x = 0; x <= 5; x++) {
+			List<Object[]> atividadesLoop = atividades.retornaHierarquia(cronogramaEdicao);
+			for (Object[] atividade : atividadesLoop) {
+				BigDecimal codigo = (BigDecimal) atividade[0];
+				BigDecimal total = (BigDecimal) atividade[1];
+				AtividadeHoraPadrao atv = atividades.pesquisaPorId(codigo.longValue());
+				atv.setHoraAtividade(total.intValue());
+				try {
+					this.cadastroAtividade.salvar(atv);
+				} catch (NegocioException e) {
+					e.printStackTrace();
+				}
+			}
 		}
-		try {
-			this.cadastroCromogramaPadrao.salvar(atividadeEdicao,cronogramaEdicao);
-		} catch (NegocioException e) {
-			e.printStackTrace();
-		}
-
+		cronogramaEdicao = this.cronogramasPadrao.pesquisaPorId(cronogramaEdicao.getCodigo());
 	}
 
 	public void carregaArvore(CronogramaPadrao cronogramaEdicao) {
