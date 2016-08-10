@@ -60,15 +60,6 @@
 									action="#{cadastroCronogramaPadraoBean.addSintetico}"
 									disabled="#{cadastroCronogramaPadraoBean.atividadeSelecionada.analiticoSitetico == 'ANALITICO'}">
 
-									<!--  <p:menuitem icon="ui-icon-plus" process="@this"
-										value="Adicionar Sintético Avulso"
-										update="painel-tab painel-tab:frmAtividade:hora"
-										action="#{cadastroCronogramaPadraoBean.addSinteticoAvulso}"
-										disabled="#{cadastroCronogramaPadraoBean.atividadeSelecionada.analiticoSitetico == 'ANALITICO'}">
-
-										<f:ajax event="click" render="painel-tab:frmAtividade:hora" />
-									</p:menuitem>-->
-
 									<f:ajax event="click" render="painel-tab:frmAtividade:hora" />
 								</p:splitButton>
 
