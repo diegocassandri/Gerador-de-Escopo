@@ -11,6 +11,7 @@ import org.hibernate.validator.constraints.br.CNPJ;
 import org.hibernate.validator.constraints.br.CPF;
 
 import br.com.prodama.enun.TipoEmpresa;
+import br.com.prodama.model.proposta.projeto.CronogramaProjeto;
 
 @Entity
 @Table(name = "Empresa")
@@ -97,6 +98,9 @@ public class Empresa implements Serializable {
 
 	@ManyToMany(mappedBy="abrangenciaEmpresas",cascade=CascadeType.REMOVE,fetch=FetchType.EAGER)
 	private List<Usuario> abrangenciaUsuarios = new LinkedList<Usuario>();
+	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "empresa")
+	private List<CronogramaProjeto> listaCronogramas;
 	
 	public Long getCodigo() {
 		return codigo;
@@ -280,6 +284,14 @@ public class Empresa implements Serializable {
 
 	public void setAbrangenciaUsuarios(List<Usuario> abrangenciaUsuarios) {
 		this.abrangenciaUsuarios = abrangenciaUsuarios;
+	}
+
+	public List<CronogramaProjeto> getListaCronogramas() {
+		return listaCronogramas;
+	}
+
+	public void setListaCronogramas(List<CronogramaProjeto> listaCronogramas) {
+		this.listaCronogramas = listaCronogramas;
 	}
 
 	@Override

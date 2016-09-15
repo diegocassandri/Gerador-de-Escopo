@@ -1,6 +1,7 @@
 package br.com.prodama.model.cadastro.cronograma;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.persistence.Basic;
@@ -19,6 +20,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Cascade;
@@ -29,6 +31,7 @@ import br.com.prodama.enun.FormatoExecucao;
 import br.com.prodama.enun.ResponsavelExecucao;
 import br.com.prodama.model.cadastro.geral.Equipe;
 import br.com.prodama.model.cadastro.geral.NivelEquipe;
+import br.com.prodama.model.cadastro.geral.TipoHora;
 import br.com.prodama.util.componentes.ConversorHora;
 
 @Entity
@@ -103,14 +106,22 @@ public class AtividadeHoraPadrao implements Serializable {
 	@Basic(optional = false)
 	@Column(name = "nivelAtividade", nullable = false)
 	private String nivelAtividade;
-	
-	
 
 	@SuppressWarnings("deprecation")
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "atividadeHoraPadrao", cascade = CascadeType.ALL, orphanRemoval = true)
 	@Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
 	private List<DocAtividadeHoraPadrao> listaDocAtividadesHorasPadroes;
 
+	@NotNull
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "codigo")
+	private TipoHora tipoHora;
+	
+	@NotNull 
+	@DecimalMin("0")
+	@Column(precision = 15, scale = 2, nullable = false)
+	private BigDecimal valor;
+	
 	public Long getCodigo() {
 		return codigo;
 	}
@@ -253,7 +264,21 @@ public class AtividadeHoraPadrao implements Serializable {
 		this.nivelAtividade = nivelAtividade;
 	}
 
-	
+	public TipoHora getTipoHora() {
+		return tipoHora;
+	}
+
+	public void setTipoHora(TipoHora tipoHora) {
+		this.tipoHora = tipoHora;
+	}
+
+	public BigDecimal getValor() {
+		return valor;
+	}
+
+	public void setValor(BigDecimal valor) {
+		this.valor = valor;
+	}
 
 	@Override
 	public int hashCode() {

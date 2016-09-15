@@ -2,11 +2,13 @@ package br.com.prodama.model.cadastro.geral;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
 
 import javax.persistence.*;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.Cascade;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.br.CNPJ;
 import org.hibernate.validator.constraints.br.CPF;
@@ -14,6 +16,9 @@ import org.hibernate.validator.constraints.br.CPF;
 import br.com.prodama.enun.Status;
 import br.com.prodama.enun.TipoEmpresa;
 import br.com.prodama.enun.TipoPessoa;
+import br.com.prodama.model.proposta.projeto.AtividadeProjeto;
+import br.com.prodama.model.proposta.projeto.CronogramaProjeto;
+import br.com.prodama.model.proposta.projeto.TipoHoraCliente;
 
 @Entity
 @Table(name = "Pessoa")
@@ -124,6 +129,22 @@ public class Pessoa implements Serializable {
 	@ManyToOne(optional = true,fetch=FetchType.EAGER)
 	private NivelEquipe nivelEquipe;
 	
+	@SuppressWarnings("deprecation")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "cliente", cascade = CascadeType.ALL)
+	@Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
+	private List<TipoHoraCliente> listaHorasCliente;
+	
+	public List<CronogramaProjeto> getListaCronogramas() {
+		return listaCronogramas;
+	}
+
+	public void setListaCronogramas(List<CronogramaProjeto> listaCronogramas) {
+		this.listaCronogramas = listaCronogramas;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente")
+	private List<CronogramaProjeto> listaCronogramas;
+	
 	public Long getCodigo() {
 		return codigo;
 	}
@@ -155,8 +176,6 @@ public class Pessoa implements Serializable {
 	public void setApelidoFantasia(String apelidoFantasia) {
 		this.apelidoFantasia = apelidoFantasia;
 	}
-
-	
 
 	public String getCnpj() {
 		return cnpj;
@@ -320,9 +339,6 @@ public class Pessoa implements Serializable {
 	}
 
 	
-
-	
-
 	public Empresa getEmpresa() {
 		return empresa;
 	}
@@ -347,7 +363,6 @@ public class Pessoa implements Serializable {
 		this.tipoEmpresa = tipoEmpresa;
 	}
 	
-	
 
 	public String getEmail() {
 		return email;
@@ -355,6 +370,15 @@ public class Pessoa implements Serializable {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	
+	public List<TipoHoraCliente> getListaHorasCliente() {
+		return listaHorasCliente;
+	}
+
+	public void setListaHorasCliente(List<TipoHoraCliente> listaHorasCliente) {
+		this.listaHorasCliente = listaHorasCliente;
 	}
 
 	@Override

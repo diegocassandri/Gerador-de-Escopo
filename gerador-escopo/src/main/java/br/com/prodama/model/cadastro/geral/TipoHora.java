@@ -3,7 +3,9 @@ package br.com.prodama.model.cadastro.geral;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,6 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -19,7 +22,11 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.Cascade;
 import org.hibernate.validator.constraints.NotEmpty;
+
+import br.com.prodama.model.cadastro.cronograma.AtividadeHoraPadrao;
+import br.com.prodama.model.proposta.projeto.TipoHoraCliente;
 
 @Entity
 @Table(name = "tipoHora")
@@ -56,6 +63,16 @@ public class TipoHora implements Serializable{
 	@ManyToOne(optional = true, fetch = FetchType.LAZY)
 	private Usuario codigoUsuarioAlteracao;
 	
+	@SuppressWarnings("deprecation")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "tipoHora", cascade = CascadeType.ALL)
+	@Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
+	private List<TipoHoraCliente> listaTiposHorasCliente;
+	
+	@SuppressWarnings("deprecation")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "tipoHora", cascade = CascadeType.ALL)
+	@Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
+	private List<AtividadeHoraPadrao> listaAtividadesPadroes;
+	
 	public Long getCodigo() {
 		return codigo;
 	}
@@ -72,8 +89,6 @@ public class TipoHora implements Serializable{
 		this.descricao = descricao;
 	}
 	
-	
-
 	public BigDecimal getValor() {
 		return valor;
 	}
@@ -112,6 +127,22 @@ public class TipoHora implements Serializable{
 
 	public void setCodigoUsuarioAlteracao(Usuario codigoUsuarioAlteracao) {
 		this.codigoUsuarioAlteracao = codigoUsuarioAlteracao;
+	}
+
+	public List<TipoHoraCliente> getListaTiposHorasCliente() {
+		return listaTiposHorasCliente;
+	}
+
+	public void setListaTiposHorasCliente(List<TipoHoraCliente> listaTiposHorasCliente) {
+		this.listaTiposHorasCliente = listaTiposHorasCliente;
+	}
+
+	public List<AtividadeHoraPadrao> getListaAtividadesPadroes() {
+		return listaAtividadesPadroes;
+	}
+
+	public void setListaAtividadesPadroes(List<AtividadeHoraPadrao> listaAtividadesPadroes) {
+		this.listaAtividadesPadroes = listaAtividadesPadroes;
 	}
 
 	@Override

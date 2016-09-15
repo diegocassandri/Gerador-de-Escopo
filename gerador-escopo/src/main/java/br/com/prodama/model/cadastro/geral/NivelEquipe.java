@@ -3,6 +3,7 @@ package br.com.prodama.model.cadastro.geral;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -15,9 +16,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cascade;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import br.com.prodama.model.cadastro.cronograma.AtividadeHoraPadrao;
+import br.com.prodama.model.proposta.projeto.TipoHoraClienteNivelEquipe;
 
 @Entity
 @Table(name = "nivelEquipe")
@@ -44,6 +47,11 @@ public class NivelEquipe implements Serializable{
 	
 	@OneToMany(fetch = FetchType.LAZY,mappedBy = "nivelEquipe")
 	private List<AtividadeHoraPadrao> listaAtidadeHoraPadrao;
+	
+	@SuppressWarnings("deprecation")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "nivelEquipe", cascade = CascadeType.ALL)
+	@Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
+	private List<TipoHoraClienteNivelEquipe> listaTiposHorasClienteNivelEquipe;
 	
 	public Long getCodigo() {
 		return codigo;
@@ -77,6 +85,22 @@ public class NivelEquipe implements Serializable{
 
 	public void setEquipe(Equipe equipe) {
 		this.equipe = equipe;
+	}
+
+	public List<AtividadeHoraPadrao> getListaAtidadeHoraPadrao() {
+		return listaAtidadeHoraPadrao;
+	}
+
+	public void setListaAtidadeHoraPadrao(List<AtividadeHoraPadrao> listaAtidadeHoraPadrao) {
+		this.listaAtidadeHoraPadrao = listaAtidadeHoraPadrao;
+	}
+
+	public List<TipoHoraClienteNivelEquipe> getListaTiposHorasClienteNivelEquipe() {
+		return listaTiposHorasClienteNivelEquipe;
+	}
+
+	public void setListaTiposHorasClienteNivelEquipe(List<TipoHoraClienteNivelEquipe> listaTiposHorasClienteNivelEquipe) {
+		this.listaTiposHorasClienteNivelEquipe = listaTiposHorasClienteNivelEquipe;
 	}
 
 	@Override
