@@ -69,7 +69,7 @@ public class CronogramaProjeto implements Serializable {
 	@JoinColumn(name = "FaixaColaborador")
 	private FaixaColaborador faixaColaborador;
 
-	@SuppressWarnings("deprecation")
+	/*@SuppressWarnings("deprecation")
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "codigo", cascade = CascadeType.ALL)
 	@Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
 	private List<EmpresaCliente> listaEmpresasCliente;
@@ -77,10 +77,10 @@ public class CronogramaProjeto implements Serializable {
 	@SuppressWarnings("deprecation")
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "codigo", cascade = CascadeType.ALL)
 	@Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
-	private List<FilialCliente> listaFiliaisCliente;
+	private List<FilialCliente> listaFiliaisCliente;*/
 	
 	@SuppressWarnings("deprecation")
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "codigo", cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "cronogramaProjeto", cascade = CascadeType.ALL)
 	@Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
 	private List<AtividadeProjeto> listaAtividadesProjeto;
 
@@ -156,7 +156,7 @@ public class CronogramaProjeto implements Serializable {
 		this.faixaColaborador = faixaColaborador;
 	}
 
-	public List<EmpresaCliente> getListaEmpresasCliente() {
+	/*public List<EmpresaCliente> getListaEmpresasCliente() {
 		return listaEmpresasCliente;
 	}
 
@@ -170,7 +170,7 @@ public class CronogramaProjeto implements Serializable {
 
 	public void setListaFiliaisCliente(List<FilialCliente> listaFiliaisCliente) {
 		this.listaFiliaisCliente = listaFiliaisCliente;
-	}
+	}*/
 
 	@Override
 	public int hashCode() {

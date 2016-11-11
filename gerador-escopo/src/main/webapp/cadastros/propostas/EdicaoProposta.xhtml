@@ -1,0 +1,194 @@
+<ui:composition template="/WEB-INF/template/Layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui">
+
+	<f:metadata>
+		<f:viewAction action="#{projetoBean.consultar}" />
+	</f:metadata>
+
+	<ui:define name="titulo">Edição Proposta</ui:define>
+
+	<ui:define name="corpo">
+		<h1>Edição Proposta</h1>
+		<h:form id="frmCadastro">
+
+			<p:messages id="msgs" closable="true" autoUpdate="true" />
+
+			<p:toolbar id="toolbar">
+				<f:facet name="left">
+					<p:commandButton value="Novo" icon="ui-icon-document"
+						action="#{projetoBean.prepararNovoCadastro}"
+						process="@this" update="cronograma-dialog"
+						oncomplete="PF('edicaoCronogramaDialog').show()">
+						<p:resetInput target="cronograma-dialog" />
+					</p:commandButton>
+
+					<span class="ui-separator"> <span
+						class="ui-icon ui-icon-grip-dotted-vertical" />
+					</span>
+
+					<p:commandButton icon="ui-icon-pencil" title="Editar"
+						process="@this" update="cronograma-dialog"
+						oncomplete="PF('edicaoCronogramaDialog').show()"
+						disabled="#{projetoBean.cronogramaSelecionado == null}">
+						<p:resetInput target="cronograma-dialog" />
+
+						<f:setPropertyActionListener
+							value="#{projetoBean.cronogramaSelecionado}"
+							target="#{projetoBean.cronogramaEdicao}" />
+					</p:commandButton>
+
+					<p:commandButton icon="ui-icon-trash" title="Excluir"
+						process="@this" update="cronograma-table msgs toolbar"
+						action="#{projetoBean.excluir}"
+						disabled="#{projetoBean.cronogramaSelecionado == null}">
+
+						<p:confirm icon="ui-icon-alert" header="Confirmação de exclusão"
+							message="Tem certeza que deseja excluir a proposta?" />
+
+					</p:commandButton>
+				</f:facet>
+			</p:toolbar>
+
+			<p:dataTable value="#{projetoBean.todosCronogramas}"
+				var="cronograma" emptyMessage="Nenhuma proposta cadastrada."
+				rows="10" paginator="true" paginatorPosition="bottom"
+				style="margin-top: 10px" id="cronograma-table"
+				selection="#{projetoBean.cronogramaSelecionado}"
+				selectionMode="single" rowKey="#{cronograma.codigo}"
+				filteredValue="#{projetoBean.filtroCronogramas}"
+				widgetVar="tabelaCronograma">
+
+				<f:facet name="header">
+					<div align="left">
+						<p:outputPanel>
+							<h:outputText value="Filtro:" />
+							<p:inputText id="globalFilter"
+								onkeyup="PF('tabelaCronograma').filter()" style="width:150px" />
+						</p:outputPanel>
+					</div>
+				</f:facet>
+
+				<p:ajax event="rowSelect" update=":frmCadastro:toolbar" />
+				<p:ajax event="rowUnselect" update=":frmCadastro:toolbar" />
+
+				<p:column headerText="Código" sortBy="#{cronograma.codigo}"
+					filterBy="#{cronograma.codigo}" filterMatchMode="contains"
+					filterable="false">
+					<h:outputText value="#{cronograma.codigo}" />
+				</p:column>
+
+				<p:column headerText="Descrição" sortBy="#{cronograma.descricao}"
+					filterBy="#{cronograma.descricao}" filterMatchMode="contains"
+					filterable="false">
+					<h:outputText value="#{cronograma.descricao}" />
+				</p:column>
+
+				<p:column headerText="Produto"
+					sortBy="#{cronograma.produto.descricao}"
+					filterBy="#{cronograma.produto.descricao}"
+					filterMatchMode="contains" filterable="false">
+					<h:outputText value="#{cronograma.produto.descricao}" />
+				</p:column>
+				
+				<p:column headerText="Produto"
+					sortBy="#{cronograma.cliente.apelidoFantasia}"
+					filterBy="#{cronograma.cliente.apelidoFantasia}"
+					filterMatchMode="contains" filterable="false">
+					<h:outputText value="#{cronograma.cliente.apelidoFantasia}" />
+				</p:column>
+
+				<p:column headerText="Editar" width="50">
+					<p:button icon="fa fa-cog" outcome="/cadastros/propostas/EdicaoProposta">
+						<f:param name="id" value="#{cronograma.codigo}" />
+					</p:button>
+						
+				
+				</p:column>
+
+
+			</p:dataTable>
+
+			<p:dialog header="Nova proposta" widgetVar="edicaoCronogramaDialog"
+				id="cronograma-dialog" resizable="false" modal="true"
+				closeOnEscape="true">
+
+				<p:messages id="msgs-dialog" autoUpdate="true" />
+
+				<p:defaultCommand target="salvar-button" scope="cronograma-dialog" />
+
+				<h:panelGrid columns="2" id="painel-dialog">
+					<p:outputLabel value="Código" for="codigo" />
+					<p:inputText id="codigo" size="7" maxlength="10"
+						value="#{projetoBean.cronogramaEdicao.codigo}"
+						readonly="true" />
+
+					<p:outputLabel value="Descrição" for="descricao" />
+					<p:inputText id="descricao" size="30" maxlength="50"
+						value="#{projetoBean.cronogramaEdicao.descricao}" />
+
+					<p:outputLabel value="Produto:" for="produto" />
+					<p:selectOneMenu filter="true"
+						value="#{projetoBean.cronogramaEdicao.produto}"
+						converter="omnifaces.SelectItemsConverter" required="true"
+						requiredMessage="O Campo Produto é obrigatório" id="produto">
+						<f:selectItem noSelectionOption="true"
+							itemLabel="Selecione um produto" />
+						<f:selectItems
+							value="#{projetoBean.todosProdutos}" 
+							var="produto" itemValue="#{produto}"
+							itemLabel="#{produto.descricao}" />
+					</p:selectOneMenu>
+					
+					<p:outputLabel value="Empresa:" for="empresa" />
+					<p:selectOneMenu filter="true"
+						value="#{projetoBean.cronogramaEdicao.empresa}"
+						converter="omnifaces.SelectItemsConverter" required="true"
+						requiredMessage="O Campo Empresa é obrigatório" id="empresa">
+						<f:selectItem noSelectionOption="true"
+							itemLabel="Selecione uma empresa" />
+						<f:selectItems
+							value="#{projetoBean.todasEmpresas}" 
+							var="empresa" itemValue="#{empresa}"
+							itemLabel="#{empresa.razaoSocial}" />
+						<f:ajax event="change" render="filial"
+										listener="#{projetoBean.listaFiliais}" />
+					</p:selectOneMenu>
+					
+					<p:outputLabel value="Filial:" for="filial" />
+					<p:selectOneMenu filter="true"
+						value="#{projetoBean.cronogramaEdicao.filial}"
+						converter="omnifaces.SelectItemsConverter" required="true"
+						requiredMessage="O Campo Filial é obrigatório" id="filial">
+						<f:selectItem noSelectionOption="true"
+							itemLabel="Selecione uma filial" />
+						<f:selectItems
+							value="#{projetoBean.todasFiliais}" 
+							var="filial" itemValue="#{filial}"
+							itemLabel="#{filial.razaoSocial}" />
+					</p:selectOneMenu>
+					
+					<p:outputLabel value="faixa Colaborador:" for="faixa" rendered="#{projetoBean.cronogramaEdicao.produto.codigo == 2}" />
+					<p:selectOneMenu filter="true" rendered="#{projetoBean.cronogramaEdicao.produto.codigo == 2}"
+						value="#{projetoBean.cronogramaEdicao.faixaColaborador}"
+						converter="omnifaces.SelectItemsConverter" id="faixa">
+						<f:selectItem noSelectionOption="true"
+							itemLabel="Selecione uma faixa" />
+						<f:selectItems
+							value="#{projetoBean.todasFaixas}" 
+							var="faixa" itemValue="#{faixa}"
+							itemLabel="#{faixa.descricao}" />
+					</p:selectOneMenu>
+
+					<p:commandButton value="Salvar" id="salvar-button"
+						action="#{projetoBean.salvar}"
+						process="cronograma-dialog" update="msgs-dialog painel-dialog" />
+				</h:panelGrid>
+			</p:dialog>
+
+		</h:form>
+	</ui:define>
+</ui:composition>

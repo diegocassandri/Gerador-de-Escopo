@@ -33,7 +33,7 @@
 			</h:form>
 		</p:panel>
 
-		<p:layout style="min-width:10%;min-height:200%;margin-top:10px">
+		<p:layout style="margin-top:10px">
 			<p:layoutUnit position="west" resizable="true" header="Atividades"
 				maxSize="400">
 
@@ -131,6 +131,27 @@
 										value="#{cadastroCronogramaPadraoBean.atividadeEdicao.horaAtividadeForm}"
 										id="hora">
 									</p:inputMask>
+
+									<p:outputLabel value="Tipo de Hora:" for="tipoHora" />
+									<p:selectOneMenu filter="true"
+										disabled="#{cadastroCronogramaPadraoBean.habilitar == false}"
+										value="#{cadastroCronogramaPadraoBean.atividadeEdicao.tipoHora}"
+										converter="omnifaces.SelectItemsConverter" id="tipoHora">
+										<f:selectItem noSelectionOption="true"
+											itemLabel="Selecione um nível" />
+										<f:selectItems
+											value="#{cadastroCronogramaPadraoBean.todosTiposHora}"
+											var="tipoHora" itemValue="#{tipoHora}"
+											itemLabel="#{tipoHora.descricao}" />
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Valor: " for="valor" />
+									<p:inputText id="valor"
+										disabled="#{cadastroCronogramaPadraoBean.habilitar == false}"
+										value="#{cadastroCronogramaPadraoBean.atividadeEdicao.valor}"
+										onfocus="maskMoney(this)">
+										<f:convertNumber pattern="#,##0.00" />
+									</p:inputText>
 
 									<p:outputLabel value="Formato Execução:" for="formato" />
 									<p:selectOneMenu id="formato"
@@ -336,7 +357,8 @@
 									</p:commandButton>
 
 									<p:commandButton icon="fa fa-trash" title="Remover Arquivo"
-										action="#{cadastroCronogramaPadraoBean.removerAnexo}" update="anexo-table">
+										action="#{cadastroCronogramaPadraoBean.removerAnexo}"
+										update="anexo-table">
 										<p:confirm icon="ui-icon-alert"
 											header="Confirmação de exclusão"
 											message="Tem certeza que deseja excluir o anexo?" />
