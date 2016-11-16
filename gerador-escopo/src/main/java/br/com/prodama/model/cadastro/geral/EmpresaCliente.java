@@ -33,7 +33,7 @@ public class EmpresaCliente implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="gen_empresa_cliente") 
     @SequenceGenerator(name="gen_empresa_cliente", sequenceName = "seq_empresa_cliente", initialValue=1, allocationSize=1)
-	@Column(name = "Codigo", nullable = false)
+	@Column(name = "codigo", nullable = false)
 	private Long codigo;
 	
 	@NotEmpty

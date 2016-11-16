@@ -46,7 +46,7 @@ public class AtividadeProjeto implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gen_atividadeProjeto")
 	@SequenceGenerator(name = "gen_atividadeProjeto", sequenceName = "seq_atividadeProjeto", initialValue = 1, allocationSize = 1)
-	@Column(name = "Codigo")
+	@Column(name = "codigo")
 	private Long codigo;
 
 	@NotEmpty

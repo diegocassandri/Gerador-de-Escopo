@@ -31,7 +31,7 @@ public class FilialCliente implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="gen_filial_cliente") 
     @SequenceGenerator(name="gen_filial_cliente", sequenceName = "seq_filial_cliente", initialValue=1, allocationSize=1)
-	@Column(name = "Codigo", nullable = false)
+	@Column(name = "codigo", nullable = false)
 	private Long codigo;
 	
 	@NotEmpty
