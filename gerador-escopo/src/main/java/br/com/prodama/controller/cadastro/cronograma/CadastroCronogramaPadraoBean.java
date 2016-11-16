@@ -29,6 +29,7 @@ import br.com.prodama.model.cadastro.cronograma.CronogramaPadrao;
 import br.com.prodama.model.cadastro.cronograma.DocAtividadeHoraPadrao;
 import br.com.prodama.model.cadastro.geral.Equipe;
 import br.com.prodama.model.cadastro.geral.NivelEquipe;
+import br.com.prodama.model.cadastro.geral.TipoHora;
 import br.com.prodama.model.cadastro.produto.Produto;
 import br.com.prodama.repository.cadastro.cronograma.AnexosAtividadesHoraPadrao;
 import br.com.prodama.repository.cadastro.cronograma.AtividadesHoraPadrao;
@@ -36,6 +37,7 @@ import br.com.prodama.repository.cadastro.cronograma.CronogramasPadrao;
 import br.com.prodama.repository.cadastro.cronograma.DocsAtividadesHoraPadrao;
 import br.com.prodama.repository.cadastro.geral.Equipes;
 import br.com.prodama.repository.cadastro.geral.NiveisEquipe;
+import br.com.prodama.repository.cadastro.geral.TipoHoras;
 import br.com.prodama.repository.cadastro.produto.Produtos;
 import br.com.prodama.service.NegocioException;
 import br.com.prodama.service.cadastro.cronograma.CadastroAnexoAtividadePadrao;
@@ -75,6 +77,9 @@ public class CadastroCronogramaPadraoBean implements Serializable {
 	private Equipes equipes;
 
 	@Inject
+	private TipoHoras tipoHoras;
+	
+	@Inject
 	private NiveisEquipe niveisEquipe;
 
 	@Inject
@@ -106,7 +111,8 @@ public class CadastroCronogramaPadraoBean implements Serializable {
 	private List<Produto> todosProdutos;
 	private List<DocAtividadeHoraPadrao> todosDocumentos;
 	private List<AnexoAtividadeHoraPadrao> todosAnexos;
-
+	private List<TipoHora> todosTiposHora;
+	
 	private TreeNode raiz;
 
 	private boolean habilitar = false;
@@ -119,6 +125,7 @@ public class CadastroCronogramaPadraoBean implements Serializable {
 		todosProdutos = produtos.todos();
 		todasEquipes = equipes.todos();
 		todosNiveisEquipe = niveisEquipe.todos();
+		todosTiposHora = tipoHoras.todos();
 		atividadeEdicao = new AtividadeHoraPadrao();
 		if (cronogramaEdicao == null) {
 			cronogramaEdicao = new CronogramaPadrao();
@@ -624,4 +631,13 @@ public class CadastroCronogramaPadraoBean implements Serializable {
 		this.arquivoDownload = arquivoDownload;
 	}
 
+	public List<TipoHora> getTodosTiposHora() {
+		return todosTiposHora;
+	}
+
+	public void setTodosTiposHora(List<TipoHora> todosTiposHora) {
+		this.todosTiposHora = todosTiposHora;
+	}
+
+	
 }

@@ -30,22 +30,46 @@
 		<a href="/gerador-escopo/Home.xhtml"> <h:graphicImage
 				library="prodama" name="logo.png" />
 		</a>
-		<div style="float: right; margin-right: 80px; margin-top: 2px">
+		<div style="float: right; margin-right: 140px; margin-top: 2px">
 			<h:form style="display: inline-block" id="menu2">
-				<p:menubar styleClass="menu-sistema">
+				<p:menubar  id="menuBar" styleClass="menu-sistema">
 					<p:submenu label="Olá #{usuarioLogin.nome}!">
 						<p:menuitem value="Alterar Senha" outcome="/AlteracaoSenha.xhtml" />
 						<p:menuitem value="Sair" action="#{loginBean.logout}"
 							icon="ui-icon-close" />
+							
+						<p:menuitem  id="empresa" value="#{usuarioLogin.empresaSelecionada.razaoSocial} "  />
+						
+						<p:menuitem  id="filial" value="#{usuarioLogin.filialSelecionada.razaoSocial}"  />
+
 					</p:submenu>
 				</p:menubar>
 				<f:facet name="start">
-			<h:graphicImage library="prodama" name="loading.gif" />
-		</f:facet>
-		<f:facet name="complete">
-			<h:outputText value="" />
-		</f:facet>
+					<h:graphicImage library="prodama" name="loading.gif" />
+				</f:facet>
+
+
+
+			</h:form>
+		</div>
+
+		<div style="float: right; margin-right: 20px; margin-top: 5px">
+			<h:form>
+				<p:commandButton icon="fa fa-globe" title="Selecionar Empresa"
+					action="#{selecaoEmpresaBean.abrirDialogo}" process="@this">
+					<p:ajax event="dialogReturn"
+						listener="#{usuarioLogin.SelecionarEmpresa}" process="@this" 
+						update="menu2:menuBar"/>
+						<p:resetInput target="menu2:empresa" />
+				</p:commandButton>
 				
+				<p:commandButton icon="fa fa-building" title="Selecionar Filial"
+					action="#{selecaoFilialBean.abrirDialogo}" process="@this">
+					<p:ajax event="dialogReturn"
+						listener="#{usuarioLogin.SelecionarFilial}" process="@this"
+						update="menu2:menuBar" />
+					<p:resetInput target="menu2:filial" />
+				</p:commandButton>
 			</h:form>
 		</div>
 
@@ -112,42 +136,28 @@
 		<ui:insert name="corpo" />
 	</div>
 
-	<footer>
+	<!--   <footer>
 		<h:form id="frm">
-			<div style="align:right">
+			<div style="align: right">
 				<p:outputLabel value="Sistema gerador de proposta - Prodama" />
 			</div>
 			<p:outputPanel id="painel" columns="1">
-				<p:commandButton icon="fa fa-globe" title="Selecionar Empresa"
-					action="#{selecaoEmpresaBean.abrirDialogo}" process="@this"
-					update="frm">
-					<p:ajax event="dialogReturn"
-						listener="#{usuarioLogin.SelecionarEmpresa}" process="@this"
-						update="empresa" />
-					<p:resetInput target="empresa" />
-				</p:commandButton>
+
 				<p:outputLabel value=" " />
 				<p:outputLabel value="Empresa: " />
 				<p:outputLabel id="empresa"
-					value="      #{usuarioLogin.empresaSelecionada.razaoSocial}    " />
+					 />
 				<br />
-				<p:commandButton icon="fa fa-building" title="Selecionar Filial"
-					action="#{selecaoFilialBean.abrirDialogo}" process="@this"
-					update="frm">
-					<p:ajax event="dialogReturn"
-						listener="#{usuarioLogin.SelecionarFilial}" process="@this"
-						update="filial" />
-					<p:resetInput target="filial" />
-				</p:commandButton>
+				
 				<p:outputLabel value=" " />
 				<p:outputLabel value="Filial:  " />
 				<p:outputLabel id="filial"
 					value="      #{usuarioLogin.filialSelecionada.razaoSocial}    " />
 			</p:outputPanel>
-			
-			
+
+
 		</h:form>
-	</footer>
+	</footer> -->
 	<h:form>
 		<p:confirmDialog global="true">
 			<p:commandButton value="Não" type="button"
@@ -158,7 +168,7 @@
 		</p:confirmDialog>
 	</h:form>
 
-	
+
 </h:body>
 
 </html>

@@ -27,10 +27,14 @@
 		<class>br.com.prodama.model.cadastro.produto.Modulo</class>
 		<class>br.com.prodama.model.cadastro.produto.ProcessoGestao</class>
 		<class>br.com.prodama.model.cadastro.produto.Produto</class>
+		<class>br.com.prodama.model.proposta.projeto.AnexoAtividadeProjeto</class>
+		<class>br.com.prodama.model.proposta.projeto.AtividadeProjeto</class>
+		<class>br.com.prodama.model.proposta.projeto.CronogramaProjeto</class>
+		<class>br.com.prodama.model.proposta.projeto.DocAtividadeProjeto</class>
+		<class>br.com.prodama.model.proposta.projeto.TipoHoraCliente</class>
+		<class>br.com.prodama.model.proposta.projeto.TipoHoraClienteNivelEquipe</class>
 		
 		
-
-
 		<properties>		
 			<property name="hibernate.connection.driver_class" value="oracle.jdbc.OracleDriver" />
 			<property name="hibernate.connection.url"
